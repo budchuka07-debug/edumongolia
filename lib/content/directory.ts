@@ -16,6 +16,16 @@ export type Delivery = "classroom" | "home" | "online";
 
 export type Grouping = "individual" | "semi";
 
+export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+
+export type Slot = {
+  day: Weekday;
+  time: string;
+};
+
+export const weekdays: Weekday[] = ["mon", "tue", "wed", "thu", "fri", "sat"];
+export const slotTimes = ["10:00", "16:00", "17:30", "19:00"];
+
 export type Teacher = {
   id: string;
   name: string;
@@ -29,6 +39,7 @@ export type Teacher = {
   rate: Copy;
   bio: Copy;
   foreign: boolean;
+  schedule?: Slot[];
 };
 
 export type Center = {
@@ -82,6 +93,11 @@ export const teachers: Teacher[] = [
       en: "Visits homes for grades 8–11 mathematics and university-entrance practice.",
     },
     foreign: false,
+    schedule: [
+      { day: "mon", time: "16:00" },
+      { day: "wed", time: "16:00" },
+      { day: "sat", time: "10:00" },
+    ],
   },
   {
     id: "temuulen",
@@ -102,6 +118,10 @@ export const teachers: Teacher[] = [
       en: "Spelling, composition, and exam writing, one to one at home.",
     },
     foreign: false,
+    schedule: [
+      { day: "tue", time: "17:30" },
+      { day: "thu", time: "17:30" },
+    ],
   },
   {
     id: "ankhtuya",
@@ -122,6 +142,11 @@ export const teachers: Teacher[] = [
       en: "Speaking, IELTS reading, and school English at home or online.",
     },
     foreign: false,
+    schedule: [
+      { day: "mon", time: "19:00" },
+      { day: "wed", time: "19:00" },
+      { day: "fri", time: "16:00" },
+    ],
   },
   {
     id: "enkhbat",
@@ -142,6 +167,11 @@ export const teachers: Teacher[] = [
       en: "Physics and chemistry problems, at home or in a small classroom group.",
     },
     foreign: false,
+    schedule: [
+      { day: "tue", time: "16:00" },
+      { day: "thu", time: "16:00" },
+      { day: "sat", time: "10:00" },
+    ],
   },
   {
     id: "sarangerel",
@@ -162,6 +192,10 @@ export const teachers: Teacher[] = [
       en: "Morin khuur and piano, one to one in the student's home.",
     },
     foreign: false,
+    schedule: [
+      { day: "sat", time: "10:00" },
+      { day: "sat", time: "16:00" },
+    ],
   },
   {
     id: "bolormaa",
@@ -182,6 +216,11 @@ export const teachers: Teacher[] = [
       en: "Python, web, and school computing online, one to one or in a small group.",
     },
     foreign: false,
+    schedule: [
+      { day: "mon", time: "19:00" },
+      { day: "wed", time: "19:00" },
+      { day: "fri", time: "19:00" },
+    ],
   },
   {
     id: "james-miller",
@@ -202,6 +241,10 @@ export const teachers: Teacher[] = [
       en: "A foreign teacher. Spoken English and essays online or in a center classroom.",
     },
     foreign: true,
+    schedule: [
+      { day: "tue", time: "19:00" },
+      { day: "thu", time: "19:00" },
+    ],
   },
   {
     id: "kim-hana",
@@ -222,6 +265,10 @@ export const teachers: Teacher[] = [
       en: "Korean and TOPIK prep online, in groups of up to four.",
     },
     foreign: true,
+    schedule: [
+      { day: "sat", time: "10:00" },
+      { day: "sat", time: "17:30" },
+    ],
   },
 ];
 
@@ -440,13 +487,17 @@ export function getCenter(id: string) {
   return centers.find((center) => center.id === id);
 }
 
-export const LEARNER_KEY = "edumongolia-learner";
+export const STUDENTS_KEY = "edumongolia-students";
 export const EXTRA_TEACHERS_KEY = "edumongolia-teachers";
 
-export type Learner = {
+export type StudentRecord = {
+  id: string;
   name: string;
   grade: string;
   category: Category;
   delivery: Delivery;
   grouping: Grouping;
+  day: Weekday;
+  time: string;
+  teacherId: string;
 };

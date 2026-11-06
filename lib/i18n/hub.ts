@@ -1,9 +1,8 @@
-import type { Category, Education } from "@/lib/content/directory";
+import type { Category, Education, Weekday } from "@/lib/content/directory";
 import type { Locale } from "@/lib/i18n/types";
 
 export type HubCopy = {
-  greeting: string;
-  guestName: string;
+  title: string;
   lead: string;
   sample: string;
   railLabel: string;
@@ -30,6 +29,7 @@ export type HubCopy = {
   levels: Record<Education, string>;
   categories: Record<Category, string>;
   groups: { individual: string; semi: string; all: string };
+  days: Record<Weekday, string>;
   sections: {
     classroom: string;
     home: string;
@@ -47,6 +47,8 @@ export type HubCopy = {
     international: string;
     travel: string;
     foreignUni: string;
+    admin: string;
+    schedule: string;
   };
   pages: Record<
     | "tutors"
@@ -59,7 +61,8 @@ export type HubCopy = {
     | "travel"
     | "foreignUni"
     | "teacher"
-    | "student",
+    | "student"
+    | "admin",
     { title: string; lead: string }
   >;
   form: {
@@ -77,6 +80,16 @@ export type HubCopy = {
     studentDone: string;
     required: string;
     pickCategory: string;
+    day: string;
+    time: string;
+    pickTeacher: string;
+    noTeacher: string;
+    openSlot: string;
+    booked: string;
+    students: string;
+    teachers: string;
+    openAdmin: string;
+    noSignups: string;
     classroom: string;
     home: string;
     online: string;
@@ -97,6 +110,7 @@ const railHrefs = [
   ["/discounts", "discounts"],
   ["/register/teacher", "registerTeacher"],
   ["/register/student", "registerStudent"],
+  ["/admin", "admin"],
   ["/centers?licensed=1", "licensed"],
   ["/programs/foreign", "foreignTeachers"],
   ["/programs/international", "international"],
@@ -130,6 +144,8 @@ const mnSections: HubCopy["sections"] = {
   international: "Олон улсын сургалтууд",
   travel: "Аялалтай сургалт",
   foreignUni: "Гадаадын их дээд сургуулийн тэтгэлэгт хөтөлбөр",
+  admin: "Админ самбар",
+  schedule: "Цагийн хуваарь",
 };
 
 const enSections: HubCopy["sections"] = {
@@ -149,12 +165,13 @@ const enSections: HubCopy["sections"] = {
   international: "International courses",
   travel: "Study with travel",
   foreignUni: "Scholarship tracks for foreign universities",
+  admin: "Admin desk",
+  schedule: "Schedule",
 };
 
 export const hubCopy: Record<Locale, HubCopy> = {
   mn: {
-    greeting: "Сайн байна уу,",
-    guestName: "Уртнасан",
+    title: "Сургуулиас гадуурх сургалт",
     lead: "Сургуулиас гадуур гэрийн багш, танхимын төв, онлайн багшийг боловсролын зэрэг, хичээлийн ангиллаар нь шүүж олоорой.",
     sample: "Доорх багш, төв, тэтгэлэг нь жишээ. Жинхэнэ анги, зөвшөөрөл, төлбөр биш.",
     railLabel: "Ангилал",
@@ -199,6 +216,14 @@ export const hubCopy: Record<Locale, HubCopy> = {
       individual: "Ганцаарчилсан",
       semi: "Хагас ганцаарчилсан",
     },
+    days: {
+      mon: "Даваа",
+      tue: "Мягмар",
+      wed: "Лхагва",
+      thu: "Пүрэв",
+      fri: "Баасан",
+      sat: "Бямба",
+    },
     sections: mnSections,
     pages: {
       tutors: {
@@ -239,11 +264,15 @@ export const hubCopy: Record<Locale, HubCopy> = {
       },
       teacher: {
         title: "Багш бүртгүүлэх",
-        lead: "Боловсролын зэрэг, хичээлийн ангилал, заах хэлбэрээ үлдээнэ. Жагсаалтад энэ хөтөч дээр нэмэгдэнэ.",
+        lead: "Боловсролын зэрэг, хичээлийн ангилал, цагийн хуваариа үлдээнэ. Админ самбар болон багшийн мэдээлэл дээр гарна.",
       },
       student: {
         title: "Сурагч бүртгүүлэх",
-        lead: "Нэр, анги, хүссэн сургалтаа үлдээнэ. Нүүрэнд мэндчилгээ таны нэрээр гарна.",
+        lead: "Нэр, анги, хүссэн цагаа үлдээнэ. Админ самбар дээр, сонгосон багшийн хуваарь дээр гарна.",
+      },
+      admin: {
+        title: "Админ самбар",
+        lead: "Энэ хөтөч дээр бүртгүүлсэн сурагч, багш энд жагсана. Багшийн цагийн хуваарь нь багшийн мэдээлэл дээр байна.",
       },
     },
     form: {
@@ -261,6 +290,16 @@ export const hubCopy: Record<Locale, HubCopy> = {
       studentDone: "Сурагчийн бүртгэл хадгалагдлаа.",
       required: "Нэрээ бичнэ үү.",
       pickCategory: "Дор хаяж нэг ангилал сонгоно уу.",
+      day: "Өдөр",
+      time: "Цаг",
+      pickTeacher: "Багш",
+      noTeacher: "Багш сонгоогүй",
+      openSlot: "Сул",
+      booked: "Захиалга",
+      students: "Сурагчийн бүртгэл",
+      teachers: "Багшийн бүртгэл",
+      openAdmin: "Админ самбар нээх",
+      noSignups: "Одоогоор бүртгэл алга.",
       classroom: "Танхим",
       home: "Гэр",
       online: "Онлайн",
@@ -268,8 +307,7 @@ export const hubCopy: Record<Locale, HubCopy> = {
     rail: rail(mnSections, "Багш бүртгүүлэх", "Сурагч бүртгүүлэх"),
   },
   en: {
-    greeting: "Hello,",
-    guestName: "Urtnasan",
+    title: "Study beyond the school day",
     lead: "Find a tutor outside school. Filter home tutors, classroom centers, and online teachers by degree and subject.",
     sample: "Teachers, centers, and grants below are samples, not a live class list, license, or fee.",
     railLabel: "Categories",
@@ -314,6 +352,14 @@ export const hubCopy: Record<Locale, HubCopy> = {
       individual: "Individual",
       semi: "Semi-individual",
     },
+    days: {
+      mon: "Monday",
+      tue: "Tuesday",
+      wed: "Wednesday",
+      thu: "Thursday",
+      fri: "Friday",
+      sat: "Saturday",
+    },
     sections: enSections,
     pages: {
       tutors: {
@@ -354,11 +400,15 @@ export const hubCopy: Record<Locale, HubCopy> = {
       },
       teacher: {
         title: "Register as a teacher",
-        lead: "Leave your degree, subjects, and how you teach. You appear in this browser's list.",
+        lead: "Leave your degree, subjects, and weekly hours. They show on the admin desk and on your profile.",
       },
       student: {
         title: "Register as a student",
-        lead: "Leave your name, grade, and the kind of study you want. The greeting uses your name.",
+        lead: "Leave your name, grade, and a time. It shows on the admin desk and on the tutor's schedule.",
+      },
+      admin: {
+        title: "Admin desk",
+        lead: "Students and teachers who register in this browser are listed here. A teacher's hours stay on the teacher profile.",
       },
     },
     form: {
@@ -376,6 +426,16 @@ export const hubCopy: Record<Locale, HubCopy> = {
       studentDone: "The student profile was saved.",
       required: "Enter a name.",
       pickCategory: "Choose at least one subject.",
+      day: "Day",
+      time: "Time",
+      pickTeacher: "Teacher",
+      noTeacher: "No teacher yet",
+      openSlot: "Open",
+      booked: "Booked",
+      students: "Student registrations",
+      teachers: "Teacher registrations",
+      openAdmin: "Open the admin desk",
+      noSignups: "No registrations yet.",
       classroom: "Classroom",
       home: "Home",
       online: "Online",

@@ -2,8 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { centers, offers, teachers, LEARNER_KEY, type Learner } from "@/lib/content/directory";
-import { usePersistedState } from "@/lib/use-persisted-state";
+import { centers, offers, teachers } from "@/lib/content/directory";
 import { useHub } from "@/components/directory/use-hub";
 import { CenterCard, OfferCard, TeacherCard } from "@/components/directory/cards";
 import { buttonVariants } from "@/components/ui/button";
@@ -45,8 +44,6 @@ function Row({ children }: { children: ReactNode }) {
 
 export function HubHome() {
   const hub = useHub();
-  const [learner] = usePersistedState<Learner | null>(LEARNER_KEY, null);
-  const name = learner?.name || hub.guestName;
   const homeTutors = teachers.filter((teacher) => teacher.delivery.includes("home"));
   const online = teachers.filter((teacher) => teacher.delivery.includes("online"));
   const individual = teachers.filter((teacher) => teacher.grouping.includes("individual"));
@@ -57,10 +54,7 @@ export function HubHome() {
     <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-8 sm:py-12">
       <section className="steppe-grid rounded-3xl border border-border bg-card px-5 py-8 sm:px-8">
         <p className="text-sm font-medium text-primary">{hub.outside}</p>
-        <h1 className="mt-3 font-heading text-4xl font-semibold tracking-tight sm:text-5xl">
-          {hub.greeting}
-          <span className="mt-1 block">{name}</span>
-        </h1>
+        <h1 className="mt-3 font-heading text-4xl font-semibold tracking-tight sm:text-5xl">{hub.title}</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">{hub.lead}</p>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{hub.sample}</p>
         <div className="mt-6 flex flex-wrap gap-2">

@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { EXTRA_TEACHERS_KEY, getTeacher, type Teacher } from "@/lib/content/directory";
+import {
+  EXTRA_TEACHERS_KEY,
+  STUDENTS_KEY,
+  slotTimes,
+  weekdays,
+  getTeacher,
+  type StudentRecord,
+  type Teacher,
+} from "@/lib/content/directory";
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useI18n } from "@/components/language-provider";
 import { useHub } from "@/components/directory/use-hub";
@@ -11,6 +19,7 @@ export function TutorProfile({ id }: { id: string }) {
   const { locale } = useI18n();
   const hub = useHub();
   const [extra] = usePersistedState<Teacher[]>(EXTRA_TEACHERS_KEY, []);
+  const [students] = usePersistedState<StudentRecord[]>(STUDENTS_KEY, []);
   const teacher = getTeacher(id) ?? extra.find((item) => item.id === id);
 
   if (!teacher) {
@@ -61,6 +70,48 @@ export function TutorProfile({ id }: { id: string }) {
           </div>
         ))}
       </dl>
+      <h2 className="mt-10 font-heading text-2xl font-semibold">{hub.sections.schedule}</h2>
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
+        <table className="w-full min-w-[40rem] border-collapse text-sm">
+          <thead>
+            <tr className="bg-muted/60 text-left">
+              <th className="px-3 py-2 font-medium">{hub.form.time}</th>
+              {weekdays.map((day) => (
+                <th key={day} className="px-3 py-2 font-medium">
+                  {hub.days[day]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {slotTimes.map((time) => (
+              <tr key={time} className="border-t border-border">
+                <th className="px-3 py-2 text-left font-medium">{time}</th>
+                {weekdays.map((day) => {
+                  const open = teacher.schedule?.some((slot) => slot.day === day && slot.time === time);
+                  const booked = students.filter(
+                    (student) => student.teacherId === teacher.id && student.day === day && student.time === time,
+                  );
+                  return (
+                    <td key={day} className="px-3 py-2 align-top">
+                      {booked.length > 0 ? (
+                        <span>
+                          <span className="block text-xs text-primary">{hub.form.booked}</span>
+                          {booked.map((student) => student.name).join(", ")}
+                        </span>
+                      ) : open ? (
+                        <span className="text-muted-foreground">{hub.form.openSlot}</span>
+                      ) : (
+                        <span className="text-border">—</span>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </article>
   );
 }
