@@ -3,6 +3,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { centers, offers, teachers } from "@/lib/content/directory";
+import { papers } from "@/lib/content/papers";
+import { PaperCard } from "@/components/pages/paper-board";
 import { useHub } from "@/components/directory/use-hub";
 import { CenterCard, OfferCard, TeacherCard } from "@/components/directory/cards";
 import { buttonVariants } from "@/components/ui/button";
@@ -137,6 +139,17 @@ export function HubHome() {
             <CenterCard key={center.id} center={center} />
           ))}
         </div>
+      </Section>
+
+      <Section id="papers" title={hub.sections.papers} href="/papers" seeAll={hub.seeAll}>
+        <p className="mb-4 max-w-2xl text-sm leading-6 text-muted-foreground">{hub.pages.papers.lead}</p>
+        <Row>
+          {papers.map((paper) => (
+            <div key={paper.id} className="w-[20rem] shrink-0 snap-start">
+              <PaperCard paper={paper} />
+            </div>
+          ))}
+        </Row>
       </Section>
 
       <Section id="scholarships" title={hub.sections.scholarships} href="/scholarships" seeAll={hub.seeAll}>

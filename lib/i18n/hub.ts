@@ -1,4 +1,5 @@
 import type { Category, Education, Weekday } from "@/lib/content/directory";
+import type { PaperKind, PaperLevel } from "@/lib/content/papers";
 import type { Locale } from "@/lib/i18n/types";
 
 export type HubCopy = {
@@ -49,6 +50,8 @@ export type HubCopy = {
     foreignUni: string;
     admin: string;
     schedule: string;
+    papers: string;
+    orderPaper: string;
   };
   pages: Record<
     | "tutors"
@@ -62,7 +65,9 @@ export type HubCopy = {
     | "foreignUni"
     | "teacher"
     | "student"
-    | "admin",
+    | "admin"
+    | "papers"
+    | "order",
     { title: string; lead: string }
   >;
   form: {
@@ -94,6 +99,19 @@ export type HubCopy = {
     home: string;
     online: string;
   };
+  paper: {
+    kinds: Record<PaperKind, string>;
+    levels: Record<PaperLevel, string>;
+    pages: string;
+    topic: string;
+    deadline: string;
+    phone: string;
+    note: string;
+    order: string;
+    from: string;
+    orders: string;
+    phoneRequired: string;
+  };
   rail: { href: string; label: string }[];
 };
 
@@ -108,6 +126,8 @@ const railHrefs = [
   ["/online", "onlineTeachers"],
   ["/scholarships", "scholarships"],
   ["/discounts", "discounts"],
+  ["/papers", "papers"],
+  ["/papers/order", "orderPaper"],
   ["/register/teacher", "registerTeacher"],
   ["/register/student", "registerStudent"],
   ["/admin", "admin"],
@@ -146,6 +166,8 @@ const mnSections: HubCopy["sections"] = {
   foreignUni: "Гадаадын их дээд сургуулийн тэтгэлэгт хөтөлбөр",
   admin: "Админ самбар",
   schedule: "Цагийн хуваарь",
+  papers: "Төсөл, диплом, даалгавар",
+  orderPaper: "Захиалгаар бичүүлэх",
 };
 
 const enSections: HubCopy["sections"] = {
@@ -167,6 +189,8 @@ const enSections: HubCopy["sections"] = {
   foreignUni: "Scholarship tracks for foreign universities",
   admin: "Admin desk",
   schedule: "Schedule",
+  papers: "Projects, diplomas, assignments",
+  orderPaper: "Order a paper",
 };
 
 export const hubCopy: Record<Locale, HubCopy> = {
@@ -272,7 +296,15 @@ export const hubCopy: Record<Locale, HubCopy> = {
       },
       admin: {
         title: "Админ самбар",
-        lead: "Энэ хөтөч дээр бүртгүүлсэн сурагч, багш энд жагсана. Багшийн цагийн хуваарь нь багшийн мэдээлэл дээр байна.",
+        lead: "Энэ хөтөч дээр бүртгүүлсэн сурагч, багш, бичгийн захиалга энд жагсана. Багшийн цагийн хуваарь нь багшийн мэдээлэл дээр байна.",
+      },
+      papers: {
+        title: "Төсөл, диплом, курсын ажил, бие даалт",
+        lead: "Бэлэн сэдвийн жишээ. Файл зардаггүй. Диплом, курсын ажил, бие даалт, төслийг захиалгаар бичүүлнэ.",
+      },
+      order: {
+        title: "Захиалгаар бичүүлэх",
+        lead: "Сэдэв, хуудас, хугацаагаа үлдээнэ. Захиалга админ самбар дээр гарна. Төлбөр энд холбогдоогүй.",
       },
     },
     form: {
@@ -303,6 +335,28 @@ export const hubCopy: Record<Locale, HubCopy> = {
       classroom: "Танхим",
       home: "Гэр",
       online: "Онлайн",
+    },
+    paper: {
+      kinds: {
+        diploma: "Дипломын ажил",
+        course: "Курсын ажил",
+        assignment: "Бие даалт",
+        project: "Төсөл",
+      },
+      levels: {
+        college: "Коллеж",
+        bachelor: "Бакалавр",
+        master: "Магистр",
+      },
+      pages: "Хуудас",
+      topic: "Сэдэв",
+      deadline: "Хугацаа",
+      phone: "Утас",
+      note: "Нэмэлт шаардлага",
+      order: "Захиалга илгээх",
+      from: "Эхлэх үнэ",
+      orders: "Бичгийн захиалга",
+      phoneRequired: "Утасны дугаараа бичнэ үү.",
     },
     rail: rail(mnSections, "Багш бүртгүүлэх", "Сурагч бүртгүүлэх"),
   },
@@ -408,7 +462,15 @@ export const hubCopy: Record<Locale, HubCopy> = {
       },
       admin: {
         title: "Admin desk",
-        lead: "Students and teachers who register in this browser are listed here. A teacher's hours stay on the teacher profile.",
+        lead: "Students, teachers, and writing orders from this browser are listed here. A teacher's hours stay on the teacher profile.",
+      },
+      papers: {
+        title: "Projects, diplomas, course papers, assignments",
+        lead: "Sample topics. Files are not for sale. Order a diploma, course paper, assignment, or project.",
+      },
+      order: {
+        title: "Order a paper",
+        lead: "Leave the topic, length, and date. The order shows on the admin desk. Payment is not connected here.",
       },
     },
     form: {
@@ -439,6 +501,28 @@ export const hubCopy: Record<Locale, HubCopy> = {
       classroom: "Classroom",
       home: "Home",
       online: "Online",
+    },
+    paper: {
+      kinds: {
+        diploma: "Diploma paper",
+        course: "Course paper",
+        assignment: "Assignment",
+        project: "Project",
+      },
+      levels: {
+        college: "College",
+        bachelor: "Bachelor's",
+        master: "Master's",
+      },
+      pages: "Pages",
+      topic: "Topic",
+      deadline: "Deadline",
+      phone: "Phone",
+      note: "Extra requirements",
+      order: "Send the order",
+      from: "Starting fee",
+      orders: "Writing orders",
+      phoneRequired: "Enter a phone number.",
     },
     rail: rail(enSections, "Register as a teacher", "Register as a student"),
   },

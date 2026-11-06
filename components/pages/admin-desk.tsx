@@ -8,6 +8,7 @@ import {
   type StudentRecord,
   type Teacher,
 } from "@/lib/content/directory";
+import { PAPER_ORDERS_KEY, type PaperOrder } from "@/lib/content/papers";
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useHub } from "@/components/directory/use-hub";
 
@@ -20,6 +21,7 @@ export function AdminDesk() {
   const hub = useHub();
   const [students] = usePersistedState<StudentRecord[]>(STUDENTS_KEY, []);
   const [teachers] = usePersistedState<Teacher[]>(EXTRA_TEACHERS_KEY, []);
+  const [orders] = usePersistedState<PaperOrder[]>(PAPER_ORDERS_KEY, []);
   const page = hub.pages.admin;
 
   return (
@@ -98,6 +100,38 @@ export function AdminDesk() {
                 </Link>
               </article>
             ))}
+          </div>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <h2 className="font-heading text-2xl font-semibold">{hub.paper.orders}</h2>
+        {orders.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">{hub.form.noSignups}</p>
+        ) : (
+          <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
+            <table className="w-full min-w-[44rem] border-collapse text-sm">
+              <thead>
+                <tr className="bg-muted/60 text-left">
+                  <th className="px-3 py-2 font-medium">{hub.category}</th>
+                  <th className="px-3 py-2 font-medium">{hub.paper.topic}</th>
+                  <th className="px-3 py-2 font-medium">{hub.form.name}</th>
+                  <th className="px-3 py-2 font-medium">{hub.paper.phone}</th>
+                  <th className="px-3 py-2 font-medium">{hub.paper.deadline}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id} className="border-t border-border">
+                    <td className="px-3 py-2">{hub.paper.kinds[order.kind]}</td>
+                    <td className="px-3 py-2 font-medium">{order.topic}</td>
+                    <td className="px-3 py-2">{order.name}</td>
+                    <td className="px-3 py-2">{order.phone}</td>
+                    <td className="px-3 py-2">{order.deadline || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </section>
