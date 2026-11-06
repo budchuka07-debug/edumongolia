@@ -76,7 +76,7 @@ export function CourseDetail({ slug }: { slug: string }) {
           ))}
         </ul>
         <div className="mt-8">
-          <Accordion defaultValue={[course.modules[0]?.id]}>
+          <Accordion multiple defaultValue={course.modules.map((module) => module.id)}>
             {course.modules.map((module) => (
               <AccordionItem key={module.id} value={module.id}>
                 <AccordionTrigger className="text-base">{module.title[locale]}</AccordionTrigger>

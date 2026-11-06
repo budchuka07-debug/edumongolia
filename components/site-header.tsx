@@ -3,17 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useI18n } from "@/components/language-provider";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
 const links = [
@@ -90,45 +83,39 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="ml-auto lg:ml-3">{language}</div>
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            render={
-              <Button
-                variant="outline"
-                size="icon"
-                className="lg:hidden"
-                aria-label={t.header.menu}
-              />
-            }
-          >
-            <MenuIcon />
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[min(100%,20rem)]">
-            <SheetHeader>
-              <SheetTitle>{t.brand}</SheetTitle>
-            </SheetHeader>
-            <nav className="flex flex-col gap-1 px-4" aria-label={t.header.menu}>
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "outline", size: "icon-lg" }), "lg:hidden")}
+          aria-label={open ? t.header.close : t.header.menu}
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? <XIcon /> : <MenuIcon />}
+        </button>
+      </div>
+      {open ? (
+        <div className="border-t border-border bg-card lg:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col px-2 py-2" aria-label={t.header.menu}>
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-3 py-3 text-base hover:bg-muted"
+            >
+              {t.nav.home}
+            </Link>
+            {links.map((link) => (
               <Link
-                href="/"
+                key={link.href}
+                href={link.href}
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-3 text-base hover:bg-muted"
               >
-                {t.nav.home}
+                {t.nav[link.key]}
               </Link>
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-3 text-base hover:bg-muted"
-                >
-                  {t.nav[link.key]}
-                </Link>
-              ))}
-            </nav>
-          </SheetContent>
-        </Sheet>
-      </div>
+            ))}
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }
