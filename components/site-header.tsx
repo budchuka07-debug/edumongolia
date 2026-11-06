@@ -6,50 +6,21 @@ import { useState } from "react";
 import { MenuIcon, XIcon } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useI18n } from "@/components/language-provider";
+import { useHub } from "@/components/directory/use-hub";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
-const links = [
-  { href: "/courses", key: "courses" },
-  { href: "/resources", key: "resources" },
-  { href: "/students", key: "students" },
-  { href: "/teachers", key: "teachers" },
-  { href: "/about", key: "about" },
-] as const;
-
 function isCurrent(pathname: string, href: string) {
+  if (href.includes("#") || href.includes("?")) return false;
+  if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function SiteHeader() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
+  const hub = useHub();
   const [open, setOpen] = useState(false);
-
-  const language = (
-    <div
-      className="flex rounded-lg border border-border bg-card p-0.5"
-      role="group"
-      aria-label={t.header.language}
-    >
-      {(["mn", "en"] as const).map((code) => (
-        <button
-          key={code}
-          type="button"
-          aria-pressed={locale === code}
-          onClick={() => setLocale(code)}
-          className={cn(
-            "rounded-md px-2.5 py-1 text-xs font-semibold tracking-wide",
-            locale === code
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {code === "mn" ? "МН" : "EN"}
-        </button>
-      ))}
-    </div>
-  );
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur">
@@ -57,35 +28,33 @@ export function SiteHeader() {
         <Link href="/" className="flex min-w-0 items-center gap-2.5">
           <Logo />
           <span className="min-w-0">
-            <span className="block font-heading text-base leading-none font-semibold">
-              {t.brand}
-            </span>
-            <span className="mt-1 hidden text-xs text-muted-foreground sm:block">
-              {t.tagline}
-            </span>
+            <span className="block font-heading text-base leading-none font-semibold">{t.brand}</span>
+            <span className="mt-1 hidden text-xs text-muted-foreground sm:block">{t.tagline}</span>
           </span>
         </Link>
-        <nav className="ml-auto hidden items-center gap-1 lg:flex" aria-label={t.nav.home}>
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              aria-current={isCurrent(pathname, link.href) ? "page" : undefined}
+        <div
+          className="ml-auto flex rounded-lg border border-border bg-card p-0.5"
+          role="group"
+          aria-label={t.header.language}
+        >
+          {(["mn", "en"] as const).map((code) => (
+            <button
+              key={code}
+              type="button"
+              aria-pressed={locale === code}
+              onClick={() => setLocale(code)}
               className={cn(
-                "rounded-lg px-3 py-2 text-sm",
-                isCurrent(pathname, link.href)
-                  ? "bg-primary text-primary-foreground"
-                  : "text-foreground/80 hover:bg-muted",
+                "rounded-md px-2.5 py-1 text-xs font-semibold tracking-wide",
+                locale === code ? "bg-primary text-primary-foreground" : "text-muted-foreground",
               )}
             >
-              {t.nav[link.key]}
-            </Link>
+              {code === "mn" ? "МН" : "EN"}
+            </button>
           ))}
-        </nav>
-        <div className="ml-auto lg:ml-3">{language}</div>
+        </div>
         <button
           type="button"
-          className={cn(buttonVariants({ variant: "outline", size: "icon-lg" }), "lg:hidden")}
+          className={cn(buttonVariants({ variant: "outline", size: "icon-lg" }))}
           aria-label={open ? t.header.close : t.header.menu}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
@@ -93,28 +62,41 @@ export function SiteHeader() {
           {open ? <XIcon /> : <MenuIcon />}
         </button>
       </div>
+      <nav
+        aria-label={hub.railLabel}
+        className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-2 [scrollbar-width:thin]"
+      >
+        {hub.rail.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
+            className={cn(
+              "shrink-0 rounded-full border px-3 py-1.5 text-sm",
+              isCurrent(pathname, item.href)
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border bg-card text-foreground/80",
+            )}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
       {open ? (
-        <div className="border-t border-border bg-card lg:hidden">
-          <nav className="mx-auto flex max-w-6xl flex-col px-2 py-2" aria-label={t.header.menu}>
-            <Link
-              href="/"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-3 text-base hover:bg-muted"
-            >
-              {t.nav.home}
-            </Link>
-            {links.map((link) => (
+        <nav className="border-t border-border bg-card" aria-label={t.header.menu}>
+          <div className="mx-auto grid max-w-6xl gap-1 px-2 py-2 sm:grid-cols-2">
+            {hub.rail.map((item) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={item.href}
+                href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 text-base hover:bg-muted"
+                className="rounded-lg px-3 py-3 text-sm hover:bg-muted"
               >
-                {t.nav[link.key]}
+                {item.label}
               </Link>
             ))}
-          </nav>
-        </div>
+          </div>
+        </nav>
       ) : null}
     </header>
   );

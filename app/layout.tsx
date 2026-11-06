@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s · EduMongolia",
   },
   description:
-    "Монгол, англи хэлтэй хичээл, нөөц, сурагчийн ширээ, багшийн самбар. edumongolia.com",
+    "Сургуулиас гадуур гэрийн багш, танхимын төв, онлайн сургалт, тэтгэлэг. edumongolia.com",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

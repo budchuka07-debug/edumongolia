@@ -117,7 +117,7 @@ export type Dictionary = {
 
 const mn: Dictionary = {
   brand: "EduMongolia",
-  tagline: "Сурагч, багш хоёрын нэг талбар",
+  tagline: "Сургуулиас гадуурх багш, төв, тэтгэлэг",
   nav: {
     home: "Нүүр",
     courses: "Хичээл",
@@ -271,7 +271,7 @@ const mn: Dictionary = {
 
 const en: Dictionary = {
   brand: "EduMongolia",
-  tagline: "One place for students and teachers",
+  tagline: "Tutors, centers, and scholarships beyond school",
   nav: {
     home: "Home",
     courses: "Courses",

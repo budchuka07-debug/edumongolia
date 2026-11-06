@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { HomePage } from "@/components/pages/home-page";
+import { HubHome } from "@/components/pages/hub-home";
 
 export const metadata: Metadata = {
   title: "EduMongolia",
-  description: "Аймаг бүрийн ангид хүрэх хичээл, нөөц, сурагч ба багшийн хэсэг.",
+  description:
+    "Сайн байна уу. Сургуулиас гадуур гэрийн багш, танхим, онлайн сургалт, тэтгэлэг, хөнгөлөлт.",
 };
 
 export default function Page() {
-  return <HomePage />;
+  return <HubHome />;
 }
