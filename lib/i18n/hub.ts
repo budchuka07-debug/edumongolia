@@ -47,6 +47,7 @@ export type HubCopy = {
     foreignTeachers: string;
     international: string;
     travel: string;
+    englishWild: string;
     foreignUni: string;
     admin: string;
     schedule: string;
@@ -135,6 +136,7 @@ const railHrefs = [
   ["/programs/foreign", "foreignTeachers"],
   ["/programs/international", "international"],
   ["/programs/travel", "travel"],
+  ["/programs/english", "englishWild"],
   ["/scholarships?scope=foreign", "foreignUni"],
 ] as const;
 
@@ -163,6 +165,7 @@ const mnSections: HubCopy["sections"] = {
   foreignTeachers: "Гадаад багштай сургалт",
   international: "Олон улсын сургалтууд",
   travel: "Аялалтай сургалт",
+  englishWild: "Англи хэлний вакуум аялал",
   foreignUni: "Гадаадын их дээд сургуулийн тэтгэлэгт хөтөлбөр",
   admin: "Админ самбар",
   schedule: "Цагийн хуваарь",
@@ -186,6 +189,7 @@ const enSections: HubCopy["sections"] = {
   foreignTeachers: "Courses with foreign teachers",
   international: "International courses",
   travel: "Study with travel",
+  englishWild: "English immersion trip",
   foreignUni: "Scholarship tracks for foreign universities",
   admin: "Admin desk",
   schedule: "Schedule",

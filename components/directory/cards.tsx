@@ -69,6 +69,11 @@ export function OfferCard({ offer }: { offer: Offer }) {
       <p className="mt-1 text-sm text-muted-foreground">{offer.org[locale]}</p>
       <p className="mt-3 text-sm leading-6">{offer.summary[locale]}</p>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">{offer.detail[locale]}</p>
+      {offer.href && offer.linkLabel ? (
+        <Link href={offer.href} className="mt-3 inline-block text-sm font-semibold text-primary">
+          {offer.linkLabel[locale]}
+        </Link>
+      ) : null}
     </article>
   );
 }

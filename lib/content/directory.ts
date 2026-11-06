@@ -71,6 +71,8 @@ export type Offer = {
   summary: Copy;
   detail: Copy;
   meta: Copy;
+  href?: string;
+  linkLabel?: Copy;
 };
 
 export const teachers: Teacher[] = [
@@ -461,6 +463,26 @@ export const offers: Offer[] = [
       en: "Online small groups. Materials in Mongolian and English.",
     },
     meta: { mn: "8 долоо хоног", en: "8 weeks" },
+  },
+  {
+    id: "english-immersion",
+    kind: "travel",
+    title: {
+      mn: "Англи хэлний вакуум аялал",
+      en: "English immersion in the wild",
+    },
+    org: { mn: "Booking Mongolia", en: "Booking Mongolia" },
+    summary: {
+      mn: "7 хоног, 100% англи. Хөвсгөл нуур, Тэрэлж, Цонжин болдог. Англи хичээл болон морь унах хичээлд хамт сууна.",
+      en: "Seven days, 100% English. Khuvsgul Lake, Terelj, and Tsonjin Boldog. Join the English class and the horse-riding lesson.",
+    },
+    detail: {
+      mn: "Жижиг бүлэг хөдөөний малчин айлын буудалд байрлаж болно. Огноо, үнэ Booking Mongolia дээр.",
+      en: "A small group can stay in a herder family camp. Dates and price are on Booking Mongolia.",
+    },
+    meta: { mn: "7 хоног", en: "7 days" },
+    href: "/programs/english",
+    linkLabel: { mn: "Хөтөлбөрийг нээх", en: "Open the program" },
   },
   {
     id: "khuvsgul-trip",
