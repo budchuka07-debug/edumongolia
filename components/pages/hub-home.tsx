@@ -6,6 +6,7 @@ import { centers, offers, teachers } from "@/lib/content/directory";
 import { papers } from "@/lib/content/papers";
 import { PaperCard } from "@/components/pages/paper-board";
 import { useHub } from "@/components/directory/use-hub";
+import { ChinaPreview } from "@/components/marketplace/china-preview";
 import { CenterCard, OfferCard, TeacherCard } from "@/components/directory/cards";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
@@ -71,6 +72,8 @@ export function HubHome() {
           </Link>
         </div>
       </section>
+
+      <ChinaPreview />
 
       <Section id="classroom" title={hub.sections.classroom} href="/centers" seeAll={hub.seeAll}>
         <Row>

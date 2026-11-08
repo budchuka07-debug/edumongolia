@@ -17,12 +17,13 @@ const heading = Literata({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://edumongolia.com"),
   title: {
     default: "EduMongolia",
     template: "%s · EduMongolia",
   },
   description:
-    "Сургуулиас гадуур гэрийн багш, танхимын төв, онлайн сургалт, тэтгэлэг. edumongolia.com",
+    "Сургуулиас гадуур гэрийн багш, танхимын төв, онлайн сургалт, Хятадын их сургууль, тэтгэлэг. edumongolia.com",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

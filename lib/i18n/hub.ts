@@ -49,6 +49,11 @@ export type HubCopy = {
     travel: string;
     englishWild: string;
     foreignUni: string;
+    china: string;
+    universities: string;
+    majors: string;
+    chinaScholarships: string;
+    eligibility: string;
     admin: string;
     schedule: string;
     papers: string;
@@ -126,6 +131,11 @@ const railHrefs = [
   ["/tutors", "tutors"],
   ["/online", "onlineTeachers"],
   ["/scholarships", "scholarships"],
+  ["/china", "china"],
+  ["/universities", "universities"],
+  ["/programs", "majors"],
+  ["/study/scholarships", "chinaScholarships"],
+  ["/eligibility", "eligibility"],
   ["/discounts", "discounts"],
   ["/papers", "papers"],
   ["/papers/order", "orderPaper"],
@@ -167,6 +177,11 @@ const mnSections: HubCopy["sections"] = {
   travel: "Аялалтай сургалт",
   englishWild: "Англи хэлний вакуум аялал",
   foreignUni: "Гадаадын их дээд сургуулийн тэтгэлэгт хөтөлбөр",
+  china: "Хятад дахь сургалт",
+  universities: "Их сургуулиуд",
+  majors: "Хөтөлбөр, мэргэжил",
+  chinaScholarships: "Хятадын тэтгэлэг",
+  eligibility: "Элсэлтийн шалгуур",
   admin: "Админ самбар",
   schedule: "Цагийн хуваарь",
   papers: "Төсөл, диплом, даалгавар",
@@ -191,6 +206,11 @@ const enSections: HubCopy["sections"] = {
   travel: "Study with travel",
   englishWild: "English immersion trip",
   foreignUni: "Scholarship tracks for foreign universities",
+  china: "Study in China",
+  universities: "Universities",
+  majors: "Programs and majors",
+  chinaScholarships: "China scholarships",
+  eligibility: "Eligibility check",
   admin: "Admin desk",
   schedule: "Schedule",
   papers: "Projects, diplomas, assignments",
