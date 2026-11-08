@@ -30,7 +30,9 @@ python3 scripts/import_moe_registry.py
 
 ## Хуудас
 
-- `/china-universities/registry` — хайлт, муж, түвшин
+- `/china-universities/registry` — нэр, муж, хот, түвшин. Мэргэжил, хэл, төлбөр, тэтгэлэг зөвхөн DongXueJi-ийн хөтөлбөрөөс, тусад нь.
+- `/china-universities/registry/compare` — яамны талбараар харьцуулалт
+- `/china-universities/registry/saved` — хөтөчид хадгалсан сургууль
 - `/china-universities/registry/[код]` — монгол профайл
 - Админ самбар — дутуу талбар, энэ хөтөчийн төлөв
 

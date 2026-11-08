@@ -103,6 +103,14 @@ export function HostDirectory() {
           <Link className="font-semibold text-primary" href={paths.registry}>
             {en ? "Ministry registry, 3,196 institutions" : "Яамны бүртгэл, 3,196 сургууль"}
           </Link>
+          {" · "}
+          <Link className="font-semibold text-primary" href={paths.chinaCities}>
+            {en ? "City living" : "Хотын амьдрах орчин"}
+          </Link>
+          {" · "}
+          <Link className="font-semibold text-primary" href={paths.chinaVideos}>
+            {en ? "Videos" : "Видео"}
+          </Link>
         </p>
       </header>
       <div className="flex flex-wrap gap-2">

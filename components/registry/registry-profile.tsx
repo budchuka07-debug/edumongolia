@@ -142,6 +142,14 @@ export function RegistryProfile({ institution }: { institution: MoeInstitution }
         <Link className="font-semibold text-primary" href={paths.registry}>
           Бүртгэлийн жагсаалт
         </Link>
+        {" · "}
+        <Link className="font-semibold text-primary" href={`${paths.registryCompare}?codes=${institution.code}`}>
+          Харьцуулах
+        </Link>
+        {" · "}
+        <Link className="font-semibold text-primary" href={paths.registrySaved}>
+          Хадгалсан
+        </Link>
       </p>
     </article>
   );

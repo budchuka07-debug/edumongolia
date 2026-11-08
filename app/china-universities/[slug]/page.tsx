@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HostProfile } from "@/components/marketplace/host-directory";
+import { PartnerMedia } from "@/components/marketplace/partner-media";
 import { JsonLd } from "@/components/marketplace/json-ld";
 import { UniversityView } from "@/components/marketplace/university-view";
 import { chinaLinkHosts, chinaLinkSource, getChinaLinkHost } from "@/lib/marketplace/china-link-hosts";
@@ -58,6 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           }}
         />
         <HostProfile slug={slug} />
+        {partner ? <PartnerMedia slug={partner.slug} cityEn={partner.cityEn} cityZh={partner.cityZh} /> : null}
       </>
     );
   }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { filterMoeInstitutions, levelLabel, moeProvinces, moeSummary } from "@/lib/registry/moe";
+import { filterMoeInstitutions, levelLabel, moeCities, moeProvinces, moeSummary } from "@/lib/registry/moe";
+import { searchPartnerPrograms } from "@/lib/registry/partner-search";
 import { paths } from "@/lib/marketplace/paths";
 import { pageMeta } from "@/lib/marketplace/seo";
 
@@ -13,23 +14,28 @@ export const metadata: Metadata = pageMeta({
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; province?: string; level?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; province?: string; city?: string; level?: string; admission?: string; major?: string; language?: string; tuitionMin?: string; tuitionMax?: string; scholarship?: string; page?: string }>;
 }) {
   const query = await searchParams;
   const page = Number(query.page || "1");
   const result = filterMoeInstitutions({
     q: query.q,
     province: query.province,
+    city: query.city,
     level: query.level,
+    admission: query.admission,
     page: Number.isFinite(page) ? page : 1,
   });
   const provinces = moeProvinces();
+  const cities = moeCities(query.province);
+  const partner = searchPartnerPrograms(query);
 
   function href(nextPage: number) {
     const params = new URLSearchParams();
-    if (query.q) params.set("q", query.q);
-    if (query.province) params.set("province", query.province);
-    if (query.level) params.set("level", query.level);
+    for (const [key, value] of Object.entries(query)) {
+      if (key === "page" || !value) continue;
+      params.set(key, value);
+    }
     if (nextPage > 1) params.set("page", String(nextPage));
     const text = params.toString();
     return text ? `${paths.registry}?${text}` : paths.registry;
@@ -53,9 +59,17 @@ export default async function Page({
           <Link className="font-semibold text-primary" href={paths.universities}>
             China Link ба DongXueJi
           </Link>
+          {" · "}
+          <Link className="font-semibold text-primary" href={paths.registryCompare}>
+            Харьцуулах
+          </Link>
+          {" · "}
+          <Link className="font-semibold text-primary" href={paths.registrySaved}>
+            Хадгалсан
+          </Link>
         </p>
       </header>
-      <form key={`${query.q ?? ""}-${query.province ?? ""}-${query.level ?? ""}`} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" action={paths.registry}>
+      <form key={`${query.q ?? ""}-${query.province ?? ""}-${query.city ?? ""}-${query.level ?? ""}-${query.admission ?? ""}-${query.major ?? ""}`} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" action={paths.registry}>
         <label className="text-sm">
           <span className="mb-1 block text-muted-foreground">Нэр эсвэл код</span>
           <input name="q" defaultValue={query.q ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm" />
@@ -80,6 +94,52 @@ export default async function Page({
             <option value="adult">Насанд хүрэгчдийн</option>
             <option value="private">Тусгай (民办)</option>
           </select>
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block text-muted-foreground">Хот</span>
+          <select name="city" defaultValue={query.city ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm">
+            <option value="">Бүгд</option>
+            {cities.map((item) => (
+              <option key={`${item.provinceZh}-${item.locationZh}`} value={`${item.provinceZh}|${item.locationZh}`}>
+                {query.province ? item.locationZh : `${item.locationZh} · ${item.provinceMn}`}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block text-muted-foreground">Элсэлтийн төлөв</span>
+          <select name="admission" defaultValue={query.admission ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm">
+            <option value="">Бүгд</option>
+            <option value="open">Нээлттэй гэж нийтлэгдсэн</option>
+          </select>
+        </label>
+        <label className="text-sm lg:col-span-2">
+          <span className="mb-1 block text-muted-foreground">Мэргэжил (зөвхөн хамтрагчийн хөтөлбөр)</span>
+          <input name="major" defaultValue={query.major ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm" />
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block text-muted-foreground">Сургалтын хэл</span>
+          <select name="language" defaultValue={query.language ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm">
+            <option value="">Яамны жагсаалтад байхгүй</option>
+            <option value="Chinese">Хятад хэл, DongXueJi</option>
+            <option value="English">Англи хэл, DongXueJi</option>
+            <option value="Chinese and English">Хятад, англи хосолсон, DongXueJi</option>
+          </select>
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block text-muted-foreground">Тэтгэлгийн нэр</span>
+          <select name="scholarship" defaultValue={query.scholarship ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm">
+            <option value="">Яамны жагсаалтад байхгүй</option>
+            <option value="yes">DongXueJi дээр нэр нь бичигдсэн</option>
+          </select>
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block text-muted-foreground">Төлбөрийн доод дүн, юань</span>
+          <input name="tuitionMin" inputMode="numeric" defaultValue={query.tuitionMin ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm" />
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block text-muted-foreground">Төлбөрийн дээд дүн, юань</span>
+          <input name="tuitionMax" inputMode="numeric" defaultValue={query.tuitionMax ?? ""} className="h-10 w-full rounded-lg border border-input bg-card px-2 text-sm" />
         </label>
         <div className="flex items-end">
           <button type="submit" className="h-10 rounded-lg bg-primary px-4 text-sm text-primary-foreground">
@@ -111,12 +171,40 @@ export default async function Page({
                 </td>
                 <td className="px-3 py-2">{item.provinceMn} · {item.locationZh ?? item.provinceZh}</td>
                 <td className="px-3 py-2">{levelLabel(item)}{item.ownership === "private" ? " · тусгай" : ""}</td>
-                <td className="px-3 py-2 text-muted-foreground">Нийтлэгдээгүй</td>
+                <td className="px-3 py-2 text-muted-foreground">
+                  Нийтлэгдээгүй
+                  <Link className="mt-1 block font-medium text-primary" href={`${paths.registryCompare}?codes=${item.code}`}>
+                    Харьцуулах
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {query.admission === "open" ? (
+        <p className="text-sm">Яамны жагсаалт гадаад оюутны элсэлт нээлттэй гэж нэг ч сургууль дээр бичээгүй.</p>
+      ) : null}
+      {partner.active ? (
+        <section className="flex flex-col gap-3">
+          <h2 className="font-heading text-2xl font-semibold">Хамтрагчийн хөтөлбөр</h2>
+          <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
+            Мэргэжил, сургалтын хэл, төлбөр, тэтгэлгийн нэр яамны файлд байхгүй. Доорх мөр зөвхөн DongXueJi-ийн нийтэлсэн хөтөлбөр. Төлбөрийн хугацааг эхэд нь заагаагүй. Хоосон төлбөртэй хөтөлбөр дүнгийн шүүлтүүрт орохгүй.
+          </p>
+          {partner.hits.length === 0 ? <p className="text-sm">Тохирох хамтрагчийн хөтөлбөр алга.</p> : null}
+          <ul className="space-y-2 text-sm">
+            {partner.hits.map((hit) => (
+              <li key={hit.program.id} className="rounded-xl border border-border px-3 py-2">
+                <Link className="font-medium text-primary" href={paths.university(hit.university.slug)}>{hit.university.nameZh}</Link>
+                <p>{hit.program.name}</p>
+                <p className="text-muted-foreground">
+                  {hit.program.degree} · {hit.program.language} · {hit.program.tuitionCny == null ? "Төлбөр нийтлэгдээгүй" : `${hit.program.tuitionCny.toLocaleString("en-US")} CNY`} · {hit.program.award ?? "Тэтгэлгийн нэр байхгүй"}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       <p className="flex gap-4 text-sm">
         {result.page > 1 ? (
           <Link className="font-semibold text-primary" href={href(result.page - 1)}>

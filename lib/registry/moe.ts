@@ -37,6 +37,19 @@ export function moeProvinces() {
   return [...seen.values()];
 }
 
+export function moeCities(provinceZh?: string) {
+  const seen = new Map<string, { locationZh: string; provinceZh: string; provinceMn: string }>();
+  for (const item of moeInstitutions) {
+    if (!item.locationZh) continue;
+    if (provinceZh && item.provinceZh !== provinceZh) continue;
+    const key = `${item.provinceZh}\t${item.locationZh}`;
+    if (!seen.has(key)) {
+      seen.set(key, { locationZh: item.locationZh, provinceZh: item.provinceZh, provinceMn: item.provinceMn });
+    }
+  }
+  return [...seen.values()].sort((a, b) => a.locationZh.localeCompare(b.locationZh, "zh"));
+}
+
 export const unpublishedMn = "Албан ёсоор мэдээлэл одоогоор нийтлэгдээгүй.";
 
 export function levelLabel(item: MoeInstitution) {
@@ -46,14 +59,20 @@ export function levelLabel(item: MoeInstitution) {
   return unpublishedMn;
 }
 
-export function filterMoeInstitutions(input: { q?: string; province?: string; level?: string; page?: number }) {
+export function filterMoeInstitutions(input: { q?: string; province?: string; city?: string; level?: string; admission?: string; page?: number }) {
   const needle = (input.q ?? "").trim().toLowerCase();
   const rows = moeInstitutions.filter((item) => {
     if (input.province && item.provinceZh !== input.province) return false;
+    if (input.city) {
+      const [provincePart, cityPart] = input.city.includes("|") ? input.city.split("|") : ["", input.city];
+      if (cityPart && item.locationZh !== cityPart) return false;
+      if (provincePart && item.provinceZh !== provincePart) return false;
+    }
     if (input.level === "undergraduate" && item.level !== "undergraduate") return false;
     if (input.level === "vocational" && item.level !== "vocational") return false;
     if (input.level === "adult" && item.kind !== "adult") return false;
     if (input.level === "private" && item.ownership !== "private") return false;
+    if (input.admission === "open") return false;
     if (!needle) return true;
     return `${item.nameZh} ${item.code} ${item.provinceZh} ${item.provinceMn} ${item.locationZh ?? ""} ${item.authorityZh}`.toLowerCase().includes(needle);
   });
