@@ -4,6 +4,7 @@ import { HostProfile } from "@/components/marketplace/host-directory";
 import { JsonLd } from "@/components/marketplace/json-ld";
 import { UniversityView } from "@/components/marketplace/university-view";
 import { chinaLinkHosts, chinaLinkSource, getChinaLinkHost } from "@/lib/marketplace/china-link-hosts";
+import { dongxuejiUniversities, getDongxuejiUniversity } from "@/lib/marketplace/dongxueji-universities";
 import { paths } from "@/lib/marketplace/paths";
 import { getUniversity, isPublicUniversity, listPublishedUniversities } from "@/lib/marketplace/queries";
 import { pageMeta, siteUrl } from "@/lib/marketplace/seo";
@@ -12,6 +13,7 @@ export function generateStaticParams() {
   const slugs = new Set([
     ...listPublishedUniversities().map((university) => university.slug),
     ...chinaLinkHosts.map((host) => host.slug),
+    ...dongxuejiUniversities.map((partner) => partner.slug),
   ]);
   return slugs.size ? [...slugs].map((slug) => ({ slug })) : [{ slug: "__unpublished__" }];
 }
@@ -19,11 +21,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const host = getChinaLinkHost(slug);
-  if (host) {
+  const partner = getDongxuejiUniversity(slug);
+  if (host || partner) {
+    const nameEn = host?.nameEn ?? partner?.nameEn ?? "University";
+    const nameZh = host?.nameZh ?? partner?.nameZh ?? "";
     return pageMeta({
-      title: host.nameEn,
-      description: `${host.nameZh}. ${host.provinceEn}. 2026 China Link хүлээн авагч. Квот, чиглэл, хугацаа хавсралтад байхгүй.`,
-      path: paths.university(host.slug),
+      title: nameEn,
+      description: `${nameZh}. ${partner ? "DongXueJi-ийн хамтрагч сургууль." : "2026 China Link хүлээн авагч."} Чиглэл, суудал, хугацааг эхэд нь байгаагаар нь харуулна.`,
+      path: paths.university(slug),
     });
   }
   const university = getUniversity(slug);
@@ -38,20 +43,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const host = getChinaLinkHost(slug);
-  if (host) {
+  const partner = getDongxuejiUniversity(slug);
+  if (host || partner) {
     return (
       <>
         <JsonLd
           data={{
             "@context": "https://schema.org",
             "@type": "CollegeOrUniversity",
-            name: host.nameEn,
-            alternateName: host.nameZh,
-            url: chinaLinkSource.listUrl,
-            address: { "@type": "PostalAddress", addressRegion: host.provinceEn, addressCountry: "CN" },
+            name: host?.nameEn ?? partner?.nameEn,
+            alternateName: host?.nameZh ?? partner?.nameZh,
+            url: partner?.partnerUrl ?? chinaLinkSource.listUrl,
+            address: { "@type": "PostalAddress", addressRegion: host?.provinceEn ?? partner?.provinceEn, addressCountry: "CN" },
           }}
         />
-        <HostProfile slug={host.slug} />
+        <HostProfile slug={slug} />
       </>
     );
   }

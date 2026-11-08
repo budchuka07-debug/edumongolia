@@ -6,7 +6,7 @@ import { listPublishedUniversities } from "@/lib/marketplace/queries";
 
 export const metadata: Metadata = pageMeta({
   title: "Гадаад оюутан хүлээн авах их сургуулиуд",
-  description: "2026 оны China Link тэтгэлгийн 295 хүлээн авагч их сургууль. Квот, чиглэл, хугацааг хавсралтад байхгүй бол хоосон.",
+  description: "China Link-ийн 295 хүлээн авагч ба DongXueJi-ийн 256 хамтрагч сургууль. Хөтөлбөрийн чиглэл, суудал, хугацааг эхэд нь байгаагаар нь харуулна.",
   path: "/china-universities",
 });
 
