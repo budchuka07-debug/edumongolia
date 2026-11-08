@@ -1,4 +1,5 @@
 import { catalog } from "@/lib/marketplace/catalog";
+import { chinaLinkHosts } from "@/lib/marketplace/china-link-hosts";
 import { paths } from "@/lib/marketplace/paths";
 import type {
   AcademicRequirement,
@@ -185,6 +186,7 @@ export function marketplacePaths() {
     paths.apply,
     paths.account,
     paths.partners,
+    ...chinaLinkHosts.map((item) => paths.university(item.slug)),
     ...catalog.universities.filter(isPublicUniversity).map((item) => paths.university(item.slug)),
     ...catalog.programs.filter(isPublicProgram).map((item) => paths.program(item.slug)),
     ...catalog.scholarships.filter(isPublicScholarship).map((item) => paths.scholarship(item.slug)),

@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { Fact, Shell, StatusPill, categoryLabel, degreeLabel, money, useMarket } from "@/components/marketplace/chrome";
 import { catalog } from "@/lib/marketplace/catalog";
-import { EmptyState } from "@/components/empty-state";
+import { ChinaLinkFacts } from "@/components/marketplace/host-directory";
+import { chinaLinkHosts, chinaLinkSource } from "@/lib/marketplace/china-link-hosts";
+import { paths } from "@/lib/marketplace/paths";
 import { benefitFor, deadlineFor, isPublicScholarship, requirementFor, sourceOf, universityOf } from "@/lib/marketplace/queries";
 import type { Scholarship } from "@/lib/marketplace/types";
 
@@ -11,9 +13,19 @@ export function ScholarshipBrowser() {
   const { t, text } = useMarket();
   return (
     <Shell kicker={t.chinaKicker} title={t.scholarships} lead={t.nationalBody}>
-      {catalog.scholarships.filter(isPublicScholarship).length === 0 ? (
-        <EmptyState title={t.nonePublished} lead={t.nonePublishedLead} />
-      ) : null}
+      <article className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
+        <p className="text-xs font-medium text-primary">2026-01-21</p>
+        <h2 className="mt-2 font-heading text-2xl font-semibold">China Link</h2>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{t.hostLead}</p>
+        <p className="mt-3 text-sm">
+          <a className="font-semibold text-primary" href={chinaLinkSource.programUrl}>{t.website}</a>
+          {" · "}
+          <Link href={paths.universities} className="font-semibold text-primary">
+            {chinaLinkHosts.length}
+          </Link>
+        </p>
+      </article>
+      <ChinaLinkFacts />
       <div className="grid gap-4 md:grid-cols-2">
         {catalog.scholarships.filter(isPublicScholarship).map((scholarship) => {
           const benefit = benefitFor(scholarship.id, scholarship.academicYearId);

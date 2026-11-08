@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { EmptyState } from "@/components/empty-state";
 import { Shell, useMarket } from "@/components/marketplace/chrome";
 import { paths } from "@/lib/marketplace/paths";
 import { cn } from "cn";
@@ -38,9 +37,8 @@ export function ChinaHome() {
       </div>
       <section>
         <h2 className="font-heading text-2xl font-semibold">{t.universities}</h2>
-        <div className="mt-4">
-          <EmptyState title={t.nonePublished} lead={t.nonePublishedLead} />
-        </div>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">{t.hostLead}</p>
+        <Link href={paths.universities} className="mt-3 inline-block text-sm font-semibold text-primary">{t.universities}</Link>
       </section>
       <section>
         <h2 className="font-heading text-2xl font-semibold">{t.requirements}</h2>

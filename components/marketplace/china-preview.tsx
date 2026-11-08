@@ -13,7 +13,7 @@ export function ChinaPreview() {
           {t.seeAllChina}
         </Link>
       </div>
-      <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{t.nonePublishedLead}</p>
+      <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{t.hostLead}</p>
     </section>
   );
 }
