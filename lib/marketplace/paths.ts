@@ -15,6 +15,7 @@ export const paths = {
   program: (slug: string) => `/china-programs/${slug}`,
   compare: "/china-programs/compare",
   scholarships: "/china-scholarships",
+  innerMongoliaScholarship: "/china-scholarships/inner-mongolia-government",
   scholarship: (slug: string) => `/china-scholarships/${slug}`,
   admission: "/admission-requirements",
   article: (slug: string) => `/admission-requirements/${slug}`,

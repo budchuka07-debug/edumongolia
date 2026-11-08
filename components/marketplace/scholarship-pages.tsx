@@ -6,11 +6,12 @@ import { catalog } from "@/lib/marketplace/catalog";
 import { ChinaLinkFacts } from "@/components/marketplace/host-directory";
 import { chinaLinkHosts, chinaLinkSource } from "@/lib/marketplace/china-link-hosts";
 import { paths } from "@/lib/marketplace/paths";
+import { innerMongoliaScholarshipPath } from "@/lib/scholarships/inner-mongolia";
 import { benefitFor, deadlineFor, isPublicScholarship, requirementFor, sourceOf, universityOf } from "@/lib/marketplace/queries";
 import type { Scholarship } from "@/lib/marketplace/types";
 
 export function ScholarshipBrowser() {
-  const { t, text } = useMarket();
+  const { t, text, lang } = useMarket();
   return (
     <Shell kicker={t.chinaKicker} title={t.scholarships} lead={t.nationalBody}>
       <article className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
@@ -26,6 +27,20 @@ export function ScholarshipBrowser() {
         </p>
       </article>
       <ChinaLinkFacts />
+      <article className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
+        <p className="text-xs font-medium text-primary">{lang === "en" ? "Separate program" : "Тусдаа хөтөлбөр"}</p>
+        <h2 className="mt-2 font-heading text-2xl font-semibold">
+          <Link href={innerMongoliaScholarshipPath} className="hover:underline">
+            {lang === "en" ? "Inner Mongolia Government Scholarship" : "Өвөр Монголын Засгийн газрын тэтгэлэг"}
+          </Link>
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">内蒙古自治区政府奖学金</p>
+        <p className="mt-3 text-sm leading-6">
+          {lang === "en"
+            ? "For Mongolian students. Not the Chinese Government Scholarship, and not a university or other provincial award. The 2026/2027 quota is historical."
+            : "Монгол оюутанд. Хятадын засгийн газрын тэтгэлэг, их сургуулийн болон бусад мужийн тэтгэлэг биш. 2026/2027 оны квот нь өмнөх жилийн тоо."}
+        </p>
+      </article>
       <div className="grid gap-4 md:grid-cols-2">
         {catalog.scholarships.filter(isPublicScholarship).map((scholarship) => {
           const benefit = benefitFor(scholarship.id, scholarship.academicYearId);

@@ -16,6 +16,7 @@ import { centerStatus, offerStatus, paperStatus, teacherStatus } from "@/lib/con
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useHub } from "@/components/directory/use-hub";
 import { InternationalCatalog } from "@/components/marketplace/admin-catalog";
+import { InnerMongoliaAdmin } from "@/components/scholarships/inner-mongolia-admin";
 import { RegistryAdmin } from "@/components/registry/registry-admin";
 
 function teacherName(id: string, extra: Teacher[]) {
@@ -36,6 +37,7 @@ export function AdminDesk() {
       <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">{page.lead}</p>
       <p className="mt-2 text-sm text-muted-foreground">{hub.saved}</p>
       <InternationalCatalog />
+      <InnerMongoliaAdmin />
       <RegistryAdmin />
       <section className="mt-12">
         <h2 className="font-heading text-2xl font-semibold">Ноорог</h2>

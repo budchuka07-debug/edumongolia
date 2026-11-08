@@ -182,6 +182,7 @@ export function marketplacePaths() {
     paths.programs,
     paths.compare,
     paths.scholarships,
+    paths.innerMongoliaScholarship,
     paths.eligibility,
     paths.admission,
     paths.exams,
