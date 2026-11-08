@@ -4,7 +4,7 @@
 
 ## Дараалал
 
-1. Supabase төсөл үүсгээд `supabase/schema.sql`, дараа нь `supabase/rls.sql` ажиллуулна.
+1. Supabase төсөл үүсгээд `supabase/schema.sql`, `supabase/knowledge-base.sql`, `supabase/rls.sql`, дараа нь `supabase/rls-knowledge-base.sql` ажиллуулна. Одоо холбохгүй. Тайлбар `docs/china-knowledge-base.md`.
 2. `lib/marketplace/catalog.ts` дээрх UUID-г seed болгоно. Хоосон тоог null хэвээр үлдээнэ.
 3. `translations` хүснэгтэд mn, en, zh оруулна. Код дахь `Localized` объект түр зуурынх.
 4. Auth: `profiles.id = auth.uid()`. Сурагч өөрийн өргөдөл, баримтаа уншина. Агент зөвхөн оноогдсон өргөдөл. Хамтрагч зөвхөн өөрийн байгууллага.

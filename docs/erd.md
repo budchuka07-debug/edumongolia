@@ -28,6 +28,6 @@ erDiagram
   partners ||--o{ referrals : sends
 ```
 
-Бүтэн хүснэгт `supabase/schema.sql` дотор. Орчуулга `translations` хүснэгтэд `entity_table + entity_id + field_name + locale`. Одоогийн код орчуулгыг TypeScript объект дээр хадгална. 3-р үед мөр болгоно.
+Бүтэн хүснэгт `supabase/schema.sql` дотор. Бүртгэл, төлбөр, импортын нэмэлт `supabase/knowledge-base.sql` болон `docs/china-knowledge-base.md` дотор. Орчуулга `translations` хүснэгтэд `entity_table + entity_id + field_name + locale`. Одоогийн код орчуулгыг TypeScript объект дээр хадгална. 3-р үед мөр болгоно. Supabase холбогдоогүй.
 
 `audit_logs.context` л jsonb. Төлбөр, оноо, баримт бичгийг jsonb-д хийхгүй.
