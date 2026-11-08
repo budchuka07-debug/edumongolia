@@ -99,6 +99,10 @@ export function HostDirectory() {
           <a className="font-semibold text-primary" href={dongxuejiSource.listUrl}>
             {en ? "DongXueJi study-abroad list" : "DongXueJi-ийн элсэлтийн жагсаалт"}
           </a>
+          {" · "}
+          <Link className="font-semibold text-primary" href={paths.registry}>
+            {en ? "Ministry registry, 3,196 institutions" : "Яамны бүртгэл, 3,196 сургууль"}
+          </Link>
         </p>
       </header>
       <div className="flex flex-wrap gap-2">

@@ -79,6 +79,7 @@ export function SiteHeader() {
       ? [
           { href: "/study-abroad/china", label: "Study in China" },
           { href: "/china-universities", label: "Universities" },
+          { href: "/china-universities/registry", label: "Ministry registry" },
           { href: "/china-programs", label: "Programs and majors" },
           { href: "/study-abroad", label: "Study abroad" },
           { href: "/eligibility-checker", label: "Eligibility check" },
@@ -91,6 +92,7 @@ export function SiteHeader() {
       : [
           { href: "/study-abroad/china", label: "Хятад дахь сургалт" },
           { href: "/china-universities", label: "Их сургуулиуд" },
+          { href: "/china-universities/registry", label: "Яамны бүртгэл" },
           { href: "/china-programs", label: "Хөтөлбөр, мэргэжил" },
           { href: "/study-abroad", label: "Гадаадад суралцах" },
           { href: "/eligibility-checker", label: "Элсэлтийн шалгуур" },
@@ -104,7 +106,7 @@ export function SiteHeader() {
   const grouped = groupOrder.map((id) => ({
     id,
     title: groupTitle[id],
-    links: id === "abroad" ? abroadLinks : hub.rail.filter((item) => bucket(item.href) === id && item.href !== "/study-abroad/china" && item.href !== "/china-universities" && item.href !== "/china-programs" && item.href !== "/eligibility-checker" && item.href !== "/admission-requirements" && item.href !== "/examination-requirements" && item.href !== "/csca" && item.href !== "/apply" && item.href !== "/study-abroad"),
+    links: id === "abroad" ? abroadLinks : hub.rail.filter((item) => bucket(item.href) === id && item.href !== "/study-abroad/china" && item.href !== "/china-universities" && item.href !== "/china-universities/registry" && item.href !== "/china-programs" && item.href !== "/eligibility-checker" && item.href !== "/admission-requirements" && item.href !== "/examination-requirements" && item.href !== "/csca" && item.href !== "/apply" && item.href !== "/study-abroad"),
   }));
 
   useEffect(() => {

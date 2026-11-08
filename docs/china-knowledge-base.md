@@ -6,9 +6,12 @@ Apply in this order, later, on an empty Supabase database:
 
 1. `supabase/schema.sql`
 2. `supabase/knowledge-base.sql`
-3. `supabase/rls.sql`
-4. `supabase/rls-knowledge-base.sql`
-5. `supabase/seeds/demonstration.sql` only in a non-production database
+3. `supabase/registry-profile.sql`
+4. `supabase/rls.sql`
+5. `supabase/rls-knowledge-base.sql`
+6. `supabase/rls-registry.sql`
+7. `supabase/seeds/moe-2026-06-17.sql` for the 17 June 2026 institution file
+8. `supabase/seeds/demonstration.sql` only in a non-production database
 
 `supabase/seeds/demonstration.sql` inserts one draft row whose English name is `DEMONSTRATION ONLY — not a university`, plus five headline counts. It does not insert a real institution, a program, a fee, or an admission rule.
 
@@ -28,7 +31,9 @@ A university is one row. Membership is `university_registries.registry`:
 
 The same university can be in more than one registry. A Ministry listing does not set `international_student_status`. That column stays `unknown` until a source says `accepts` or `does_not_accept`.
 
-The June 2026 headline counts from the project brief are stored as `registry_statistics`, not as 3,196 invented schools:
+The 17 June 2026 Ministry spreadsheets are in `data/moe/2026-06-17/`. `scripts/import_moe_registry.py` rebuilds the JSON catalog and `supabase/seeds/moe-2026-06-17.sql`. That seed marks identity fields from the file as officially verified. It does not set `international_student_status`. The older demonstration seed still stores the same headline counts as pending, dated 2026-06-01, because that seed is not the institution file.
+
+The June 2026 headline counts are:
 
 | Metric | Value |
 | --- | --- |
@@ -38,7 +43,7 @@ The June 2026 headline counts from the project brief are stored as `registry_sta
 | Higher vocational institutions | 1,540 |
 | Adult higher education institutions | 244 |
 
-Those five rows are `pending_verification`. The institution file and its exact notice URL are not in this repository, so they are not marked officially verified. 2,952 + 244 = 3,196. The undergraduate and vocational counts are a split of the regular institutions, not an extra set of schools.
+2,952 + 244 = 3,196. The undergraduate and vocational counts are a split of the regular institutions, not an extra set of schools. `supabase/seeds/moe-2026-06-17.sql` stores these five counts as `officially_verified` on 2026-06-17. The demonstration seed keeps a separate pending copy dated 2026-06-01.
 
 ## Names and languages
 

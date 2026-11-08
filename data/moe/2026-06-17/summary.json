@@ -1,0 +1,14 @@
+{
+  "asOf": "2026-06-17",
+  "checkedOn": "2026-11-08",
+  "noticeUrl": "http://www.moe.gov.cn/jyb_xxgk/s5743/s5744/202606/t20260618_1441074.html",
+  "regularFile": "http://www.moe.gov.cn/jyb_xxgk/s5743/s5744/202606/W020260618416094865984.xls",
+  "adultFile": "http://www.moe.gov.cn/jyb_xxgk/s5743/s5744/202606/W020260618307096079727.xls",
+  "total": 3196,
+  "regular": 2952,
+  "undergraduate": 1412,
+  "vocational": 1540,
+  "adult": 244,
+  "privateRemark": 842,
+  "crossLinks": 425
+}
