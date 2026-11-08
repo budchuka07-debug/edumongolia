@@ -18,7 +18,7 @@ export function ScholarshipBrowser() {
             <article key={scholarship.id} className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
               <p className="text-xs font-medium text-primary">{year?.label}</p>
               <h2 className="mt-2 font-heading text-2xl font-semibold">
-                <Link href={`/scholarships/${scholarship.slug}`} className="hover:underline">
+                <Link href={`/china-scholarships/${scholarship.slug}`} className="hover:underline">
                   {text(scholarship.name)}
                 </Link>
               </h2>
@@ -84,7 +84,7 @@ export function ScholarshipView({ scholarship }: { scholarship: Scholarship }) {
             : links.map((link) => {
                 const university = universityOf(link.universityId);
                 return university ? (
-                  <Link key={link.universityId} href={`/universities/${university.slug}`} className="block text-primary">
+                  <Link key={link.universityId} href={`/china-universities/${university.slug}`} className="block text-primary">
                     {text(university.name)}
                   </Link>
                 ) : null;
@@ -102,7 +102,7 @@ export function ScholarshipView({ scholarship }: { scholarship: Scholarship }) {
         </p>
       ) : null}
       <p className="text-sm text-muted-foreground">{t.disclaimer}</p>
-      <Link href="/eligibility" className="text-sm font-semibold text-primary">
+      <Link href="/eligibility-checker" className="text-sm font-semibold text-primary">
         {t.checkFit}
       </Link>
     </Shell>

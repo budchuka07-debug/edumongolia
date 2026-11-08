@@ -54,6 +54,13 @@ export type HubCopy = {
     majors: string;
     chinaScholarships: string;
     eligibility: string;
+    studyAbroad: string;
+    admission: string;
+    exams: string;
+    csca: string;
+    apply: string;
+    account: string;
+    partners: string;
     admin: string;
     schedule: string;
     papers: string;
@@ -131,11 +138,18 @@ const railHrefs = [
   ["/tutors", "tutors"],
   ["/online", "onlineTeachers"],
   ["/scholarships", "scholarships"],
-  ["/china", "china"],
-  ["/universities", "universities"],
-  ["/programs", "majors"],
-  ["/study/scholarships", "chinaScholarships"],
-  ["/eligibility", "eligibility"],
+  ["/study-abroad/china", "china"],
+  ["/china-universities", "universities"],
+  ["/china-programs", "majors"],
+  ["/china-scholarships", "chinaScholarships"],
+  ["/study-abroad", "studyAbroad"],
+  ["/eligibility-checker", "eligibility"],
+  ["/admission-requirements", "admission"],
+  ["/examination-requirements", "exams"],
+  ["/csca", "csca"],
+  ["/apply", "apply"],
+  ["/account", "account"],
+  ["/partners", "partners"],
   ["/discounts", "discounts"],
   ["/papers", "papers"],
   ["/papers/order", "orderPaper"],
@@ -182,6 +196,13 @@ const mnSections: HubCopy["sections"] = {
   majors: "Хөтөлбөр, мэргэжил",
   chinaScholarships: "Хятадын тэтгэлэг",
   eligibility: "Элсэлтийн шалгуур",
+  studyAbroad: "Гадаадад суралцах",
+  admission: "Элсэлтийн нөхцөл",
+  exams: "Шалгалтын нөхцөл",
+  csca: "CSCA",
+  apply: "Зөвлөгөө авах",
+  account: "Миний бүртгэл",
+  partners: "Хамтрагчид",
   admin: "Админ самбар",
   schedule: "Цагийн хуваарь",
   papers: "Төсөл, диплом, даалгавар",
@@ -211,6 +232,13 @@ const enSections: HubCopy["sections"] = {
   majors: "Programs and majors",
   chinaScholarships: "China scholarships",
   eligibility: "Eligibility check",
+  studyAbroad: "Study abroad",
+  admission: "Admission requirements",
+  exams: "Examination requirements",
+  csca: "CSCA",
+  apply: "Ask for advice",
+  account: "My account",
+  partners: "Partners",
   admin: "Admin desk",
   schedule: "Schedule",
   papers: "Projects, diplomas, assignments",

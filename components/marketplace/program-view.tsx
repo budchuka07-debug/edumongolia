@@ -18,13 +18,13 @@ export function ProgramView({ program }: { program: Program }) {
     <Shell kicker={program.name.zh} title={text(program.name)} lead={`${text(university.name)} · ${program.name.en}`}>
       <dl>
         <Fact label={t.universities}>
-          <Link className="text-primary underline-offset-4 hover:underline" href={`/universities/${university.slug}`}>
+          <Link className="text-primary underline-offset-4 hover:underline" href={`/china-universities/${university.slug}`}>
             {text(university.name)}
           </Link>
           {city ? `, ${text(city.name)}` : ""}
         </Fact>
         <Fact label={t.major}>
-          <Link className="text-primary underline-offset-4 hover:underline" href={`/programs/${discipline.slug}`}>
+          <Link className="text-primary underline-offset-4 hover:underline" href={`/china-programs/${discipline.slug}`}>
             {text(discipline.name)}
           </Link>
         </Fact>
@@ -80,9 +80,9 @@ export function ProgramView({ program }: { program: Program }) {
       ) : null}
       <p className="text-sm text-muted-foreground">{t.disclaimer}</p>
       <div className="flex flex-wrap gap-4 text-sm font-semibold">
-        <Link href={`/eligibility?program=${program.slug}`} className="text-primary">{t.checkFit}</Link>
-        <Link href={`/programs/compare?ids=${program.slug}`} className="text-primary">{t.compare}</Link>
-        <Link href="/study/inquiry" className="text-primary">{t.ask}</Link>
+        <Link href={`/eligibility-checker?program=${program.slug}`} className="text-primary">{t.checkFit}</Link>
+        <Link href={`/china-programs/compare?ids=${program.slug}`} className="text-primary">{t.compare}</Link>
+        <Link href="/apply" className="text-primary">{t.ask}</Link>
       </div>
     </Shell>
   );

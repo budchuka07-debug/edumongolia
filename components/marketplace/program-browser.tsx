@@ -73,7 +73,7 @@ export function ProgramBrowser({
           type="button"
           className={cn(buttonVariants({ variant: "outline" }))}
           disabled={picked.length < 2}
-          onClick={() => router.push(`/programs/compare?ids=${picked.join(",")}`)}
+          onClick={() => router.push(`/china-programs/compare?ids=${picked.join(",")}`)}
         >
           {t.compare} ({picked.length}/3)
         </button>
@@ -95,7 +95,7 @@ export function ProgramBrowser({
               <div>
                 <p className="text-xs text-muted-foreground">{text(university.name)} · {city ? text(city.name) : ""}</p>
                 <h2 className="font-heading text-xl font-semibold">
-                  <Link href={`/programs/${program.slug}`} className="hover:underline">
+                  <Link href={`/china-programs/${program.slug}`} className="hover:underline">
                     {text(program.name)}
                   </Link>
                 </h2>

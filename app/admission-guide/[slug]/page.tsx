@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return pageMeta({
       title: article.title.mn,
       description: article.description.mn,
-      path: `/admission-guide/${article.slug}`,
+      path: `/admission-requirements/${article.slug}`,
     });
   }
   const exam = examinations().find((item) => item.slug === slug);
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return pageMeta({
       title: exam.name.mn,
       description: `${exam.name.mn}. ${exam.name.zh}. Их сургуулийн доод оноог зохиогоогүй.`,
-      path: `/admission-guide/${exam.slug}`,
+      path: exam.slug === "csca" ? "/csca" : `/examination-requirements/${exam.slug}`,
     });
   }
   return { title: "Тайлбар" };

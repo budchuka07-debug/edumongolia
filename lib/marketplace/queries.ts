@@ -1,4 +1,5 @@
 import { catalog } from "@/lib/marketplace/catalog";
+import { paths } from "@/lib/marketplace/paths";
 import type {
   AcademicRequirement,
   City,
@@ -140,21 +141,26 @@ export function sessionsFor(examinationId: string) {
 }
 
 export function marketplacePaths() {
-  const paths = [
-    "/china",
-    "/universities",
-    "/programs",
-    "/programs/compare",
-    "/study/scholarships",
-    "/eligibility",
-    "/admission-guide",
-    "/study/inquiry",
-    ...catalog.universities.map((item) => `/universities/${item.slug}`),
-    ...catalog.programs.map((item) => `/programs/${item.slug}`),
-    ...catalog.disciplines.map((item) => `/programs/${item.slug}`),
-    ...catalog.scholarships.map((item) => `/scholarships/${item.slug}`),
-    ...catalog.articles.map((item) => `/admission-guide/${item.slug}`),
-    ...catalog.examinations.map((item) => `/admission-guide/${item.slug}`),
+  const list = [
+    paths.studyAbroad,
+    paths.china,
+    paths.universities,
+    paths.programs,
+    paths.compare,
+    paths.scholarships,
+    paths.eligibility,
+    paths.admission,
+    paths.exams,
+    paths.csca,
+    paths.apply,
+    paths.account,
+    paths.partners,
+    ...catalog.universities.map((item) => paths.university(item.slug)),
+    ...catalog.programs.map((item) => paths.program(item.slug)),
+    ...catalog.disciplines.map((item) => paths.program(item.slug)),
+    ...catalog.scholarships.map((item) => paths.scholarship(item.slug)),
+    ...catalog.articles.map((item) => paths.article(item.slug)),
+    ...catalog.examinations.filter((item) => item.slug !== "csca").map((item) => paths.exam(item.slug)),
   ];
-  return [...new Set(paths)];
+  return [...new Set(list)];
 }

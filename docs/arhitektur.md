@@ -16,14 +16,16 @@
 
 | Зам | Үүрэг |
 | --- | --- |
-| `/china` | Хятад дахь сургалтын нүүр |
-| `/universities`, `/universities/[slug]` | Их сургуулийн лавлах, дэлгэрэнгүй |
-| `/programs`, `/programs/[slug]` | Хөтөлбөр. Хуучин төрөл хэвээр |
-| `/programs/compare` | 2–3 хөтөлбөр зэрэгцүүлэх |
-| `/study/scholarships`, `/scholarships/[slug]` | Тэтгэлэг. Жил тусдаа |
-| `/eligibility` | Шалгуур |
-| `/admission-guide`, `/admission-guide/[slug]` | Тайлбар, шалгалт |
-| `/study/inquiry` | Зөвлөгөө. Хөтөч дээр, серверт явахгүй |
+| `/study-abroad`, `/study-abroad/china` | Гадаад сургалтын нүүр, Хятад |
+| `/china-universities`, `/china-universities/[slug]` | Их сургуулийн лавлах, дэлгэрэнгүй |
+| `/china-programs`, `/china-programs/[slug]`, `/china-programs/compare` | Хөтөлбөр. Хуучин `/programs/foreign`, `international`, `travel`, `english` хэвээр |
+| `/china-scholarships`, `/china-scholarships/[slug]` | Тэтгэлэг. Жил тусдаа. Хуучин `/scholarships` хэвээр |
+| `/eligibility-checker` | Шалгуур. Элсэлт амлахгүй |
+| `/admission-requirements`, `/examination-requirements`, `/csca` | Тайлбар, шалгалт |
+| `/apply` | Зөвлөгөө. Нэр, утсыг хадгалахгүй, илгээхгүй |
+| `/account`, `/partners` | Нэвтрэлтгүй тайлбар. Багш, сурагчийн бүртгэл хэвээр |
+
+Хуучин `/china`, `/universities`, `/programs` (яг энэ хаяг), `/study/scholarships`, `/eligibility`, `/admission-guide`, `/study/inquiry` шинэ хаяг руу чиглэнэ. `/programs/foreign` зэрэг хуучин сургалт чиглэхгүй.
 
 Өгөгдөл: `lib/marketplace/`. Дэлгэц: `components/marketplace/`. SQL: `supabase/schema.sql`, `supabase/rls.sql`. Supabase клиент суулгаагүй.
 
@@ -37,8 +39,8 @@
 
 ## Үлдсэн үе
 
-2. Админ, CSV, эх сурвалж баталгаажуулалт, өргөдлийн маягт.
+2. CSV, эх сурвалж засах, өргөдөл хадгалах. Админ дээр олон улсын хэсэг зөвхөн уншина.
 3. Supabase, нэвтрэлт, schema, хувийн хадгалалт, RLS, сурагчийн портал.
 4. Хамтрагч, агент, шимтгэл, мэдэгдэл, өргөдлийн явц.
 
-Одоогийн админ самбар гэрийн багшийн бүртгэлийг харуулсаар байна. Хятадын каталогийг тэнд засахгүй.
+Одоогийн админ самбар гэрийн багш, сурагч, бичгийн захиалгыг харуулсаар байна. Хятадын каталогийг тэнд засахгүй. Supabase холбогдоогүй.

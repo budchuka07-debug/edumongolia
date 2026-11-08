@@ -166,11 +166,11 @@ export function EligibilityForm({ initialProgram = "" }: { initialProgram?: stri
                       <div className="flex flex-wrap items-center gap-2">
                         <MatchPill status={match.status} />
                         <h3 className="font-heading text-xl font-semibold">
-                          <Link href={`/programs/${match.program.slug}`} className="hover:underline">{text(match.program.name)}</Link>
+                          <Link href={`/china-programs/${match.program.slug}`} className="hover:underline">{text(match.program.name)}</Link>
                         </h3>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        <Link href={`/universities/${match.university.slug}`} className="hover:underline">{text(match.university.name)}</Link>
+                        <Link href={`/china-universities/${match.university.slug}`} className="hover:underline">{text(match.university.name)}</Link>
                         {" · "}
                         {degreeLabel(match.program.degree, t)}
                         {" · "}

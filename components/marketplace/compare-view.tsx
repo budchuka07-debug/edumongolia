@@ -35,7 +35,7 @@ export function CompareView({ ids }: { ids: string }) {
       {programs.length < 2 ? (
         <p className="text-sm">
           {t.compareNeed}{" "}
-          <Link href="/programs" className="font-semibold text-primary">{t.programs}</Link>
+          <Link href="/china-programs" className="font-semibold text-primary">{t.programs}</Link>
         </p>
       ) : (
         <div className="overflow-x-auto">
@@ -45,7 +45,7 @@ export function CompareView({ ids }: { ids: string }) {
                 <th className="py-2 pr-3" />
                 {programs.map((program) => (
                   <th key={program.id} className="py-2 pr-3 font-heading text-base font-semibold">
-                    <Link href={`/programs/${program.slug}`} className="hover:underline">{text(program.name)}</Link>
+                    <Link href={`/china-programs/${program.slug}`} className="hover:underline">{text(program.name)}</Link>
                   </th>
                 ))}
               </tr>

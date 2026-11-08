@@ -60,7 +60,7 @@ export function UniversityBrowser() {
                 {programs.length} {t.programCount}
                 {programs[0] ? ` · ${degreeLabel(programs[0].degree, t)} · ${languageLabel(programs[0].instructionLanguage, t)}` : ""}
               </p>
-              <Link href={`/universities/${university.slug}`} className={cn(buttonVariants({ size: "lg" }), "mt-4 h-10 w-fit px-4")}>
+              <Link href={`/china-universities/${university.slug}`} className={cn(buttonVariants({ size: "lg" }), "mt-4 h-10 w-fit px-4")}>
                 {t.view}
               </Link>
             </article>

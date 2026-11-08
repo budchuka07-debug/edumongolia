@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Shell, useMarket } from "@/components/marketplace/chrome";
 import { cn } from "cn";
 
-const STORAGE_KEY = "edumongolia-china-inquiries";
-
 export function InquiryForm() {
   const { t } = useMarket();
   const [name, setName] = useState("");
@@ -25,9 +23,6 @@ export function InquiryForm() {
             setMessage(t.required);
             return;
           }
-          const current = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as unknown[];
-          current.push({ name: name.trim(), phone: phone.trim(), note: note.trim(), at: new Date().toISOString() });
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
           setMessage(t.saved);
           setName("");
           setPhone("");

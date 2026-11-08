@@ -3,30 +3,37 @@
 import Link from "next/link";
 import { Fact, Shell, StatusPill, useMarket } from "@/components/marketplace/chrome";
 import { catalog } from "@/lib/marketplace/catalog";
+import { paths } from "@/lib/marketplace/paths";
 import { sessionsFor, sourceOf, subjectsFor } from "@/lib/marketplace/queries";
 import type { Article, Examination } from "@/lib/marketplace/types";
 
-export function GuideIndex() {
+export function GuideIndex({ show = "all" }: { show?: "all" | "articles" | "exams" }) {
   const { t, text } = useMarket();
   return (
-    <Shell kicker={t.chinaKicker} title={t.guides} lead={t.examLead}>
-      <div className="grid gap-3 md:grid-cols-2">
-        {catalog.articles.map((article) => (
-          <Link key={article.slug} href={`/admission-guide/${article.slug}`} className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
-            <h2 className="font-heading text-2xl font-semibold">{text(article.title)}</h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">{text(article.description)}</p>
-          </Link>
-        ))}
-      </div>
-      <h2 className="font-heading text-2xl font-semibold">{t.examTitle}</h2>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {catalog.examinations.map((exam) => (
-          <Link key={exam.id} href={`/admission-guide/${exam.slug}`} className="rounded-2xl bg-card p-4 ring-1 ring-foreground/10">
-            <p className="font-heading text-xl font-semibold">{text(exam.name)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{exam.family}</p>
-          </Link>
-        ))}
-      </div>
+    <Shell kicker={t.chinaKicker} title={show === "exams" ? t.examTitle : t.guides} lead={t.examLead}>
+      {show === "exams" ? null : (
+        <div className="grid gap-3 md:grid-cols-2">
+          {catalog.articles.map((article) => (
+            <Link key={article.slug} href={paths.article(article.slug)} className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
+              <h2 className="font-heading text-2xl font-semibold">{text(article.title)}</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{text(article.description)}</p>
+            </Link>
+          ))}
+        </div>
+      )}
+      {show === "articles" ? null : (
+        <>
+          <h2 className="font-heading text-2xl font-semibold">{t.examTitle}</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {catalog.examinations.map((exam) => (
+              <Link key={exam.id} href={paths.exam(exam.slug)} className="rounded-2xl bg-card p-4 ring-1 ring-foreground/10">
+                <p className="font-heading text-xl font-semibold">{text(exam.name)}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{exam.family}</p>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
     </Shell>
   );
 }

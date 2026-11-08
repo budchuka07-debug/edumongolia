@@ -11,6 +11,7 @@ import {
 import { PAPER_ORDERS_KEY, type PaperOrder } from "@/lib/content/papers";
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useHub } from "@/components/directory/use-hub";
+import { InternationalCatalog } from "@/components/marketplace/admin-catalog";
 
 function teacherName(id: string, extra: Teacher[]) {
   if (!id) return "";
@@ -29,6 +30,7 @@ export function AdminDesk() {
       <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
       <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">{page.lead}</p>
       <p className="mt-2 text-sm text-muted-foreground">{hub.saved}</p>
+      <InternationalCatalog />
 
       <section className="mt-10">
         <h2 className="font-heading text-2xl font-semibold">{hub.form.students}</h2>

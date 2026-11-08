@@ -15,11 +15,11 @@ npm run dev
 
 1-р үе шат. Лавлах, хөтөлбөр, тэтгэлэг, CSCA-ийн нийтлэгдсэн өдөр, элсэлтийн шалгуур. Төлбөр, доод оноо, хугацааг зохиогоогүй. Supabase холбоогүй.
 
-- `/china` — эхлэл
-- `/universities` — их сургууль
-- `/programs` — хөтөлбөр
-- `/study/scholarships` — Хятадын тэтгэлэг
-- `/eligibility` — шалгуур
+- `/study-abroad/china` — эхлэл
+- `/china-universities` — их сургууль
+- `/china-programs` — хөтөлбөр
+- `/china-scholarships` — Хятадын тэтгэлэг
+- `/eligibility-checker` — шалгуур
 
 Хуучин гэрийн багш, төв, `/scholarships` хуудас хэвээр. Тайлбар `docs/arhitektur.md`.
 

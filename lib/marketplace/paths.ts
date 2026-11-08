@@ -1,0 +1,21 @@
+/** Canonical public paths for the China marketplace. Older paths redirect here. */
+export const paths = {
+  studyAbroad: "/study-abroad",
+  china: "/study-abroad/china",
+  universities: "/china-universities",
+  university: (slug: string) => `/china-universities/${slug}`,
+  programs: "/china-programs",
+  program: (slug: string) => `/china-programs/${slug}`,
+  compare: "/china-programs/compare",
+  scholarships: "/china-scholarships",
+  scholarship: (slug: string) => `/china-scholarships/${slug}`,
+  admission: "/admission-requirements",
+  article: (slug: string) => `/admission-requirements/${slug}`,
+  exams: "/examination-requirements",
+  exam: (slug: string) => (slug === "csca" ? "/csca" : `/examination-requirements/${slug}`),
+  csca: "/csca",
+  eligibility: "/eligibility-checker",
+  apply: "/apply",
+  account: "/account",
+  partners: "/partners",
+} as const;

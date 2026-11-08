@@ -26,6 +26,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [...new Set(paths)].map((path) => ({
     url: `${siteUrl}${path || "/"}`,
     changeFrequency: "weekly",
-    priority: path === "" || path === "/china" ? 1 : 0.7,
+    priority: path === "" || path === "/study-abroad/china" ? 1 : 0.7,
   }));
 }

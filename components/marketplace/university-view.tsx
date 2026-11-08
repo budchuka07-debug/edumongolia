@@ -49,7 +49,7 @@ export function UniversityView({ university }: { university: University }) {
         <h2 className="font-heading text-2xl font-semibold">{t.programs}</h2>
         <div className="mt-4 grid gap-3">
           {programs.map((program) => (
-            <Link key={program.id} href={`/programs/${program.slug}`} className="rounded-2xl bg-card p-4 ring-1 ring-foreground/10">
+            <Link key={program.id} href={`/china-programs/${program.slug}`} className="rounded-2xl bg-card p-4 ring-1 ring-foreground/10">
               <p className="text-sm text-muted-foreground">{program.name.zh}</p>
               <p className="font-heading text-xl font-semibold">{text(program.name)}</p>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -72,7 +72,7 @@ export function UniversityView({ university }: { university: University }) {
           ))}
         </div>
       </section>
-      <Link href={`/eligibility?university=${university.slug}`} className="text-sm font-semibold text-primary">
+      <Link href={`/eligibility-checker?university=${university.slug}`} className="text-sm font-semibold text-primary">
         {t.checkFit}
       </Link>
     </Shell>

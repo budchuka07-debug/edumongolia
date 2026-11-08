@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ kind: str
     return pageMeta({
       title: program.name.mn,
       description: `${program.name.mn}, ${university?.name.mn ?? ""}. ${program.name.zh}. Сургалтын төлбөр, доод оноо нийтлэгдээгүй бол хоосон.`,
-      path: `/programs/${program.slug}`,
+      path: `/china-programs/${program.slug}`,
     });
   }
   const discipline = getDiscipline(kind);
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ kind: str
     return pageMeta({
       title: discipline.name.mn,
       description: `${discipline.name.mn} (${discipline.name.zh}) хөтөлбөрүүд.`,
-      path: `/programs/${discipline.slug}`,
+      path: `/china-programs/${discipline.slug}`,
     });
   }
   return { title: "Сургалт" };

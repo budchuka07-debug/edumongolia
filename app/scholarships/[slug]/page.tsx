@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return pageMeta({
     title: scholarship.name.mn,
     description: `${scholarship.name.mn}. ${scholarship.name.zh}. Хамрах хүрээ, оноо, хугацаа нийтлэгдээгүй бол хоосон.`,
-    path: `/scholarships/${scholarship.slug}`,
+    path: `/china-scholarships/${scholarship.slug}`,
   });
 }
 
