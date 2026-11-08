@@ -86,18 +86,6 @@ export function HubHome() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-8 sm:py-10">
-      <section className="steppe-grid rounded-3xl border border-border bg-card px-5 py-8 sm:px-8">
-        <p className="text-sm font-medium text-primary">{hub.outside}</p>
-        <h1 className="mt-3 max-w-3xl font-heading text-4xl font-semibold tracking-tight sm:text-5xl">{t.hero}</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">{t.lead}</p>
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Link href="/tutors" className={cn(buttonVariants({ size: "lg" }))}>{t.findTeacher}</Link>
-          <Link href="/centers" className={cn(buttonVariants({ size: "lg", variant: "outline" }))}>{t.findStudy}</Link>
-          <Link href="/scholarships" className={cn(buttonVariants({ size: "lg", variant: "outline" }))}>{t.findGrant}</Link>
-          <Link href={paths.universities} className={cn(buttonVariants({ size: "lg", variant: "outline" }))}>{t.findChina}</Link>
-        </div>
-      </section>
-
       <Block id="services" title={t.services}>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map(([label, href]) => (
