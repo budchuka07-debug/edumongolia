@@ -13,6 +13,8 @@ import {
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useI18n } from "@/components/language-provider";
 import { useHub } from "@/components/directory/use-hub";
+import { EmptyState } from "@/components/empty-state";
+import { isPublicStatus, teacherStatus } from "@/lib/content/publication";
 import { Badge } from "@/components/ui/badge";
 
 export function TutorProfile({ id }: { id: string }) {
@@ -20,7 +22,21 @@ export function TutorProfile({ id }: { id: string }) {
   const hub = useHub();
   const [extra] = usePersistedState<Teacher[]>(EXTRA_TEACHERS_KEY, []);
   const [students] = usePersistedState<StudentRecord[]>(STUDENTS_KEY, []);
-  const teacher = getTeacher(id) ?? extra.find((item) => item.id === id);
+  const seeded = getTeacher(id);
+  if (seeded && !isPublicStatus(teacherStatus())) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-16">
+        <EmptyState
+          title={locale === "en" ? "There is no verified information to show yet." : "Одоогоор баталгаажсан мэдээлэл байхгүй байна."}
+          lead={locale === "en" ? "This profile is not published." : "Энэ бүртгэл нийтэд гараагүй."}
+        />
+        <Link href="/tutors" className="mt-4 inline-block text-sm font-semibold text-primary">
+          {hub.back}
+        </Link>
+      </div>
+    );
+  }
+  const teacher = seeded ?? extra.find((item) => item.id === id);
 
   if (!teacher) {
     return (

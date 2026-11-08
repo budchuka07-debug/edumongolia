@@ -29,10 +29,8 @@ export function Shell({
   lead?: string;
   children: ReactNode;
 }) {
-  const { t } = useMarket();
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:py-10">
-      <p className="rounded-2xl bg-accent px-4 py-3 text-sm leading-6 text-accent-foreground">{t.demo}</p>
       <header>
         {kicker ? <p className="text-sm font-semibold tracking-wide text-primary uppercase">{kicker}</p> : null}
         <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>

@@ -13,8 +13,30 @@ import type {
   University,
 } from "@/lib/marketplace/types";
 
+export function isPublicUniversity(university: University) {
+  if (university.demonstration) return false;
+  const source = catalog.sources.find((item) => item.id === university.sourceId);
+  return source?.status === "verified";
+}
+
+export function isPublicProgram(program: Program) {
+  if (program.demonstration) return false;
+  const source = catalog.sources.find((item) => item.id === program.sourceId);
+  return source?.status === "verified";
+}
+
+export function isPublicScholarship(scholarship: Scholarship) {
+  if (scholarship.demonstration) return false;
+  const source = catalog.sources.find((item) => item.id === scholarship.sourceId);
+  return source?.status === "verified";
+}
+
 export function listUniversities() {
   return catalog.universities;
+}
+
+export function listPublishedUniversities() {
+  return catalog.universities.filter(isPublicUniversity);
 }
 
 export function getUniversity(slug: string): University | null {
@@ -23,6 +45,10 @@ export function getUniversity(slug: string): University | null {
 
 export function listPrograms() {
   return catalog.programs;
+}
+
+export function listPublishedPrograms() {
+  return catalog.programs.filter(isPublicProgram);
 }
 
 export function getProgram(slug: string): Program | null {
@@ -39,6 +65,10 @@ export function listDisciplines() {
 
 export function listScholarships() {
   return catalog.scholarships;
+}
+
+export function listPublishedScholarships() {
+  return catalog.scholarships.filter(isPublicScholarship);
 }
 
 export function getScholarship(slug: string): Scholarship | null {
@@ -155,10 +185,9 @@ export function marketplacePaths() {
     paths.apply,
     paths.account,
     paths.partners,
-    ...catalog.universities.map((item) => paths.university(item.slug)),
-    ...catalog.programs.map((item) => paths.program(item.slug)),
-    ...catalog.disciplines.map((item) => paths.program(item.slug)),
-    ...catalog.scholarships.map((item) => paths.scholarship(item.slug)),
+    ...catalog.universities.filter(isPublicUniversity).map((item) => paths.university(item.slug)),
+    ...catalog.programs.filter(isPublicProgram).map((item) => paths.program(item.slug)),
+    ...catalog.scholarships.filter(isPublicScholarship).map((item) => paths.scholarship(item.slug)),
     ...catalog.articles.map((item) => paths.article(item.slug)),
     ...catalog.examinations.filter((item) => item.slug !== "csca").map((item) => paths.exam(item.slug)),
   ];

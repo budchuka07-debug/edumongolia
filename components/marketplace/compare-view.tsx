@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Shell, degreeLabel, languageLabel, money, useMarket } from "@/components/marketplace/chrome";
-import { getProgram, universityOf } from "@/lib/marketplace/queries";
+import { getProgram, isPublicProgram, universityOf } from "@/lib/marketplace/queries";
 
 export function CompareView({ ids }: { ids: string }) {
   const { t, text } = useMarket();
@@ -12,7 +12,7 @@ export function CompareView({ ids }: { ids: string }) {
     .filter(Boolean)
     .slice(0, 3)
     .map((slug) => getProgram(slug))
-    .filter((program) => program != null);
+    .filter((program): program is NonNullable<typeof program> => program != null && isPublicProgram(program));
 
   const rows: Array<[string, (program: NonNullable<(typeof programs)[number]>) => string]> = [
     [t.universities, (program) => text(universityOf(program.universityId)?.name ?? { mn: "", en: "", zh: "" })],

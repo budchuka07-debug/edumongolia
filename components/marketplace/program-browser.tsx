@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { Shell, degreeLabel, languageLabel, money, useMarket } from "@/components/marketplace/chrome";
 import { catalog } from "@/lib/marketplace/catalog";
-import { cityOf, disciplineOf, scholarshipsForProgram, universityOf } from "@/lib/marketplace/queries";
+import { EmptyState } from "@/components/empty-state";
+import { cityOf, disciplineOf, isPublicProgram, scholarshipsForProgram, universityOf } from "@/lib/marketplace/queries";
 import { cn } from "cn";
 import type { DegreeLevel, InstructionLanguage } from "@/lib/marketplace/types";
 
@@ -28,7 +29,7 @@ export function ProgramBrowser({
   const [picked, setPicked] = useState<string[]>([]);
 
   const rows = useMemo(() => {
-    return catalog.programs.filter((program) => {
+    return catalog.programs.filter(isPublicProgram).filter((program) => {
       const university = universityOf(program.universityId);
       const discipline = disciplineOf(program.disciplineId);
       if (!university || !discipline) return false;
@@ -67,7 +68,7 @@ export function ProgramBrowser({
         </label>
       </div>
       {publishedFee && rows.length === 0 ? <p className="text-sm text-muted-foreground">{t.emptyFeeFilter}</p> : null}
-      {rows.length === 0 && !publishedFee ? <p className="text-sm text-muted-foreground">{t.emptyList}</p> : null}
+      {rows.length === 0 && !publishedFee ? <EmptyState title={t.nonePublished} lead={t.nonePublishedLead} /> : null}
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"

@@ -4,19 +4,20 @@ import { JsonLd } from "@/components/marketplace/json-ld";
 import { ProgramBrowser } from "@/components/marketplace/program-browser";
 import { ProgramView } from "@/components/marketplace/program-view";
 import { paths } from "@/lib/marketplace/paths";
-import { getDiscipline, getProgram, listDisciplines, listPrograms, universityOf } from "@/lib/marketplace/queries";
+import { getDiscipline, getProgram, isPublicProgram, listDisciplines, listPublishedPrograms, universityOf } from "@/lib/marketplace/queries";
 import { pageMeta } from "@/lib/marketplace/seo";
 
 export function generateStaticParams() {
-  return [
-    ...listPrograms().map((program) => ({ slug: program.slug })),
-    ...listDisciplines().map((discipline) => ({ slug: discipline.slug })),
-  ];
+  const programs = listPublishedPrograms().map((program) => ({ slug: program.slug }));
+  const disciplines = listDisciplines().map((discipline) => ({ slug: discipline.slug }));
+  const rows = [...programs, ...disciplines];
+  return rows.length ? rows : [{ slug: "__unpublished__" }];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const program = getProgram(slug);
+  if (program && !isPublicProgram(program)) return { title: "Хөтөлбөр", robots: { index: false, follow: false } };
   if (program) {
     const university = universityOf(program.universityId);
     return pageMeta({
@@ -39,6 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const program = getProgram(slug);
+  if (program && !isPublicProgram(program)) notFound();
   if (program) {
     const university = universityOf(program.universityId);
     return (

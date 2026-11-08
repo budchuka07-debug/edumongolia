@@ -4,11 +4,12 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { EmptyState } from "@/components/empty-state";
 import { MatchPill, Shell, degreeLabel, money, useMarket } from "@/components/marketplace/chrome";
 import { catalog } from "@/lib/marketplace/catalog";
 import { emptyStudent, evaluate, matchScholarship } from "@/lib/marketplace/eligibility";
 import { id } from "@/lib/marketplace/ids";
-import { disciplineOf } from "@/lib/marketplace/queries";
+import { disciplineOf, isPublicProgram, isPublicScholarship, isPublicUniversity } from "@/lib/marketplace/queries";
 import { cn } from "cn";
 import type { EducationLevel, StudentInput } from "@/lib/marketplace/types";
 
@@ -22,7 +23,7 @@ export function EligibilityForm({ initialProgram = "" }: { initialProgram?: stri
   const { t, text, lang } = useMarket();
   const starting = emptyStudent();
   if (initialProgram) {
-    const program = catalog.programs.find((item) => item.slug === initialProgram);
+    const program = catalog.programs.find((item) => item.slug === initialProgram && isPublicProgram(item));
     const discipline = program ? disciplineOf(program.disciplineId) : null;
     if (program && discipline) {
       starting.degree = program.degree;
@@ -36,15 +37,27 @@ export function EligibilityForm({ initialProgram = "" }: { initialProgram?: stri
   const [yearId, setYearId] = useState<string>(id.year2627);
   const [ran, setRan] = useState(false);
 
-  const matches = useMemo(() => (ran ? evaluate(form, yearId, catalog) : []), [form, yearId, ran]);
+  const publicCatalog = useMemo(
+    () => ({
+      ...catalog,
+      universities: catalog.universities.filter(isPublicUniversity),
+      programs: catalog.programs.filter(isPublicProgram),
+      scholarships: catalog.scholarships.filter(isPublicScholarship),
+    }),
+    [],
+  );
+  const matches = useMemo(
+    () => (ran && publicCatalog.programs.length > 0 ? evaluate(form, yearId, publicCatalog) : []),
+    [form, publicCatalog, ran, yearId],
+  );
   const nationals = useMemo(
     () =>
       ran
-        ? catalog.scholarships
+        ? publicCatalog.scholarships
             .filter((item) => item.academicYearId === yearId)
-            .map((item) => matchScholarship(item, form, catalog))
+            .map((item) => matchScholarship(item, form, publicCatalog))
         : [],
-    [form, yearId, ran],
+    [form, publicCatalog, yearId, ran],
   );
 
   function set<K extends keyof StudentInput>(key: K, value: StudentInput[K]) {
@@ -155,7 +168,8 @@ export function EligibilityForm({ initialProgram = "" }: { initialProgram?: stri
       {ran ? (
         <div className="flex flex-col gap-6">
           <p className="text-sm text-muted-foreground">{t.hiddenNote}</p>
-          {matches.length === 0 ? <p className="text-sm">{t.noResults}</p> : null}
+          {publicCatalog.programs.length === 0 ? <EmptyState title={t.nonePublished} lead={t.nonePublishedLead} /> : null}
+          {publicCatalog.programs.length > 0 && matches.length === 0 ? <p className="text-sm">{t.noResults}</p> : null}
           {(["potential", "eligible", "ineligible"] as const).map((status) =>
             groups[status].length ? (
               <section key={status}>

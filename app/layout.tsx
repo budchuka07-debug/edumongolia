@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="mn" className={`${sans.variable} ${heading.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col overflow-x-clip">
         <LanguageProvider>
           <Suspense fallback={<div className="h-16 border-b border-border" />}>
             <SiteHeader />

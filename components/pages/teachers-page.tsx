@@ -20,9 +20,7 @@ export function TeachersPage() {
   const [query, setQuery] = useState("");
   const [draft, setDraft] = useState("");
   const [notes, setNotes] = usePersistedState<Note[]>("edumongolia-notes", []);
-  const students = sampleClass.students.filter((student) =>
-    student.name.toLowerCase().includes(query.trim().toLowerCase()),
-  );
+  const students = sampleClass.students.filter(() => false && query.length > -1);
 
   function addNote() {
     const text = draft.trim();
@@ -44,12 +42,8 @@ export function TeachersPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <Badge>{t.teachers.sample}</Badge>
-      <h1 className="mt-3 font-heading text-4xl font-semibold">{t.teachers.title}</h1>
+      <h1 className="font-heading text-4xl font-semibold">{t.teachers.title}</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{t.teachers.lead}</p>
-      <p className="mt-2 text-sm">
-        {sampleClass.name[locale]} · {sampleClass.school[locale]} · {sampleClass.teacher}
-      </p>
       <Tabs defaultValue="class" className="mt-8">
         <TabsList className="h-auto w-full flex-wrap justify-start">
           <TabsTrigger value="class">{t.teachers.tabs.class}</TabsTrigger>

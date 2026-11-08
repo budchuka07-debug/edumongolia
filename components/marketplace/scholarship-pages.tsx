@@ -3,15 +3,19 @@
 import Link from "next/link";
 import { Fact, Shell, StatusPill, categoryLabel, degreeLabel, money, useMarket } from "@/components/marketplace/chrome";
 import { catalog } from "@/lib/marketplace/catalog";
-import { benefitFor, deadlineFor, requirementFor, sourceOf, universityOf } from "@/lib/marketplace/queries";
+import { EmptyState } from "@/components/empty-state";
+import { benefitFor, deadlineFor, isPublicScholarship, requirementFor, sourceOf, universityOf } from "@/lib/marketplace/queries";
 import type { Scholarship } from "@/lib/marketplace/types";
 
 export function ScholarshipBrowser() {
   const { t, text } = useMarket();
   return (
     <Shell kicker={t.chinaKicker} title={t.scholarships} lead={t.nationalBody}>
+      {catalog.scholarships.filter(isPublicScholarship).length === 0 ? (
+        <EmptyState title={t.nonePublished} lead={t.nonePublishedLead} />
+      ) : null}
       <div className="grid gap-4 md:grid-cols-2">
-        {catalog.scholarships.map((scholarship) => {
+        {catalog.scholarships.filter(isPublicScholarship).map((scholarship) => {
           const benefit = benefitFor(scholarship.id, scholarship.academicYearId);
           const year = catalog.academicYears.find((item) => item.id === scholarship.academicYearId);
           return (

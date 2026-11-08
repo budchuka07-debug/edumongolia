@@ -4,11 +4,15 @@ import Link from "next/link";
 import {
   EXTRA_TEACHERS_KEY,
   STUDENTS_KEY,
+  centers,
   getTeacher,
+  offers,
+  teachers,
   type StudentRecord,
   type Teacher,
 } from "@/lib/content/directory";
-import { PAPER_ORDERS_KEY, type PaperOrder } from "@/lib/content/papers";
+import { papers, PAPER_ORDERS_KEY, type PaperOrder } from "@/lib/content/papers";
+import { centerStatus, offerStatus, paperStatus, teacherStatus } from "@/lib/content/publication";
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useHub } from "@/components/directory/use-hub";
 import { InternationalCatalog } from "@/components/marketplace/admin-catalog";
@@ -31,6 +35,26 @@ export function AdminDesk() {
       <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">{page.lead}</p>
       <p className="mt-2 text-sm text-muted-foreground">{hub.saved}</p>
       <InternationalCatalog />
+      <section className="mt-12">
+        <h2 className="font-heading text-2xl font-semibold">Ноорог</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+          Эдгээр мөр нийтийн хуудсанд гарахгүй. Зөвхөн published төлөвтэй, эх сурвалж нь баталгаажсан мөр нийтлэгдэнэ.
+        </p>
+        <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+          {teachers.map((teacher) => (
+            <li key={teacher.id}>{teacher.name} · {teacherStatus()}</li>
+          ))}
+          {centers.map((center) => (
+            <li key={center.id}>{center.name.mn} · {centerStatus()}</li>
+          ))}
+          {offers.map((offer) => (
+            <li key={offer.id}>{offer.title.mn} · {offerStatus(offer.id)}</li>
+          ))}
+          {papers.map((paper) => (
+            <li key={paper.id}>{paper.title.mn} · {paperStatus()}</li>
+          ))}
+        </ul>
+      </section>
 
       <section className="mt-10">
         <h2 className="font-heading text-2xl font-semibold">{hub.form.students}</h2>

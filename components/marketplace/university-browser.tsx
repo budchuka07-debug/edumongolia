@@ -6,7 +6,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Shell, degreeLabel, languageLabel, useMarket } from "@/components/marketplace/chrome";
 import { catalog } from "@/lib/marketplace/catalog";
-import { cityOf, programsForUniversity } from "@/lib/marketplace/queries";
+import { EmptyState } from "@/components/empty-state";
+import { cityOf, isPublicUniversity, programsForUniversity } from "@/lib/marketplace/queries";
 import { cn } from "cn";
 
 export function UniversityBrowser() {
@@ -18,7 +19,7 @@ export function UniversityBrowser() {
   const [kind, setKind] = useState("");
 
   const rows = useMemo(() => {
-    return catalog.universities.filter((university) => {
+    return catalog.universities.filter(isPublicUniversity).filter((university) => {
       const blob = `${university.name.mn} ${university.name.en} ${university.name.zh}`.toLowerCase();
       if (query && !blob.includes(query.trim().toLowerCase())) return false;
       if (cityId && university.cityId !== cityId) return false;
@@ -42,7 +43,7 @@ export function UniversityBrowser() {
         <Select label={t.language} value={language} onChange={setLanguage} options={[["", t.all], ["zh", t.langZh], ["en", t.langEn]]} />
         <Select label={t.type} value={kind} onChange={setKind} options={[["", t.all], ["public", t.public], ["private", t.private]]} />
       </div>
-      {rows.length === 0 ? <p className="text-sm text-muted-foreground">{t.emptyList}</p> : null}
+      {rows.length === 0 ? <EmptyState title={t.nonePublished} lead={t.nonePublishedLead} /> : null}
       <div className="grid gap-4 md:grid-cols-2">
         {rows.map((university) => {
           const city = cityOf(university.cityId);

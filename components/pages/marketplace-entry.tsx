@@ -37,7 +37,7 @@ export function StudyAbroadEntry() {
       }
     >
       <Card href={paths.china} title={en ? "Study in China" : "Хятадад суралцах"} lead={en ? "Universities, programs, scholarships, and CSCA." : "Их сургууль, хөтөлбөр, тэтгэлэг, CSCA."} />
-      <Card href={paths.universities} title={en ? "Chinese universities" : "Хятадын их сургуулиуд"} lead={en ? "Demonstration records. Fees stay empty until a source is checked." : "Үзүүлэнгийн бүртгэл. Төлбөр эх сурвалжгүй бол хоосон."} />
+      <Card href={paths.universities} title={en ? "Chinese universities" : "Хятадын их сургуулиуд"} lead={en ? "A university appears after its official page is checked. EduMongolia does not claim to represent a university." : "Их сургууль албан хуудсыг нь шалгасны дараа гарна. EduMongolia их сургуулийг төлөөлж байна гэж зарлахгүй."} />
       <Card href={paths.programs} title={en ? "University programs" : "Их сургуулийн хөтөлбөр"} lead={en ? "Bachelor, master, and doctoral programs, kept apart from tutoring offers." : "Бакалавр, магистр, доктор. Багшийн зарлалаас тусдаа."} />
       <Card href={paths.scholarships} title={en ? "Scholarship finder" : "Тэтгэлэг хайх"} lead={en ? "Amounts stay unpublished until an official notice is recorded." : "Мөнгөн дүн албан зарлалгүй бол нийтлэгдээгүй."} />
       <Card href={paths.admission} title={en ? "Admission requirements" : "Элсэлтийн нөхцөл"} lead={en ? "How to read a requirement. Not a promise of admission." : "Нөхцөлийг хэрхэн унших вэ. Элсэлт амлахгүй."} />
@@ -88,7 +88,7 @@ export function PartnersEntry() {
       <Card href="/register/teacher" title={en ? "Register as a teacher" : "Багшаар бүртгүүлэх"} lead={en ? "Shows on this browser’s admin desk and teacher schedule." : "Энэ хөтчийн админ самбар болон багшийн хуваарьт гарна."} />
       <Card href="/register/student" title={en ? "Register as a student" : "Сурагчаар бүртгүүлэх"} lead={en ? "For tutoring. It is not a university application." : "Багшийн үйлчилгээнд. Их сургуулийн өргөдөл биш."} />
       <Card href={paths.apply} title={en ? "Become an education agent" : "Боловсролын агент болох"} lead={en ? "Leave a consultation request. Agent access is not granted from this form." : "Зөвлөгөөний хүсэлт үлдээнэ. Энэ маягт агентын эрх нээхгүй."} />
-      <Card href={paths.universities} title={en ? "University partnerships" : "Их сургуулийн хамтын ажиллагаа"} lead={en ? "Universities in the catalog are demonstration records, not signed partners." : "Каталог дахь их сургууль үзүүлэн. Гэрээт хамтрагч биш."} />
+      <Card href={paths.universities} title={en ? "University partnerships" : "Их сургуулийн хамтын ажиллагаа"} lead={en ? "No university partnership is published. A partnership page opens only after an agreement." : "Гэрээт их сургууль нийтлэгдээгүй. Гэрээ байгуулсны дараа хуудас нээгдэнэ."} />
     </Frame>
   );
 }

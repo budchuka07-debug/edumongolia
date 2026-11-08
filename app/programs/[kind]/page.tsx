@@ -6,7 +6,7 @@ import { ProgramBrowser } from "@/components/marketplace/program-browser";
 import { ProgramView } from "@/components/marketplace/program-view";
 import { OfferBrowser } from "@/components/pages/offer-browser";
 import type { OfferKind } from "@/lib/content/directory";
-import { listDisciplines, listPrograms, getDiscipline, getProgram, universityOf } from "@/lib/marketplace/queries";
+import { listDisciplines, listPublishedPrograms, getDiscipline, getProgram, isPublicProgram, universityOf } from "@/lib/marketplace/queries";
 import { pageMeta } from "@/lib/marketplace/seo";
 
 const pages = {
@@ -24,7 +24,7 @@ const titles = {
 export function generateStaticParams() {
   return [
     ...Object.keys(pages).map((kind) => ({ kind })),
-    ...listPrograms().map((program) => ({ kind: program.slug })),
+    ...listPublishedPrograms().map((program) => ({ kind: program.slug })),
     ...listDisciplines().map((discipline) => ({ kind: discipline.slug })),
   ];
 }
@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ kind: str
   const { kind } = await params;
   if (kind in titles) return { title: titles[kind as keyof typeof titles] };
   const program = getProgram(kind);
+  if (program && !isPublicProgram(program)) return { title: "Хөтөлбөр", robots: { index: false, follow: false } };
   if (program) {
     const university = universityOf(program.universityId);
     return pageMeta({
@@ -63,6 +64,7 @@ export default async function Page({ params }: { params: Promise<{ kind: string 
     );
   }
   const program = getProgram(kind);
+  if (program && !isPublicProgram(program)) notFound();
   if (program) {
     const university = universityOf(program.universityId);
     return (

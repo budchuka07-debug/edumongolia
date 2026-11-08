@@ -14,6 +14,9 @@ import {
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useI18n } from "@/components/language-provider";
 import { useHub } from "@/components/directory/use-hub";
+import { EmptyState } from "@/components/empty-state";
+import { publicPapers } from "@/lib/content/public";
+import { isPublicStatus, paperStatus } from "@/lib/content/publication";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
@@ -53,17 +56,18 @@ export function PaperCard({ paper }: { paper: Paper }) {
 }
 
 export function PaperList() {
+  const { locale } = useI18n();
   const hub = useHub();
   const params = useSearchParams();
   const kind = params.get("kind");
   const active = kinds.includes(kind as PaperKind) ? (kind as PaperKind) : "all";
-  const list = active === "all" ? papers : papers.filter((paper) => paper.kind === active);
+  const published = publicPapers();
+  const list = active === "all" ? published : published.filter((paper) => paper.kind === active);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{hub.pages.papers.title}</h1>
       <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">{hub.pages.papers.lead}</p>
-      <p className="mt-2 text-sm text-muted-foreground">{hub.sample}</p>
       <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
         <Link
           href="/papers"
@@ -87,11 +91,20 @@ export function PaperList() {
           </Link>
         ))}
       </div>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        {list.map((paper) => (
-          <PaperCard key={paper.id} paper={paper} />
-        ))}
-      </div>
+      {list.length === 0 ? (
+        <div className="mt-6">
+          <EmptyState
+            title={locale === "en" ? "There is no verified information to show yet." : "Одоогоор баталгаажсан мэдээлэл байхгүй байна."}
+            lead={locale === "en" ? "You can still send an order. A price is quoted after the topic is checked." : "Захиалга илгээж болно. Үнийг сэдвийг шалгасны дараа хэлнэ."}
+          />
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {list.map((paper) => (
+            <PaperCard key={paper.id} paper={paper} />
+          ))}
+        </div>
+      )}
       <Link href="/papers/order" className={cn(buttonVariants({ size: "lg" }), "mt-8")}>
         {hub.sections.orderPaper}
       </Link>
@@ -109,7 +122,7 @@ export function PaperOrderForm() {
   const [done, setDone] = useState(false);
   const requested = params.get("kind");
   const sampleId = params.get("sample") ?? "";
-  const sample = papers.find((paper) => paper.id === sampleId);
+  const sample = papers.find((paper) => paper.id === sampleId && isPublicStatus(paperStatus()));
   const kind = kinds.includes(requested as PaperKind) ? (requested as PaperKind) : sample?.kind ?? "diploma";
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {

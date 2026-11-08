@@ -3,7 +3,7 @@ import { siteUrl } from "@/lib/marketplace/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
+    rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/teachers", "/students"] },
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,
   };

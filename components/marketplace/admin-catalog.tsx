@@ -14,8 +14,8 @@ export function InternationalCatalog() {
       <h2 className="font-heading text-2xl font-semibold">{en ? "International education" : "Олон улсын боловсрол"}</h2>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
         {en
-          ? "Read-only view of the demonstration catalog. This desk does not edit universities, and it does not connect to Supabase. A row is not verified unless its source says so. Fees, scores, and deadlines stay empty when they are unpublished."
-          : "Үзүүлэнгийн каталогийн унших горим. Энэ самбар их сургууль засахгүй, Supabase-д холбогдохгүй. Эх сурвалж нь баталгаажуулсан гээгүй бол мөр баталгаатай биш. Нийтлэгдээгүй төлбөр, оноо, хугацаа хоосон."}
+          ? "Drafts stay on this desk. A university or scholarship is public only after its source is verified. This desk does not connect to Supabase."
+          : "Ноорог энэ самбар дээр үлдэнэ. Их сургууль, тэтгэлэг эх сурвалж нь баталгаажсаны дараа л нийтэд гарна. Supabase холбогдоогүй."}
       </p>
       <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[40rem] border-collapse text-sm">
@@ -37,7 +37,7 @@ export function InternationalCatalog() {
                     </Link>
                     <p className="text-muted-foreground">{university.name.zh}</p>
                   </td>
-                  <td className="px-3 py-2">{university.demonstration ? (en ? "Demonstration" : "Үзүүлэн") : en ? "Catalog" : "Каталог"}</td>
+                  <td className="px-3 py-2">{university.demonstration ? (en ? "Draft" : "Ноорог") : en ? "Catalog" : "Каталог"}</td>
                   <td className="px-3 py-2">{source ? `${text(source.title)} · ${source.status}` : "—"}</td>
                 </tr>
               );

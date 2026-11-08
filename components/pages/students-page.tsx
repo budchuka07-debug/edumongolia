@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { learner, seedProgress, weekTasks } from "@/lib/content/classroom";
+import { weekTasks } from "@/lib/content/classroom";
 import { courseLessons, courses } from "@/lib/content/courses";
 import { getResource } from "@/lib/content/resources";
 import { usePersistedState } from "@/lib/use-persisted-state";
@@ -13,10 +13,10 @@ export function StudentsPage() {
   const { locale, t } = useI18n();
   const [progress] = usePersistedState<Record<string, string[]>>(
     "edumongolia-progress",
-    seedProgress,
+    {},
   );
   const [saved] = usePersistedState<string[]>("edumongolia-saved", []);
-  const [tasks, setTasks] = usePersistedState<string[]>("edumongolia-tasks", ["spelling"]);
+  const [tasks, setTasks] = usePersistedState<string[]>("edumongolia-tasks", []);
 
   const doneCount = Object.values(progress).reduce((sum, list) => sum + list.length, 0);
   const openCourses = courses.filter((course) => {
@@ -30,12 +30,8 @@ export function StudentsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <p className="text-sm font-semibold text-primary">{learner.school[locale]}</p>
-      <h1 className="mt-2 font-heading text-4xl font-semibold">{t.students.title}</h1>
+      <h1 className="font-heading text-4xl font-semibold">{t.students.title}</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{t.students.lead}</p>
-      <p className="mt-2 text-sm">
-        {learner.name} · {learner.grade[locale]}
-      </p>
       <p className="mt-2 text-xs text-muted-foreground">{t.students.local}</p>
       <dl className="mt-6 grid gap-3 sm:grid-cols-3">
         {[

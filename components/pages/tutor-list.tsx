@@ -3,14 +3,13 @@
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  EXTRA_TEACHERS_KEY,
-  teachers as catalog,
   type Category,
   type Education,
   type Grouping,
-  type Teacher,
 } from "@/lib/content/directory";
-import { usePersistedState } from "@/lib/use-persisted-state";
+import { publicTeachers } from "@/lib/content/public";
+import { EmptyState } from "@/components/empty-state";
+import { useI18n } from "@/components/language-provider";
 import { useHub } from "@/components/directory/use-hub";
 import { TeacherCard } from "@/components/directory/cards";
 
@@ -18,11 +17,11 @@ const levels: Education[] = ["specialist", "bachelor", "master", "doctor"];
 const categories: Category[] = ["math", "mongolian", "english", "science", "history", "music", "exam", "code"];
 
 export function TutorList({ mode }: { mode: "home" | "online" }) {
+  const { locale } = useI18n();
   const hub = useHub();
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const [extra] = usePersistedState<Teacher[]>(EXTRA_TEACHERS_KEY, []);
   const page = mode === "home" ? hub.pages.tutors : hub.pages.online;
   const level = params.get("level") ?? "all";
   const category = params.get("category") ?? "all";
@@ -37,22 +36,20 @@ export function TutorList({ mode }: { mode: "home" | "online" }) {
   }
 
   const list = useMemo(() => {
-    const merged = [...catalog, ...extra.filter((teacher) => !catalog.some((item) => item.id === teacher.id))];
-    return merged.filter((teacher) => {
+    return publicTeachers().filter((teacher) => {
       if (!teacher.delivery.includes(mode)) return false;
       if (level !== "all" && teacher.education !== level) return false;
       if (category !== "all" && !teacher.categories.includes(category as Category)) return false;
       if (group !== "all" && !teacher.grouping.includes(group as Grouping)) return false;
       return true;
     });
-  }, [category, extra, group, level, mode]);
+  }, [category, group, level, mode]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <p className="text-sm font-medium text-primary">{hub.outside}</p>
       <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
       <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">{page.lead}</p>
-      <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{hub.sample}</p>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
         <label className="text-sm font-medium">
@@ -100,9 +97,12 @@ export function TutorList({ mode }: { mode: "home" | "online" }) {
       </div>
 
       {list.length === 0 ? (
-        <p className="mt-8 rounded-2xl border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
-          {hub.empty}
-        </p>
+        <div className="mt-8">
+          <EmptyState
+            title={locale === "en" ? "There is no verified information to show yet." : "Одоогоор баталгаажсан мэдээлэл байхгүй байна."}
+            lead={locale === "en" ? "A new opportunity will be published here after it is checked." : "Шинэ боломж нэмэгдэхэд энэ хэсэгт нийтлэгдэнэ."}
+          />
+        </div>
       ) : (
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((teacher) => (

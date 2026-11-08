@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/marketplace/json-ld";
 import { UniversityView } from "@/components/marketplace/university-view";
-import { getUniversity, listUniversities } from "@/lib/marketplace/queries";
+import { getUniversity, isPublicUniversity, listPublishedUniversities } from "@/lib/marketplace/queries";
 import { pageMeta, siteUrl } from "@/lib/marketplace/seo";
 
 export function generateStaticParams() {
-  return listUniversities().map((university) => ({ slug: university.slug }));
+  const rows = listPublishedUniversities();
+  return rows.length ? rows.map((university) => ({ slug: university.slug })) : [{ slug: "__unpublished__" }];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const university = getUniversity(slug);
-  if (!university) return { title: "Их сургууль" };
+  if (!university || !isPublicUniversity(university)) return { title: "Их сургууль", robots: { index: false, follow: false } };
   return pageMeta({
     title: university.name.mn,
     description: `${university.name.mn} (${university.name.zh}). ${university.introduction.mn}`,
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const university = getUniversity(slug);
-  if (!university) notFound();
+  if (!university || !isPublicUniversity(university)) notFound();
   return (
     <>
       <JsonLd

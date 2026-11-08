@@ -3,7 +3,7 @@ import { HubHome } from "@/components/pages/hub-home";
 
 export const metadata: Metadata = {
   title: "EduMongolia",
-  description: "Сургуулиас гадуур гэрийн багш, танхим, онлайн сургалт, тэтгэлэг, хөнгөлөлт.",
+  description: "Сургалт, багш, тэтгэлэг, гадаадад суралцах боломжийг нэг дороос.",
 };
 
 export default function Page() {
