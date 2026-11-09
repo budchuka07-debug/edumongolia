@@ -74,6 +74,7 @@ export const scholarshipCountries = [
   ["sg", "Сингапур", "Singapore"],
   ["my", "Малайз", "Malaysia"],
   ["th", "Тайланд", "Thailand"],
+  ["tw", "Тайвань", "Taiwan"],
   ["other", "Бусад улс", "Other countries"],
 ] as const;
 
