@@ -144,3 +144,37 @@
     linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 7%, transparent) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
+@keyframes city-drift {
+  0% { transform: scale(1.06) translate3d(0, 0, 0); }
+  50% { transform: scale(1.14) translate3d(-2.5%, -1.5%, 0); }
+  100% { transform: scale(1.06) translate3d(0, 0, 0); }
+}
+
+@keyframes city-reel {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.city-still {
+  animation: city-drift 16s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.city-reel {
+  animation: city-reel 70s linear infinite;
+  will-change: transform;
+}
+
+.city-reel-wrap:hover .city-reel,
+.city-reel-wrap:focus-within .city-reel {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-still,
+  .city-reel {
+    animation: none;
+  }
+}

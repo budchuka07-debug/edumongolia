@@ -33,7 +33,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <p className="text-sm text-muted-foreground">{city.provinceMn || city.provinceZh}</p>
       <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{city.nameZh}</h1>
       <p className="text-sm text-muted-foreground">{city.nameEn}</p>
-      {city.image ? <img src={city.image} alt={city.nameZh} className="max-h-[28rem] w-full rounded-2xl object-cover" /> : <p className="text-sm">Албан ёсны мэдээлэл одоогоор нийтлэгдээгүй.</p>}
+      {city.image ? (
+        <div className="h-72 overflow-hidden rounded-2xl sm:h-[28rem]">
+          <img src={city.image} alt={city.nameZh} className="city-still h-full w-full object-cover" />
+        </div>
+      ) : <p className="text-sm">Албан ёсны мэдээлэл одоогоор нийтлэгдээгүй.</p>}
       <p className="text-sm leading-6 text-muted-foreground">
         Зураг, танилцуулгын эх: {dongxuejiMedia.partner}. Шалгасан {dongxuejiMedia.checkedOn}.{" "}
         <a className="font-semibold text-primary" href={city.pageUrl}>DongXueJi дээрх хот</a>

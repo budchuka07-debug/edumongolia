@@ -21,9 +21,13 @@ export default function Page() {
         </p>
       </header>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {partnerCities.map((city) => (
+        {partnerCities.map((city, index) => (
           <Link key={city.slug} href={paths.chinaCity(city.slug)} className="overflow-hidden rounded-2xl border border-border bg-card">
-            {city.image ? <img src={city.image} alt={city.nameZh} className="h-40 w-full object-cover" /> : null}
+            {city.image ? (
+              <span className="block h-40 overflow-hidden">
+                <img src={city.image} alt={city.nameZh} className="city-still h-full w-full object-cover" style={{ animationDelay: `${-index * 1.7}s` }} />
+              </span>
+            ) : null}
             <div className="px-4 py-3">
               <h2 className="font-heading text-xl font-semibold">{city.nameZh}</h2>
               <p className="text-sm text-muted-foreground">{city.provinceMn || city.provinceZh} · {city.nameEn}</p>
