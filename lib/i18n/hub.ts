@@ -54,6 +54,7 @@ export type HubCopy = {
     majors: string;
     chinaScholarships: string;
     innerMongoliaScholarship: string;
+    internationalScholarships: string;
     eligibility: string;
     studyAbroad: string;
     admission: string;
@@ -144,6 +145,7 @@ const railHrefs = [
   ["/china-programs", "majors"],
   ["/china-scholarships", "chinaScholarships"],
   ["/china-scholarships/inner-mongolia-government", "innerMongoliaScholarship"],
+  ["/international-scholarships", "internationalScholarships"],
   ["/study-abroad", "studyAbroad"],
   ["/eligibility-checker", "eligibility"],
   ["/admission-requirements", "admission"],
@@ -198,6 +200,7 @@ const mnSections: HubCopy["sections"] = {
   majors: "Хөтөлбөр, мэргэжил",
   chinaScholarships: "Хятадын тэтгэлэг",
   innerMongoliaScholarship: "Өвөр Монголын засгийн газрын тэтгэлэг",
+  internationalScholarships: "Олон улсын тэтгэлэг",
   eligibility: "Элсэлтийн шалгуур",
   studyAbroad: "Гадаадад суралцах",
   admission: "Элсэлтийн нөхцөл",
@@ -235,6 +238,7 @@ const enSections: HubCopy["sections"] = {
   majors: "Programs and majors",
   chinaScholarships: "China scholarships",
   innerMongoliaScholarship: "Inner Mongolia Government Scholarship",
+  internationalScholarships: "International scholarships",
   eligibility: "Eligibility check",
   studyAbroad: "Study abroad",
   admission: "Admission requirements",

@@ -26,6 +26,11 @@ export function ScholarshipBrowser() {
           </Link>
         </p>
       </article>
+      <p className="text-sm">
+        <Link className="font-semibold text-primary" href={paths.internationalScholarships}>
+          {lang === "en" ? "Scholarships in other countries" : "Бусад улсын тэтгэлэг"}
+        </Link>
+      </p>
       <ChinaLinkFacts />
       <article className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
         <p className="text-xs font-medium text-primary">{lang === "en" ? "Separate program" : "Тусдаа хөтөлбөр"}</p>

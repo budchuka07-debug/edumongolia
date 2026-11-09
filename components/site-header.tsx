@@ -30,7 +30,7 @@ function bucket(href: string): GroupId {
   ) {
     return "education";
   }
-  if (href === "/scholarships" || href.startsWith("/scholarships?") || href.startsWith("/china-scholarships")) return "scholarships";
+  if (href === "/scholarships" || href.startsWith("/scholarships?") || href.startsWith("/china-scholarships") || href.startsWith("/international-scholarships")) return "scholarships";
   if (
     href.startsWith("/study-abroad") ||
     href.startsWith("/china-") ||

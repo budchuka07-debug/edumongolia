@@ -4,6 +4,7 @@ import { dongxuejiUniversities } from "@/lib/marketplace/dongxueji-universities"
 import { moeInstitutions } from "@/lib/registry/moe";
 import { partnerCities } from "@/lib/marketplace/dongxueji-media";
 import { paths } from "@/lib/marketplace/paths";
+import { globalScholarships, scholarshipCountries, degreeLabels, fundingLabels } from "@/lib/scholarships/global";
 import type {
   AcademicRequirement,
   City,
@@ -183,6 +184,11 @@ export function marketplacePaths() {
     paths.programs,
     paths.compare,
     paths.scholarships,
+    paths.internationalScholarships,
+    ...globalScholarships.map((item) => paths.internationalScholarship(item.slug)),
+    ...scholarshipCountries.map(([code]) => paths.scholarshipCountry(code)),
+    ...Object.keys(degreeLabels).map((level) => paths.scholarshipDegree(level)),
+    ...Object.keys(fundingLabels).map((kind) => paths.scholarshipFunding(kind)),
     paths.innerMongoliaScholarship,
     paths.eligibility,
     paths.admission,
