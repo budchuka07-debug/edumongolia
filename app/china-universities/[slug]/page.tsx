@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HostProfile } from "@/components/marketplace/host-directory";
-import { PartnerMedia } from "@/components/marketplace/partner-media";
+import { UniversityDossier } from "@/components/marketplace/university-dossier";
 import { JsonLd } from "@/components/marketplace/json-ld";
 import { UniversityView } from "@/components/marketplace/university-view";
-import { chinaLinkHosts, chinaLinkSource, getChinaLinkHost } from "@/lib/marketplace/china-link-hosts";
+import { chinaLinkHosts, getChinaLinkHost } from "@/lib/marketplace/china-link-hosts";
 import { dongxuejiUniversities, getDongxuejiUniversity } from "@/lib/marketplace/dongxueji-universities";
+import { partnerMediaFor } from "@/lib/marketplace/dongxueji-media";
 import { paths } from "@/lib/marketplace/paths";
 import { getUniversity, isPublicUniversity, listPublishedUniversities } from "@/lib/marketplace/queries";
 import { pageMeta, siteUrl } from "@/lib/marketplace/seo";
@@ -26,10 +27,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (host || partner) {
     const nameEn = host?.nameEn ?? partner?.nameEn ?? "University";
     const nameZh = host?.nameZh ?? partner?.nameZh ?? "";
+    const image = partner ? partnerMediaFor(partner.slug)?.images[0] : undefined;
     return pageMeta({
-      title: nameEn,
-      description: `${nameZh}. ${partner ? "DongXueJi-ийн хамтрагч сургууль." : "2026 China Link хүлээн авагч."} Чиглэл, суудал, хугацааг эхэд нь байгаагаар нь харуулна.`,
+      title: `${nameZh} · ${nameEn}`,
+      description: `${nameZh}. Кампусын зураг, хот, хамтрагчийн хөтөлбөр. Төлбөр, чансаа, элсэлтийн нөхцөл баталгаажаагүй бол хоосон.`,
       path: paths.university(slug),
+      image,
     });
   }
   const university = getUniversity(slug);
@@ -54,12 +57,24 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             "@type": "CollegeOrUniversity",
             name: host?.nameEn ?? partner?.nameEn,
             alternateName: host?.nameZh ?? partner?.nameZh,
-            url: partner?.partnerUrl ?? chinaLinkSource.listUrl,
+            url: `${siteUrl}${paths.university(slug)}`,
+            image: partner ? partnerMediaFor(partner.slug)?.images[0] : undefined,
             address: { "@type": "PostalAddress", addressRegion: host?.provinceEn ?? partner?.provinceEn, addressCountry: "CN" },
           }}
         />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Нүүр", item: siteUrl },
+              { "@type": "ListItem", position: 2, name: "Их сургуулиуд", item: `${siteUrl}${paths.universities}` },
+              { "@type": "ListItem", position: 3, name: host?.nameZh ?? partner?.nameZh },
+            ],
+          }}
+        />
+        <UniversityDossier slug={slug} />
         <HostProfile slug={slug} />
-        {partner ? <PartnerMedia slug={partner.slug} cityEn={partner.cityEn} cityZh={partner.cityZh} /> : null}
       </>
     );
   }

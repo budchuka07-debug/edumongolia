@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { UniversityCoverage } from "@/components/marketplace/university-coverage";
 import { AdminDesk } from "@/components/pages/admin-desk";
 
 export const metadata: Metadata = {
@@ -8,5 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <AdminDesk />;
+  return (
+    <>
+      <AdminDesk />
+      <div className="mx-auto max-w-6xl px-4 pb-12">
+        <UniversityCoverage />
+      </div>
+    </>
+  );
 }

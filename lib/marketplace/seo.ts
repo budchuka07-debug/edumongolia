@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 
 export const siteUrl = "https://edumongolia.com";
 
-export function pageMeta(input: { title: string; description: string; path: string }): Metadata {
+export function pageMeta(input: { title: string; description: string; path: string; image?: string }): Metadata {
   const description = input.description.slice(0, 180);
+  const images = input.image ? [input.image] : undefined;
   return {
     title: input.title,
     description,
@@ -15,6 +16,13 @@ export function pageMeta(input: { title: string; description: string; path: stri
       siteName: "EduMongolia",
       locale: "mn_MN",
       type: "website",
+      images,
+    },
+    twitter: {
+      card: input.image ? "summary_large_image" : "summary",
+      title: input.title,
+      description,
+      images,
     },
   };
 }

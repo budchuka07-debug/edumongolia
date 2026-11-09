@@ -179,6 +179,7 @@ export function marketplacePaths() {
     paths.studyAbroad,
     paths.china,
     paths.universities,
+    paths.universityCompare,
     paths.programs,
     paths.compare,
     paths.scholarships,

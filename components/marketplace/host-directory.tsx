@@ -260,7 +260,7 @@ export function HostProfile({ slug }: { slug: string }) {
   return (
     <article className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:py-10">
       <p className="text-sm text-muted-foreground">{nameZh}</p>
-      <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{en ? nameEn : nameZh}</h1>
+      <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{en ? nameEn : nameZh}</h2>
       <p className="text-sm text-muted-foreground">{en ? nameZh : nameEn}</p>
       <dl className="rounded-2xl border border-border bg-card">
         {[

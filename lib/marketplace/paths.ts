@@ -4,6 +4,7 @@ export const paths = {
   china: "/study-abroad/china",
   universities: "/china-universities",
   university: (slug: string) => `/china-universities/${slug}`,
+  universityCompare: "/china-universities/compare",
   registry: "/china-universities/registry",
   registryInstitution: (code: string) => `/china-universities/registry/${code}`,
   registryCompare: "/china-universities/registry/compare",
