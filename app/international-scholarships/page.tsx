@@ -97,6 +97,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">{item.nameOriginal}</p>
               <p className="mt-3 text-sm leading-6">{item.sponsorMn}</p>
+              {item.scoreCardMn ? <p className="mt-3 text-sm leading-6">{item.scoreCardMn}</p> : null}
               {!item.nextAnnounced ? <p className="mt-3 text-sm">{nextRoundUnannounced}</p> : null}
             </article>
           ))}
