@@ -1,4 +1,5 @@
 import { publicScholarshipStatus, type StoredScholarshipStatus } from "@/lib/scholarships/status";
+import { moreScholarships } from "@/lib/scholarships/more";
 
 export type ScholarshipDegree = "bachelor" | "master" | "doctoral" | "language" | "high_school" | "short_term" | "non_degree";
 export type ScholarshipFunding = "full" | "partial" | "waiver";
@@ -61,6 +62,7 @@ export const scholarshipCountries = [
   ["it", "Итали", "Italy"],
   ["hu", "Унгар", "Hungary"],
   ["tr", "Турк", "Türkiye"],
+  ["eu", "Европын холбоо", "European Union"],
   ["nl", "Нидерланд", "Netherlands"],
   ["ch", "Швейцарь", "Switzerland"],
   ["se", "Швед", "Sweden"],
@@ -295,6 +297,7 @@ export const globalScholarships: GlobalScholarship[] = [
     lastVerifiedAt: "2026-11-09",
     verifierNotesMn: "Монголын хуудас, цагийн хуваарь, англи хэлний түгээмэл асуултыг 2026-11-09-нд уншсан. Монголын хаах өдрийг тусад нь заагаагүй. 10 сард хаагдана, 11:00 UTC гэж ерөнхий хуваарьт бичсэн. Сарын мөнгөний дүнг хуулаагүй.",
   },
+  ...moreScholarships,
 ];
 
 export function countryByCode(code: string) {

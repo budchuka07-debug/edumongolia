@@ -14,13 +14,13 @@ const statusMn = {
 
 export async function CompetitiveList() {
   await connection();
-  const rows = filterScholarships().filter((item) => item.scoreCardMn);
+  const rows = filterScholarships();
   return (
     <section className="mx-auto max-w-6xl px-4 pt-8">
       <p className="text-sm font-semibold tracking-wide text-primary uppercase">Нийтэлсэн тэтгэлэг</p>
-      <h2 className="mt-2 font-heading text-3xl font-semibold">IELTS, TOEFL, SAT-тай өрсөлдөх</h2>
+      <h2 className="mt-2 font-heading text-3xl font-semibold">Дараа жил бэлдэх хөтөлбөрүүд</h2>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">
-        Оноог албан эхэд нь байгаагаар нь бичсэн. Нэг босго заагаагүй тэтгэлгийг энд бас оруулсан. Хугацаа өнгөрсөн мөрийг нээлттэй гэж харуулахгүй.
+        Одоо хаагдсан элсэлтийг нуухгүй. Хүүхэд дараа жилийн өрсөлдөөнд бэлдэхээр уншина. Шинэ зар гарахад огноо солигдоно. Оноо, мөнгө, насыг албан эхээс нь хуулсан.
       </p>
       <div className="mt-5 grid gap-4 lg:grid-cols-2">
         {rows.map((item) => {

@@ -31,7 +31,7 @@ export function GlobalProfile({ item }: { item: GlobalScholarship }) {
           <p className="max-w-3xl text-sm leading-6">
             {item.sponsorMn}. Албан нэр: {item.sponsorOriginal}. Энэ хуудас зөвхөн шалгасан эх сурвалжийн мөрийг харуулна.
           </p>
-          {status === "open" ? null : <p className="text-sm font-semibold">{status === "closed" ? "Энэ элсэлт хаагдсан. Нээлттэй гэж харуулахгүй." : null}</p>}
+          {status === "closed" ? <p className="text-sm font-semibold">Энэ жилийн элсэлт хаагдсан. Дараа жил бэлдэхэд энэ нөхцөлийг уншина. Шинэ зар гарахад огноо солигдоно.</p> : null}
           {item.scoreCardMn ? <p className="max-w-3xl rounded-2xl bg-primary px-4 py-3 text-sm leading-6 text-primary-foreground">{item.scoreCardMn}</p> : null}
           {!item.nextAnnounced ? <p className="rounded-2xl bg-card px-4 py-3 text-sm ring-1 ring-foreground/10">{nextRoundUnannounced}</p> : null}
         </div>
@@ -44,8 +44,8 @@ export function GlobalProfile({ item }: { item: GlobalScholarship }) {
         <Fact title="Нас" body={item.ageMn} />
         <Fact title="Голч дүн" body={item.gpaMn} />
         <Fact title="Хэлний шаардлага" body={item.languageMn} />
-        <Fact title="Юуг хамардаг вэ?" body={[item.tuitionMn, item.stipendMn, item.accommodationMn, item.insuranceMn, item.otherBenefitsMn].filter(Boolean).join(" ")} />
-        <Fact title="Юуг хамруулаагүй вэ?" body={item.excludedMn ?? item.travelMn} />
+        <Fact title="Юуг хамардаг вэ?" body={[item.tuitionMn, item.stipendMn, item.accommodationMn, item.insuranceMn, item.travelMn, item.otherBenefitsMn].filter(Boolean).join(" ")} />
+        <Fact title="Юуг хамруулаагүй вэ?" body={item.excludedMn} />
         <Fact title="Ямар бичиг баримт вэ?" body={item.documentsMn.length ? item.documentsMn.join(" ") : null} />
         <Fact title="Сэдлийн захидал, зөвлөмж" body={item.statementMn} />
         <Fact title="Хэзээ өргөдөл гаргах вэ?" body={item.closesAt ? `Хаах хугацаа ${item.closesAt}${item.timezone ? `, ${item.timezone}` : ""}.` : null} />
