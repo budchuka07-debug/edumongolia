@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MovingPhoto } from "@/components/marketplace/city-film";
 import { cityBySlug, dongxuejiMedia, partnerCities } from "@/lib/marketplace/dongxueji-media";
 import { paths } from "@/lib/marketplace/paths";
 import { pageMeta } from "@/lib/marketplace/seo";
@@ -35,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <p className="text-sm text-muted-foreground">{city.nameEn}</p>
       {city.image ? (
         <div className="h-72 overflow-hidden rounded-2xl sm:h-[28rem]">
-          <img src={city.image} alt={city.nameZh} className="city-still h-full w-full object-cover" />
+          <MovingPhoto src={city.image} alt={city.nameZh} className="h-full w-full object-cover" />
         </div>
       ) : <p className="text-sm">Албан ёсны мэдээлэл одоогоор нийтлэгдээгүй.</p>}
       <p className="text-sm leading-6 text-muted-foreground">

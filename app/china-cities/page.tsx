@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CityFilm, MovingPhoto } from "@/components/marketplace/city-film";
 import { dongxuejiMedia, partnerCities } from "@/lib/marketplace/dongxueji-media";
 import { paths } from "@/lib/marketplace/paths";
 import { pageMeta } from "@/lib/marketplace/seo";
@@ -20,12 +21,20 @@ export default function Page() {
           {dongxuejiMedia.partner} зураг эсвэл танилцуулга нийтэлсэн {partnerCities.length} хот. Шалгасан {dongxuejiMedia.checkedOn}. Зураг, текстгүй хотыг оруулаагүй. Энэ нь Боловсролын яамны жагсаалт биш.
         </p>
       </header>
+      <CityFilm
+        cities={partnerCities.filter((city) => city.image).map((city) => ({
+          slug: city.slug,
+          nameZh: city.nameZh,
+          image: city.image,
+          href: paths.chinaCity(city.slug),
+        }))}
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {partnerCities.map((city, index) => (
+        {partnerCities.map((city) => (
           <Link key={city.slug} href={paths.chinaCity(city.slug)} className="overflow-hidden rounded-2xl border border-border bg-card">
             {city.image ? (
               <span className="block h-40 overflow-hidden">
-                <img src={city.image} alt={city.nameZh} className="city-still h-full w-full object-cover" style={{ animationDelay: `${-index * 1.7}s` }} />
+                <MovingPhoto src={city.image} alt={city.nameZh} className="h-full w-full object-cover" />
               </span>
             ) : null}
             <div className="px-4 py-3">

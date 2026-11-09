@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CityFilm } from "@/components/marketplace/city-film";
 import { VideoFrame } from "@/components/marketplace/partner-media";
 import { useI18n } from "@/components/language-provider";
 import { buttonVariants } from "@/components/ui/button";
@@ -120,26 +121,8 @@ export function HomeFilm({
           <h2 className="font-heading text-2xl font-semibold">{t.cities}</h2>
           <Link href={paths.chinaCities} className="text-sm font-semibold text-primary">{t.allCities}</Link>
         </div>
-        <div className="city-reel-wrap mt-4 overflow-hidden">
-          <div className="city-reel flex w-max">
-            {[0, 1].map((copy) => (
-              <div key={copy} className="flex gap-3 pr-3">
-                {cities.filter((city) => city.image).map((city, index) => (
-                  <Link key={`${copy}-${city.slug}`} href={city.href} className="relative h-44 w-64 shrink-0 overflow-hidden rounded-2xl sm:h-52 sm:w-72">
-                    <img
-                      src={city.image}
-                      alt={copy === 0 ? city.nameZh : ""}
-                      className="city-still h-full w-full object-cover"
-                      style={{ animationDelay: `${-index * 1.7}s` }}
-                    />
-                    <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-3 py-3 text-sm font-semibold text-white">
-                      {city.nameZh}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </div>
+        <div className="mt-4">
+          <CityFilm cities={cities} />
         </div>
       </section>
 

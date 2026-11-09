@@ -163,13 +163,8 @@
 }
 
 .city-reel {
-  animation: city-reel 70s linear infinite;
+  animation: city-reel 28s linear infinite;
   will-change: transform;
-}
-
-.city-reel-wrap:hover .city-reel,
-.city-reel-wrap:focus-within .city-reel {
-  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
