@@ -11,6 +11,7 @@ const existing = [
   "/scholarships",
   "/discounts",
   "/courses",
+  "/kids",
   "/resources",
   "/papers",
   "/register/student",

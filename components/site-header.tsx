@@ -26,7 +26,9 @@ function bucket(href: string): GroupId {
     href === "/tutors" ||
     href === "/online" ||
     href.startsWith("/centers?") ||
-    href === "/programs/foreign"
+    href === "/programs/foreign" ||
+    href === "/kids" ||
+    href.startsWith("/kids/")
   ) {
     return "education";
   }
