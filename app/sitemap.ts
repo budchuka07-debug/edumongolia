@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { schoolTopics } from "@/lib/content/school-exams";
 import { marketplacePaths } from "@/lib/marketplace/queries";
 import { siteUrl } from "@/lib/marketplace/seo";
 
@@ -12,6 +13,8 @@ const existing = [
   "/discounts",
   "/courses",
   "/kids",
+  "/school",
+  ...schoolTopics.map((topic) => `/school/${topic.slug}`),
   "/resources",
   "/papers",
   "/register/student",

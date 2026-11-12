@@ -68,6 +68,7 @@ export type HubCopy = {
     papers: string;
     orderPaper: string;
     kidsTests: string;
+    schoolExams: string;
   };
   pages: Record<
     | "tutors"
@@ -138,6 +139,7 @@ const railHrefs = [
   ["/#individual", "individual"],
   ["/#semi", "semi"],
   ["/kids", "kidsTests"],
+  ["/school", "schoolExams"],
   ["/centers", "centers"],
   ["/tutors", "tutors"],
   ["/online", "onlineTeachers"],
@@ -216,6 +218,7 @@ const mnSections: HubCopy["sections"] = {
   papers: "Төсөл, диплом, даалгавар",
   orderPaper: "Захиалгаар бичүүлэх",
   kidsTests: "Хүүхдийн тест",
+  schoolExams: "Дунд, ахлах, Cambridge",
 };
 
 const enSections: HubCopy["sections"] = {
@@ -255,6 +258,7 @@ const enSections: HubCopy["sections"] = {
   papers: "Projects, diplomas, assignments",
   orderPaper: "Order a paper",
   kidsTests: "Children's tests",
+  schoolExams: "School and Cambridge exams",
 };
 
 export const hubCopy: Record<Locale, HubCopy> = {
