@@ -163,6 +163,7 @@ export function HubHome() {
           ))}
         </div>
         <Link href="/kids" className="mt-4 mr-4 inline-block text-sm font-semibold text-primary">{hub.sections.kidsTests}</Link>
+        <Link href="/school" className="mt-4 mr-4 inline-block text-sm font-semibold text-primary">{hub.sections.schoolExams}</Link>
         <Link href="/courses" className="mt-4 inline-block text-sm font-semibold text-primary">{hub.seeAll}</Link>
       </Block>
 
