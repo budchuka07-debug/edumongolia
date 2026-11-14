@@ -124,6 +124,7 @@ export type SchoolCard = {
   questionCount: number;
   perAttempt: number;
   priceMnt: number;
+  href?: string;
 };
 
 function money(value: number) {
@@ -189,7 +190,7 @@ export function SchoolCatalog({ cards }: { cards: SchoolCard[] }) {
                       <p className="mt-2 text-sm leading-6 text-muted-foreground">{schoolText(item.summary, locale)}</p>
                       <p className="mt-3 text-sm">{schoolText(item.grades, locale)} · {item.questionCount} {t.bank} · {item.perAttempt} {t.each}</p>
                       <p className="mt-1 text-sm font-semibold">{money(item.priceMnt)} · {t.price}</p>
-                      <Link href={`/school/${item.slug}`} className="mt-4 inline-block text-sm font-semibold text-primary">{t.open}</Link>
+                      <Link href={item.href ?? `/school/${item.slug}`} className="mt-4 inline-block text-sm font-semibold text-primary">{t.open}</Link>
                     </article>
                   ))}
                   {added.filter((item) => item.subject === subject).map((item) => (

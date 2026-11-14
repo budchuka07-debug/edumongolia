@@ -27,7 +27,7 @@ function withReader(response: NextResponse, readerId: string, fresh: boolean) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
-  const kind: PaidPage | null = body.kind === "exam" || body.kind === "project" ? body.kind : null;
+  const kind: PaidPage | null = body.kind === "exam" || body.kind === "project" || body.kind === "form" || body.kind === "lesson" ? body.kind : null;
   const id = typeof body.id === "string" ? body.id.trim() : "";
   if (!kind || !id) return NextResponse.json({ ok: false, error: "unknown-page" }, { status: 400 });
 
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       config,
       orderId,
       kind,
-      description: kind === "exam" ? `EduMongolia exam ${id}` : `EduMongolia project ${id}`,
+      description: `EduMongolia ${kind} ${id}`,
     });
     await attachQpayInvoice(orderId, invoice.invoiceId);
     return withReader(NextResponse.json({

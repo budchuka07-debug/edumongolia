@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { schoolTopics } from "@/lib/content/school-exams";
+import { lessonCatalog } from "@/lib/content/lessons";
 import { papers } from "@/lib/content/papers";
 import { marketplacePaths } from "@/lib/marketplace/queries";
 import { siteUrl } from "@/lib/marketplace/seo";
@@ -19,6 +20,7 @@ const existing = [
   "/resources",
   "/papers",
   ...papers.filter((paper) => paper.kind === "project").map((paper) => `/papers/${paper.id}`),
+  ...lessonCatalog().map((lesson) => `/activities/${lesson.slug}`),
   "/register/student",
   "/register/teacher",
   "/programs/english",

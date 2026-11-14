@@ -9,10 +9,16 @@ import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 
 export type UnlockedReading = {
-  rest: Bilingual;
+  rest: Bilingual | null;
   questions: SchoolQuestion[] | null;
   perAttempt: number;
+  embedUrl?: string | null;
+  html?: string | null;
 };
+
+function isUnlocked(reading: UnlockedReading | null | undefined) {
+  return Boolean(reading && (reading.rest || reading.embedUrl || reading.html));
+}
 
 const copy = {
   mn: {
@@ -71,7 +77,7 @@ export function ContinuePay({
         body: JSON.stringify({ orderId }),
       });
       const body = await response.json().catch(() => ({}));
-      if (stopped || !body.paid || !body.reading?.rest) return;
+      if (stopped || !body.paid || !isUnlocked(body.reading)) return;
       onUnlocked(body.reading);
       router.refresh();
     }
@@ -92,7 +98,7 @@ export function ContinuePay({
     });
     const body = await response.json().catch(() => ({}));
     setBusy(false);
-    if (body.alreadyPaid && body.reading?.rest) {
+    if (body.alreadyPaid && isUnlocked(body.reading)) {
       onUnlocked(body.reading);
       router.refresh();
       return;
@@ -122,7 +128,7 @@ export function ContinuePay({
       body: JSON.stringify({ orderId }),
     });
     const body = await response.json().catch(() => ({}));
-    if (body.paid && body.reading?.rest) {
+    if (body.paid && isUnlocked(body.reading)) {
       onUnlocked(body.reading);
       router.refresh();
       return;

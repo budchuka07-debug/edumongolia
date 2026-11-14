@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambridge Chemistry G10 | Balancing & Redox</title>
+<style>
+:root{--bg:#0c1730;--panel:#182b4b;--panel2:#20385f;--ink:#f7f9ff;--muted:#bdcbe2;--cyan:#48d1df;--gold:#ffc45c;--green:#57d6a1;--red:#ff7777;--purple:#b7a0ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#1e3b67,#0c1730 55%);font-family:Arial,Helvetica,sans-serif;color:var(--ink);min-height:100vh;padding:18px}
+main{max-width:1050px;margin:auto}.tag{color:var(--cyan);font-size:12px;font-weight:bold;letter-spacing:1.5px}
+h1{font-size:clamp(27px,5vw,43px);margin:9px 0 6px}.sub{color:var(--muted);line-height:1.55}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.tab{border:1px solid #47618a;background:#142544;color:var(--ink);padding:11px 15px;border-radius:12px;font-weight:bold;cursor:pointer}
+.tab.active{background:var(--cyan);color:#09213a;border-color:var(--cyan)}
+.card{background:linear-gradient(145deg,#1b3154,#152643);border:1px solid #3b557d;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 12px 30px #0003}
+h2{font-size:22px;margin:0 0 10px}h3{font-size:17px;color:var(--cyan);margin:0 0 8px}
+.small{font-size:13px;color:var(--muted)}.hidden{display:none!important}
+.eq{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;font-size:clamp(19px,3.5vw,29px);font-weight:bold;margin:25px 0}
+.term{display:flex;align-items:center;gap:5px}.formula{white-space:nowrap}
+.slot{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:44px;border:2px dashed var(--cyan);border-radius:10px;color:var(--gold);font-size:20px;background:#0e203d;cursor:pointer}
+.slot.filled{border-style:solid;border-color:var(--green);background:#123e3b}.slot.over{background:#28527c}
+.plus,.arrow{color:var(--gold);padding:0 2px}
+.pieces{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:18px 0}
+.piece{background:#eaf4ff;color:#122543;border:0;border-radius:11px;padding:11px 16px;font-weight:bold;font-size:19px;cursor:grab;touch-action:none}
+.piece:active{cursor:grabbing}
+.controls{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+button.action{border:0;border-radius:10px;padding:12px 17px;font-weight:bold;cursor:pointer;background:var(--cyan);color:#09213a}
+button.secondary{background:#dce8f7;color:#142847}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.feedback{min-height:28px;text-align:center;font-weight:bold;margin:12px 0}
+.progress{height:9px;background:#0b1a31;border-radius:10px;overflow:hidden;margin:10px 0}
+.bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));width:0;transition:width .25s}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.info{background:#10213d;border-left:4px solid var(--cyan);padding:13px;border-radius:10px;line-height:1.5}
+.redox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.redox .info:nth-child(1){border-color:var(--red)}.redox .info:nth-child(2){border-color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:12px 0}td,th{border:1px solid #486184;padding:10px;text-align:left}th{color:var(--cyan)}
+.quizrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #3a5277}
+select{background:#0d203c;color:white;border:1px solid #5d789e;border-radius:8px;padding:9px;max-width:100%}
+.score{color:var(--gold);font-weight:bold}.note{font-size:13px;color:var(--muted);line-height:1.5}
+@media(max-width:620px){body{padding:12px}.card{padding:15px}.redox{grid-template-columns:1fr}.slot{min-width:36px;height:40px}}
+</style>
+</head>
+<body><main>
+<div class="tag">CAMBRIDGE IGCSE CHEMISTRY • GRADE 10</div>
+<h1>Balancing equations & redox reactions</h1>
+<p class="sub">An offline interactive lesson: revise the method, understand oxidation and reduction, then balance 10 equations from core to challenge level.</p>
+
+<div class="tabs">
+<button class="tab active" data-tab="learn">1. Learn</button>
+<button class="tab" data-tab="balance">2. Drag & drop: 10 tasks</button>
+<button class="tab" data-tab="redox">3. Redox check</button>
+</div>
+
+<section id="learn">
+<div class="card">
+<h2>Part A — Balancing chemical equations</h2>
+<div class="grid">
+<div class="info"><b>1. Count atoms</b><br>Count each element on the left and right side.</div>
+<div class="info"><b>2. Add coefficients</b><br>Change only the large numbers in front of formulae.</div>
+<div class="info"><b>3. Check & simplify</b><br>Use the smallest whole-number ratio.</div>
+</div>
+<p class="sub"><b>Never change a subscript.</b> H₂O is water; H₂O₂ is hydrogen peroxide. Changing a subscript changes the substance itself.</p>
+</div>
+<div class="card">
+<h2>Part B — Oxidation and reduction (REDOX)</h2>
+<p class="sub">A redox reaction is a reaction in which oxidation and reduction happen at the same time. At this level, use oxygen transfer and electron transfer to recognise them.</p>
+<div class="redox">
+<div class="info"><b>OXIDATION</b><br>• Gain of oxygen<br>• Loss of electrons<br>• Oxidation number increases</div>
+<div class="info"><b>REDUCTION</b><br>• Loss of oxygen<br>• Gain of electrons<br>• Oxidation number decreases</div>
+</div>
+<h3 style="margin-top:18px">Example: magnesium reacts with oxygen</h3>
+<div class="eq"><span>2Mg</span><span class="arrow">+</span><span>O₂</span><span class="arrow">→</span><span>2MgO</span></div>
+<div class="grid">
+<div class="info"><b>Magnesium: 0 → +2</b><br>Mg loses 2 electrons: it is oxidised.</div>
+<div class="info"><b>Oxygen: 0 → −2</b><br>O gains electrons: it is reduced.</div>
+</div>
+<p class="note">Electron transfer model: Mg → Mg²⁺ + 2e⁻ &nbsp; | &nbsp; O + 2e⁻ → O²⁻ (shown per oxygen atom). In O₂, both oxygen atoms gain electrons.</p>
+</div>
+<div class="card">
+<h2>Quick oxidation-number reminders</h2>
+<table><tr><th>Rule</th><th>Typical value</th></tr>
+<tr><td>Element on its own (Mg, O₂, Fe)</td><td>0</td></tr>
+<tr><td>Simple ion (Na⁺, Mg²⁺, Cl⁻)</td><td>Ion charge</td></tr>
+<tr><td>Oxygen in most compounds</td><td>−2</td></tr>
+<tr><td>Hydrogen in most compounds</td><td>+1</td></tr>
+<tr><td>Sum in a neutral compound</td><td>0</td></tr></table>
+</div>
+<div class="card">
+<h2>How to use the activity</h2>
+<p class="sub">Open the Drag & drop tab. Drag a number onto each coefficient box, or tap a number and then tap a box. Select “Check answer” when all boxes are filled. The 10 equations are ordered from easier to more challenging.</p>
+</div>
+</section>
+
+<section id="balance" class="hidden">
+<div class="card">
+<div class="small" id="taskLabel">TASK 1 OF 10</div>
+<h2 id="taskTitle">Starter</h2>
+<p class="sub" id="taskHint"></p>
+<div class="progress"><div class="bar" id="progressBar"></div></div>
+<div class="eq" id="equation"></div>
+<div class="pieces" id="pieces"></div>
+<div class="controls">
+<button class="action" id="check">Check answer</button>
+<button class="action secondary" id="hint">Show hint</button>
+<button class="action secondary" id="reset">Reset task</button>
+<button class="action secondary" id="next">Next task →</button>
+</div>
+<div class="feedback" id="feedback" aria-live="polite"></div>
+<p class="small" id="atomCheck"></p>
+</div>
+<div class="card">
+<div class="score" id="score">Correct tasks: 0 / 10</div>
+<p class="note">Scoring: each task is counted once. If you get it wrong, reset and try again. Your score remains on this device while this page is open.</p>
+</div>
+</section>
+
+<section id="redox" class="hidden">
+<div class="card">
+<h2>Redox understanding check</h2>
+<p class="sub">Choose the correct answer for each question, then check your responses.</p>
+<div id="redoxQuiz"></div>
+<div class="controls"><button class="action" id="checkQuiz">Check redox answers</button><button class="action secondary" id="resetQuiz">Reset quiz</button></div>
+<div class="feedback" id="quizFeedback" aria-live="polite"></div>
+</div>
+<div class="card">
+<h2>Teacher extension</h2>
+<p class="sub">Ask learners to explain which species is oxidised and which is reduced in each redox equation. Encourage them to compare oxidation numbers before and after the reaction.</p>
+<div class="info"><b>Fe + CuSO₄ → FeSO₄ + Cu</b><br>Iron: 0 → +2 (oxidised). Copper: +2 → 0 (reduced).</div>
+<div class="info" style="margin-top:10px"><b>CuO + H₂ → Cu + H₂O</b><br>Copper: +2 → 0 (reduced). Hydrogen: 0 → +1 (oxidised).</div>
+</div>
+</section>
+<p class="note">Designed as a self-contained HTML file. No login, internet connection, or external library is required.</p>
+</main>
+<script>
+const tasks=[
+{level:"STARTER",title:"Hydrogen + chlorine",parts:["H₂","Cl₂","HCl"],answer:[1,1,2],hint:"There are 2 H atoms and 2 Cl atoms on the left. Make 2 HCl on the right.",redox:false},
+{level:"STARTER",title:"Magnesium + oxygen",parts:["Mg","O₂","MgO"],answer:[2,1,2],hint:"O₂ has two oxygen atoms, so make two MgO. Then balance Mg.",redox:true},
+{level:"CORE",title:"Nitrogen + hydrogen",parts:["N₂","H₂","NH₃"],answer:[1,3,2],hint:"Balance nitrogen first: make 2 NH₃. Then count six hydrogen atoms.",redox:false},
+{level:"CORE",title:"Iron + oxygen",parts:["Fe","O₂","Fe₂O₃"],answer:[4,3,2],hint:"Make oxygen count 6 on each side. Then balance iron.",redox:true},
+{level:"CORE",title:"Potassium + water",parts:["K","H₂O","KOH","H₂"],answer:[2,2,2,1],hint:"Use 2K and 2H₂O to form 2KOH and H₂.",redox:true},
+{level:"CHALLENGE",title:"Propane combustion",parts:["C₃H₈","O₂","CO₂","H₂O"],answer:[1,5,3,4],hint:"Balance C first (3 CO₂), then H (4 H₂O), then O (10 O atoms).",redox:true},
+{level:"CHALLENGE",title:"Aluminium + chlorine",parts:["Al","Cl₂","AlCl₃"],answer:[2,3,2],hint:"The lowest common multiple of 2 and 3 chlorine atoms is 6.",redox:true},
+{level:"CHALLENGE",title:"Iron displaces copper",parts:["Fe","CuSO₄","FeSO₄","Cu"],answer:[1,1,1,1],hint:"This equation is already balanced: count Fe, Cu, S and O.",redox:true},
+{level:"CHALLENGE",title:"Copper oxide + hydrogen",parts:["CuO","H₂","Cu","H₂O"],answer:[1,1,1,1],hint:"Count Cu, O and H. This equation is already balanced.",redox:true},
+{level:"CHALLENGE",title:"Calcium carbonate decomposition",parts:["CaCO₃","CaO","CO₂"],answer:[1,1,1],hint:"Count Ca, C and O. The equation is already balanced.",redox:false}
+];
+let current=0, values=[], selected=null, correctSet=new Set();
+const equation=document.getElementById("equation"), pieces=document.getElementById("pieces"), feedback=document.getElementById("feedback");
+function showTab(name){document.querySelectorAll("section[id]").forEach(s=>s.classList.toggle("hidden",s.id!==name));document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name))}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+function renderTask(){
+ const t=tasks[current]; values=Array(t.parts.length).fill(null);selected=null;
+ document.getElementById("taskLabel").textContent=`TASK ${current+1} OF 10 • ${t.level}`;
+ document.getElementById("taskTitle").textContent=t.title;
+ document.getElementById("taskHint").textContent="Balance the equation using the smallest whole-number coefficients.";
+ document.getElementById("progressBar").style.width=`${(current+1)*10}%`;
+ equation.innerHTML="";
+ const split=t.parts.length===3?2:2;
+ t.parts.forEach((formula,i)=>{
+  if(i===split){const a=document.createElement("span");a.className="arrow";a.textContent="→";equation.append(a)}
+  const term=document.createElement("span");term.className="term";
+  const slot=document.createElement("button");slot.className="slot";slot.textContent="?";slot.dataset.index=i;slot.setAttribute("aria-label",`Coefficient for ${formula}`);
+  slot.addEventListener("dragover",e=>{e.preventDefault();slot.classList.add("over")});
+  slot.addEventListener("dragleave",()=>slot.classList.remove("over"));
+  slot.addEventListener("drop",e=>{e.preventDefault();slot.classList.remove("over");setValue(i,Number(e.dataTransfer.getData("text/plain")))});
+  slot.addEventListener("click",()=>{if(selected!==null)setValue(i,selected)});
+  const f=document.createElement("span");f.className="formula";f.textContent=formula;
+  term.append(slot,f);equation.append(term);
+  if(i!==t.parts.length-1 && i!==split-1){const plus=document.createElement("span");plus.className="plus";plus.textContent="+";equation.append(plus)}
+ });
+ const max=Math.max(...t.answer);
+ const pool=[1,2,3,4,5,6].filter(n=>n<=Math.max(4,max+1));
+ pieces.innerHTML="";
+ pool.forEach(n=>{const b=document.createElement("button");b.className="piece";b.textContent=n;b.draggable=true;b.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",String(n)));b.addEventListener("click",()=>{selected=n;document.querySelectorAll(".piece").forEach(p=>p.style.outline="");b.style.outline="3px solid #48d1df"});pieces.append(b)});
+ feedback.textContent="";document.getElementById("atomCheck").textContent="";
+ document.getElementById("score").textContent=`Correct tasks: ${correctSet.size} / 10`;
+}
+function setValue(i,n){if(!Number.isInteger(n)||n<1||n>6)return;values[i]=n;const slot=equation.querySelectorAll(".slot")[i];slot.textContent=n;slot.classList.add("filled")}
+document.getElementById("check").addEventListener("click",()=>{
+ if(values.some(v=>v===null)){feedback.textContent="Fill every coefficient box first.";feedback.style.color="var(--gold)";return}
+ const ans=tasks[current].answer;
+ if(values.every((v,i)=>v===ans[i])){
+  feedback.textContent="Correct! The equation is balanced.";feedback.style.color="var(--green)";correctSet.add(current);
+  document.getElementById("atomCheck").textContent="Great work: the number of each type of atom is equal on both sides.";
+ }else{feedback.textContent="Not quite. Count each element on both sides, then try again.";feedback.style.color="var(--red)";document.getElementById("atomCheck").textContent="Hint: use the hint button if you need a clue."}
+ document.getElementById("score").textContent=`Correct tasks: ${correctSet.size} / 10`;
+});
+document.getElementById("hint").addEventListener("click",()=>{document.getElementById("taskHint").textContent=tasks[current].hint});
+document.getElementById("reset").addEventListener("click",renderTask);
+document.getElementById("next").addEventListener("click",()=>{current=(current+1)%tasks.length;renderTask()});
+renderTask();
+
+const quiz=[
+["In a redox reaction, what happens?","Oxidation and reduction occur together","Only oxidation occurs","No electrons are transferred",0],
+["Oxidation can be described as…","gain of electrons","loss of electrons","loss of protons",1],
+["Reduction can be described as…","gain of electrons","loss of electrons","gain of oxygen",0],
+["In 2Mg + O₂ → 2MgO, magnesium is…","reduced","oxidised","unchanged",1],
+["In 2Mg + O₂ → 2MgO, oxygen is…","oxidised","unchanged","reduced",2],
+["The oxidation number of an element on its own is…","+1","0","−1",1],
+["In Fe + CuSO₄ → FeSO₄ + Cu, iron changes from…","0 to +2","+2 to 0","0 to −2",0],
+["In CuO + H₂ → Cu + H₂O, copper is…","oxidised","reduced","not changed",1]
+];
+const quizBox=document.getElementById("redoxQuiz");
+quiz.forEach((q,i)=>{
+ const row=document.createElement("div");row.className="quizrow";
+ const label=document.createElement("div");label.style.flex="1";label.innerHTML=`<b>${i+1}. ${q[0]}</b>`;
+ const sel=document.createElement("select");sel.id=`q${i}`;sel.innerHTML='<option value="">Choose…</option>'+q.slice(1,4).map((a,j)=>`<option value="${j}">${a}</option>`).join("");
+ row.append(label,sel);quizBox.append(row);
+});
+document.getElementById("checkQuiz").addEventListener("click",()=>{
+ let score=0,answered=0;
+ quiz.forEach((q,i)=>{const v=document.getElementById(`q${i}`).value;if(v!==""){answered++;if(Number(v)===q[4])score++}});
+ const f=document.getElementById("quizFeedback");
+ if(answered<quiz.length){f.textContent=`You answered ${answered} of ${quiz.length}. Complete every question first.`;f.style.color="var(--gold)"}
+ else{f.textContent=`Your score: ${score} / ${quiz.length}`;f.style.color=score>=6?"var(--green)":"var(--gold)"}
+});
+document.getElementById("resetQuiz").addEventListener("click",()=>{quiz.forEach((q,i)=>document.getElementById(`q${i}`).value="");document.getElementById("quizFeedback").textContent=""});
+</script>
+</body></html>

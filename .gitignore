@@ -43,8 +43,9 @@ next-env.d.ts
 # local research dumps
 /agent-tools
 
-# EduMongolia payment ledger. Separate from eSIM records.
+# EduMongolia payment ledger and teacher forms. Separate from eSIM records.
 /data/edu-payments.json
+/data/edu-teacher-forms.json
 
 # netlify
 .netlify

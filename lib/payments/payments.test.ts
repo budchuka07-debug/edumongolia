@@ -14,6 +14,8 @@ fs.rmSync(file, { force: true });
 
 assert.equal(priceForPage("exam"), 5000);
 assert.equal(priceForPage("project"), 10000);
+assert.equal(priceForPage("form"), 5000);
+assert.equal(priceForPage("lesson"), 5000);
 assert.equal(EXAM_PRICE_MNT, 5000);
 assert.equal(PROJECT_PRICE_MNT, 10000);
 

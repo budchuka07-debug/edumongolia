@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambridge Chemistry • Balance the Equation</title>
+<style>
+:root{--bg:#0d1830;--panel:#192a49;--ink:#f8faff;--muted:#becce2;--cyan:#42cddc;--gold:#fabe4a;--green:#48be8b;--red:#eb6868}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0d1830,#172b4e);font-family:Arial,sans-serif;color:var(--ink);min-height:100vh;padding:24px}
+main{max-width:920px;margin:auto}.tag{color:var(--cyan);font-weight:bold;letter-spacing:1.5px;font-size:12px}
+h1{font-size:clamp(28px,5vw,44px);margin:12px 0}.intro{color:var(--muted);line-height:1.5}
+.card{background:var(--panel);border:1px solid #3a5074;border-radius:18px;padding:22px;margin:20px 0;box-shadow:0 12px 35px #0003}
+.eq{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;font-size:clamp(21px,4vw,32px);font-weight:bold;margin:25px 0}
+.slot{display:inline-flex;align-items:center;justify-content:center;min-width:46px;height:48px;border:2px dashed var(--cyan);border-radius:10px;color:var(--gold);font-size:22px;background:#10213d}
+.term{display:flex;align-items:center;gap:6px}.formula{white-space:nowrap}.arrow{color:var(--gold)}
+.pieces{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:20px 0}
+.piece{background:#e8f5ff;color:#10213d;border:0;border-radius:12px;padding:12px 18px;font-weight:bold;font-size:20px;cursor:grab;touch-action:none}
+.piece:active{cursor:grabbing}.piece.used{opacity:.35;cursor:default}
+.controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+button.action{border:0;border-radius:10px;padding:12px 18px;font-weight:bold;cursor:pointer;background:var(--cyan);color:#092039}
+button.secondary{background:#dce7f6}.feedback{min-height:28px;text-align:center;font-weight:bold;margin-top:14px}
+.score{color:var(--gold);font-weight:bold}.small{font-size:13px;color:var(--muted)}
+.slot.over{background:#23466b}.slot.filled{border-style:solid;border-color:var(--green);background:#123d3b}
+@media(max-width:600px){body{padding:14px}.card{padding:15px}.eq{gap:7px}.slot{min-width:38px;height:42px}}
+</style></head>
+<body><main>
+<div class="tag">CAMBRIDGE IGCSE CHEMISTRY • GRADE 10</div>
+<h1>Balance the equation</h1>
+<p class="intro">Drag a number into each coefficient box. You can also tap a number and then tap a box. Use the smallest whole-number coefficients.</p>
+<section class="card">
+<div class="small" id="level">TASK 1 OF 3 • STARTER</div>
+<div class="eq" id="equation"></div>
+<div class="pieces" id="pieces"></div>
+<div class="controls">
+<button class="action" id="check">Check my answer</button>
+<button class="action secondary" id="next">Next question</button>
+<button class="action secondary" id="reset">Reset</button>
+</div>
+<div class="feedback" id="feedback" aria-live="polite"></div>
+</section>
+<section class="card">
+<div class="score" id="score">Correct answers: 0 / 3</div>
+<p class="small">Remember: coefficients change the number of particles. Never change subscripts in a chemical formula.</p>
+</section>
+</main>
+<script>
+const tasks=[
+ {label:"STARTER",parts:[["H₂","H₂"],["Cl₂","Cl₂"],["HCl","HCl"]],answer:[1,1,2],pool:[1,2,3,4]},
+ {label:"CORE",parts:[["Fe","Fe"],["O₂","O₂"],["Fe₂O₃","Fe₂O₃"]],answer:[4,3,2],pool:[1,2,3,4,5]},
+ {label:"CHALLENGE",parts:[["C₃H₈","C₃H₈"],["O₂","O₂"],["CO₂","CO₂"],["H₂O","H₂O"]],answer:[1,5,3,4],pool:[1,2,3,4,5,6]}
+];
+let index=0, values=[], score=0, selected=null;
+const eq=document.getElementById("equation"), pieces=document.getElementById("pieces"), feedback=document.getElementById("feedback");
+function render(){
+ const t=tasks[index]; values=Array(t.parts.length).fill(null); selected=null;
+ document.getElementById("level").textContent=`TASK ${index+1} OF 3 • ${t.label}`;
+ eq.innerHTML="";
+ t.parts.forEach((p,i)=>{
+   if(i===2 && t.parts.length===3){ /* separator handled below */ }
+   if(i===2 && t.parts.length===3){ }
+ });
+ // reactant/product split: first two terms left for tasks 1 and 2; first two left for combustion
+ const leftCount=2;
+ t.parts.forEach((p,i)=>{
+   if(i===leftCount) { const arrow=document.createElement("span"); arrow.className="arrow"; arrow.textContent="→"; eq.appendChild(arrow); }
+   const term=document.createElement("span"); term.className="term";
+   const slot=document.createElement("button"); slot.className="slot"; slot.textContent="?"; slot.dataset.index=i;
+   slot.setAttribute("aria-label",`Coefficient for ${p[1]}`);
+   slot.addEventListener("dragover",e=>{e.preventDefault();slot.classList.add("over")});
+   slot.addEventListener("dragleave",()=>slot.classList.remove("over"));
+   slot.addEventListener("drop",e=>{e.preventDefault();slot.classList.remove("over");setValue(i,Number(e.dataTransfer.getData("text/plain")))});
+   slot.addEventListener("click",()=>{if(selected!==null)setValue(i,selected)});
+   const formula=document.createElement("span"); formula.className="formula"; formula.textContent=p[1];
+   term.append(slot,formula); eq.appendChild(term);
+   if(i!==t.parts.length-1 && i!==leftCount-1){const plus=document.createElement("span");plus.textContent="+";plus.style.color="#becce2";eq.appendChild(plus)}
+ });
+ pieces.innerHTML="";
+ t.pool.forEach(n=>{
+   const b=document.createElement("button");b.className="piece";b.textContent=n;b.draggable=true;
+   b.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",String(n)));
+   b.addEventListener("click",()=>{selected=n;document.querySelectorAll(".piece").forEach(x=>x.style.outline="");b.style.outline="3px solid #42cddc"});
+   pieces.appendChild(b);
+ });
+ feedback.textContent="";feedback.style.color="";document.getElementById("score").textContent=`Correct answers: ${score} / 3`;
+}
+function setValue(i,n){values[i]=n;const slot=eq.querySelectorAll(".slot")[i];slot.textContent=n;slot.classList.add("filled");}
+document.getElementById("check").addEventListener("click",()=>{
+ const a=tasks[index].answer;
+ if(values.some(v=>v===null)){feedback.textContent="Fill every coefficient box first.";feedback.style.color="#fabe4a";return}
+ if(values.every((v,i)=>v===a[i])){feedback.textContent="Excellent! Every atom is balanced.";feedback.style.color="#48be8b";if(!tasks[index].done){tasks[index].done=true;score++}document.getElementById("score").textContent=`Correct answers: ${score} / 3`;}
+ else {feedback.textContent="Not quite. Count each element on both sides and try again.";feedback.style.color="#eb6868";}
+});
+document.getElementById("next").addEventListener("click",()=>{index=(index+1)%tasks.length;render()});
+document.getElementById("reset").addEventListener("click",render);
+render();
+</script></body></html>
