@@ -4,10 +4,10 @@
 # Локал: энэ мөрүүдийг төслийн үндэс дээрх .env.local руу хуулж, утгыг тэнд бөглөнө.
 # Амьд сайт: хостын Environment Variables дээр яг энэ нэрээр нэмнэ.
 #
-# EDU_QPAY_USERNAME     merchant.qpay.mn дээрх нэвтрэх нэр
-# EDU_QPAY_PASSWORD     тэр бүртгэлийн нууц үг
-# EDU_QPAY_INVOICE_CODE QPay-аас өгсөн invoice code
-# EDU_SITE_URL          заавал биш. Хоосон бол https://edumongolia.com
+# EDU_QPAY_USERNAME     эсвэл eSIM сайттай ижил QPAY_USERNAME
+# EDU_QPAY_PASSWORD     эсвэл eSIM сайттай ижил QPAY_PASSWORD
+# EDU_QPAY_INVOICE_CODE эсвэл eSIM сайттай ижил QPAY_INVOICE_CODE
+# EDU_SITE_URL          заавал биш. Эсвэл SITE_URL / BASE_URL. Хоосон бол https://edumongolia.com
 
 EDU_QPAY_USERNAME=
 EDU_QPAY_PASSWORD=

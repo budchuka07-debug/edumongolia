@@ -2,10 +2,10 @@ import { connection } from "next/server";
 import { qpayReadiness } from "@/lib/payments/qpay";
 
 const meaning: Record<string, string> = {
-  EDU_QPAY_USERNAME: "merchant.qpay.mn дээрх нэвтрэх нэр",
-  EDU_QPAY_PASSWORD: "тэр бүртгэлийн нууц үг",
-  EDU_QPAY_INVOICE_CODE: "QPay-аас өгсөн invoice code",
-  EDU_SITE_URL: "сайтын хаяг, жишээ нь https://edumongolia.mn",
+  EDU_QPAY_USERNAME: "merchant.qpay.mn дээрх нэвтрэх нэр. eSIM сайт дээрх нэр нь QPAY_USERNAME.",
+  EDU_QPAY_PASSWORD: "тэр бүртгэлийн нууц үг. eSIM сайт дээрх нэр нь QPAY_PASSWORD.",
+  EDU_QPAY_INVOICE_CODE: "QPay invoice code. eSIM сайт дээрх нэр нь QPAY_INVOICE_CODE.",
+  EDU_SITE_URL: "сайтын хаяг. eSIM сайт дээрх нэр нь SITE_URL эсвэл BASE_URL.",
 };
 
 export async function QpaySetup() {

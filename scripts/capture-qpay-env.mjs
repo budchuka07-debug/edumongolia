@@ -1,14 +1,17 @@
 import { writeFileSync } from "node:fs";
 
-function clean(name) {
-  const value = process.env[name];
-  return typeof value === "string" ? value.trim() : "";
+function first(...names) {
+  for (const name of names) {
+    const value = process.env[name];
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+  return "";
 }
 
-const username = clean("EDU_QPAY_USERNAME");
-const password = clean("EDU_QPAY_PASSWORD");
-const invoiceCode = clean("EDU_QPAY_INVOICE_CODE");
-const siteUrl = clean("EDU_SITE_URL");
+const username = first("EDU_QPAY_USERNAME", "QPAY_USERNAME");
+const password = first("EDU_QPAY_PASSWORD", "QPAY_PASSWORD");
+const invoiceCode = first("EDU_QPAY_INVOICE_CODE", "QPAY_INVOICE_CODE");
+const siteUrl = first("EDU_SITE_URL", "SITE_URL", "BASE_URL");
 const built = username && password && invoiceCode ? { username, password, invoiceCode, siteUrl } : null;
 
 writeFileSync(

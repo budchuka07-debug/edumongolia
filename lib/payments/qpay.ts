@@ -30,9 +30,18 @@ export function siteUrlFrom(headers: Headers) {
   return `${proto}://${host}`.replace(/\/$/, "");
 }
 
-function hostValue(name: "EDU_QPAY_USERNAME" | "EDU_QPAY_PASSWORD" | "EDU_QPAY_INVOICE_CODE" | "EDU_SITE_URL") {
-  const runtime = process.env[name];
-  if (typeof runtime === "string" && runtime.trim()) return runtime.trim();
+const QPAY_ALIASES = {
+  EDU_QPAY_USERNAME: ["EDU_QPAY_USERNAME", "QPAY_USERNAME"],
+  EDU_QPAY_PASSWORD: ["EDU_QPAY_PASSWORD", "QPAY_PASSWORD"],
+  EDU_QPAY_INVOICE_CODE: ["EDU_QPAY_INVOICE_CODE", "QPAY_INVOICE_CODE"],
+  EDU_SITE_URL: ["EDU_SITE_URL", "SITE_URL", "BASE_URL"],
+} as const;
+
+function hostValue(name: keyof typeof QPAY_ALIASES) {
+  for (const key of QPAY_ALIASES[name]) {
+    const runtime = process.env[key];
+    if (typeof runtime === "string" && runtime.trim()) return runtime.trim();
+  }
   const built = builtQpay?.[name === "EDU_QPAY_USERNAME" ? "username" : name === "EDU_QPAY_PASSWORD" ? "password" : name === "EDU_QPAY_INVOICE_CODE" ? "invoiceCode" : "siteUrl"];
   return built?.trim() || "";
 }
