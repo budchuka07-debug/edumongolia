@@ -23,22 +23,20 @@ function isUnlocked(reading: UnlockedReading | null | undefined) {
 const copy = {
   mn: {
     open: "Эхний 40% нээлттэй.",
-    continue: "Үргэлжлүүлэх",
+    pay: "QPay-ээр төлөх",
     waiting: "QPay нэхэмжлэл үүсгэж байна.",
-    scan: "QR уншуулж төлнө. Төлбөр баталгаажмагц үлдсэн мэдээлэл татагдана.",
+    scan: "QPay QR уншуулна уу. Төлбөр баталгаажмагц үлдсэн хичээл нээгдэнэ.",
     pending: "Төлбөр хараахан ороогүй.",
-    closed: "Үлдсэн хэсэг төлбөр холбогдсоны дараа нээгдэнэ.",
-    failed: "QPay нэхэмжлэл үүсгэж чадсангүй.",
+    failed: "QPay нэхэмжлэл үүсгэж чадсангүй. Дахин дарна уу.",
     check: "Төлбөр шалгах",
   },
   en: {
     open: "The first 40% is open.",
-    continue: "Continue",
+    pay: "Pay with QPay",
     waiting: "Creating the QPay invoice.",
-    scan: "Pay with the QR. The rest of the information loads after QPay confirms the payment.",
+    scan: "Scan the QPay QR. The rest of the lesson opens after QPay confirms the payment.",
     pending: "The payment is not in yet.",
-    closed: "The rest opens after payment is connected.",
-    failed: "The QPay invoice could not be created.",
+    failed: "The QPay invoice could not be created. Try again.",
     check: "Check payment",
   },
 } as const;
@@ -62,26 +60,10 @@ export function ContinuePay({
   const t = copy[locale];
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [ready, setReady] = useState<boolean | null>(null);
   const [message, setMessage] = useState("");
   const [orderId, setOrderId] = useState("");
   const [qrImage, setQrImage] = useState("");
   const [links, setLinks] = useState<Array<{ name: string; link: string }>>([]);
-
-  useEffect(() => {
-    let stopped = false;
-    fetch("/api/payments/qpay/status")
-      .then((response) => response.json())
-      .then((body) => {
-        if (!stopped) setReady(Boolean(body.ready));
-      })
-      .catch(() => {
-        if (!stopped) setReady(false);
-      });
-    return () => {
-      stopped = true;
-    };
-  }, []);
 
   useEffect(() => {
     if (!orderId) return undefined;
@@ -119,11 +101,6 @@ export function ContinuePay({
       router.refresh();
       return;
     }
-    if (body.error === "qpay-not-configured") {
-      setReady(false);
-      setMessage("");
-      return;
-    }
     if (!response.ok || !body.orderId) {
       setMessage(t.failed);
       return;
@@ -157,10 +134,9 @@ export function ContinuePay({
     <div className="mt-5 rounded-2xl bg-secondary p-4">
       <p className="text-sm">{t.open}</p>
       <p className="mt-1 font-heading text-2xl font-semibold">{money(priceMnt)}</p>
-      {ready === true ? (
-        <Button className="mt-3" disabled={busy} onClick={() => { void start(); }}>{t.continue}</Button>
-      ) : null}
-      {ready === false ? <p className="mt-3 text-sm leading-6 text-muted-foreground">{t.closed}</p> : null}
+      {orderId ? null : (
+        <Button className="mt-3" disabled={busy} onClick={() => { void start(); }}>{t.pay}</Button>
+      )}
       {qrImage ? (
         <img
           alt="QPay"

@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { paidPayload, readingFor } from "@/lib/payments/reading";
 import { isReaderId, READER_COOKIE } from "@/lib/payments/reader";
-import { createQpayInvoice, qpayConfig, QpayError } from "@/lib/payments/qpay";
+import { createQpayInvoice, qpayConfig, QpayError, siteUrlFrom } from "@/lib/payments/qpay";
 import { chargedPrice } from "@/lib/catalog/charge";
 import { isPaidPage, type PaidPage } from "@/lib/payments/pricing";
 import { attachQpayInvoice, createInvoice, markInvoiceFailed } from "@/lib/payments/store";
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }), reader.id, reader.fresh);
   }
 
-  const config = qpayConfig();
+  const config = qpayConfig(siteUrlFrom(request.headers));
   if (!config) {
     return withReader(NextResponse.json({ ok: false, error: "qpay-not-configured" }, { status: 503 }), reader.id, reader.fresh);
   }

@@ -14,18 +14,28 @@ export type QpayConfig = {
 
 export const QPAY_ENV_NAMES = ["EDU_QPAY_USERNAME", "EDU_QPAY_PASSWORD", "EDU_QPAY_INVOICE_CODE", "EDU_SITE_URL"] as const;
 
+const DEFAULT_SITE_URL = "https://edumongolia.com";
+
 /** Names only. Values stay on the server and are never returned. */
 export function qpayReadiness() {
   return QPAY_ENV_NAMES.map((name) => ({ name, set: Boolean(process.env[name]?.trim()) }));
 }
 
+export function siteUrlFrom(headers: Headers) {
+  const forwardedHost = headers.get("x-forwarded-host") || headers.get("host") || "edumongolia.com";
+  const host = forwardedHost.split(",")[0]?.trim() || "edumongolia.com";
+  const forwardedProto = headers.get("x-forwarded-proto") || "";
+  const proto = forwardedProto.split(",")[0]?.trim() || (host.startsWith("localhost") || host.startsWith("127.") ? "http" : "https");
+  return `${proto}://${host}`.replace(/\/$/, "");
+}
+
 /** EduMongolia uses its own QPay variables. They are not the eSIM merchant variables. */
-export function qpayConfig(): QpayConfig | null {
-  const username = process.env.EDU_QPAY_USERNAME;
-  const password = process.env.EDU_QPAY_PASSWORD;
-  const invoiceCode = process.env.EDU_QPAY_INVOICE_CODE;
-  const siteUrl = process.env.EDU_SITE_URL?.replace(/\/$/, "");
-  if (!username || !password || !invoiceCode || !siteUrl) return null;
+export function qpayConfig(fallbackSiteUrl?: string | null): QpayConfig | null {
+  const username = process.env.EDU_QPAY_USERNAME?.trim();
+  const password = process.env.EDU_QPAY_PASSWORD?.trim();
+  const invoiceCode = process.env.EDU_QPAY_INVOICE_CODE?.trim();
+  const siteUrl = (process.env.EDU_SITE_URL?.trim() || fallbackSiteUrl?.trim() || DEFAULT_SITE_URL).replace(/\/$/, "");
+  if (!username || !password || !invoiceCode) return null;
   return { username, password, invoiceCode, siteUrl };
 }
 

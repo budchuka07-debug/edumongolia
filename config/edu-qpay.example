@@ -7,9 +7,9 @@
 # EDU_QPAY_USERNAME     merchant.qpay.mn дээрх нэвтрэх нэр
 # EDU_QPAY_PASSWORD     тэр бүртгэлийн нууц үг
 # EDU_QPAY_INVOICE_CODE QPay-аас өгсөн invoice code
-# EDU_SITE_URL          сайтын хаяг, төгсгөлд / байхгүй. Callback энэ хаяг дээр ирнэ.
+# EDU_SITE_URL          заавал биш. Хоосон бол https://edumongolia.com
 
 EDU_QPAY_USERNAME=
 EDU_QPAY_PASSWORD=
 EDU_QPAY_INVOICE_CODE=
-EDU_SITE_URL=https://edumongolia.mn
+EDU_SITE_URL=
