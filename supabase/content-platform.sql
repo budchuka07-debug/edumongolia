@@ -1,7 +1,20 @@
--- EduMongolia content catalog. Review only. Do not apply this to production in the same step as a deploy.
+-- EduMongolia content catalog for a new Supabase project named edumongolia.
 -- This file does not read or write eSIM Mongolia data.
--- Apply after supabase/schema.sql, which already creates profiles and user_roles.
+-- It creates profiles and user_roles when the China schema has not been applied yet.
 -- Supabase Free plan. No storage of large files in these rows. Files belong in a private bucket later.
+
+create table if not exists profiles (
+  id uuid primary key,
+  display_name text,
+  nationality_code text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists user_roles (
+  profile_id uuid not null references profiles (id) on delete cascade,
+  role text not null check (role in ('student', 'agent', 'partner', 'admin')),
+  primary key (profile_id, role)
+);
 
 alter table profiles
   add column if not exists locale text not null default 'mn' check (locale in ('mn', 'en'));

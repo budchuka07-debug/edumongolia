@@ -38,7 +38,7 @@ A project price is `project.amount + max(0, pages - project_page.included_units)
 
 ## Database
 
-`supabase/content-platform.sql` is the migration plan. It is not applied. Supabase is still not connected, and `@supabase/supabase-js` is not installed. The Free plan stays the target. The SQL adds the catalog, order, entitlement, and attempt tables, indexes, and row level security. It reuses `profiles` and `user_roles` from `supabase/schema.sql`.
+`supabase/content-platform.sql` is the SQL for a new Supabase project. It creates `profiles` and `user_roles` if the China schema is not there, then adds the catalog, order, entitlement, and attempt tables, indexes, and row level security. Supabase is still not connected from this app, and `@supabase/supabase-js` is not installed. The Free plan stays the target.
 
 Students can read their own orders and results. They cannot write payments, entitlements, or scores. Those writes wait for the service role after a verified QPay check.
 
