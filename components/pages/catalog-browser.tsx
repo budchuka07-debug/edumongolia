@@ -36,7 +36,7 @@ export function CatalogBrowser({
     return cards.filter((card) => {
       const text = `${card.title.mn} ${card.title.en} ${card.summary.mn} ${card.summary.en}`.toLowerCase();
       if (needle && !text.includes(needle)) return false;
-      if (grade !== "all" && card.grade !== grade) return false;
+      if (grade !== "all" && card.grade !== grade && !card.grades.includes(grade)) return false;
       if (difficulty !== "all" && card.difficulty !== difficulty) return false;
       if (subject !== "all" && card.subject !== subject) return false;
       return true;

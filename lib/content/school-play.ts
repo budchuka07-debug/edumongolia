@@ -48,6 +48,7 @@ const subjectLabel: Record<string, SchoolText> = {
   english: { mn: "Англи хэл", en: "English" },
   history: { mn: "Түүх", en: "History" },
   geography: { mn: "Газарзүй", en: "Geography" },
+  logic: { mn: "Логик", en: "Logic" },
 };
 
 export function schoolText(value: SchoolText, locale: SchoolLocale) {

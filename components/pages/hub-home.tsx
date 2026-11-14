@@ -162,9 +162,8 @@ export function HubHome() {
             </Link>
           ))}
         </div>
+        <Link href="/exams" className="mt-4 mr-4 inline-block text-sm font-semibold text-primary">{locale === "en" ? "All tests by lesson" : "Хичээл бүрийн тест"}</Link>
         <Link href="/kids" className="mt-4 mr-4 inline-block text-sm font-semibold text-primary">{hub.sections.kidsTests}</Link>
-        <Link href="/bank" className="mt-4 mr-4 inline-block text-sm font-semibold text-primary">{hub.sections.gradeBank}</Link>
-        <Link href="/school" className="mt-4 mr-4 inline-block text-sm font-semibold text-primary">{hub.sections.schoolExams}</Link>
         <Link href="/courses" className="mt-4 inline-block text-sm font-semibold text-primary">{hub.seeAll}</Link>
       </Block>
 

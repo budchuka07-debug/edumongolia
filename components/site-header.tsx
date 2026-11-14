@@ -116,7 +116,7 @@ export function SiteHeader() {
   const primary = locale === "en"
     ? [
         { href: "/", label: "Home" },
-        { href: "/exams", label: "Examinations" },
+        { href: "/exams", label: "Tests" },
         { href: "/papers", label: "Projects" },
         { href: "/iq", label: "IQ Tests" },
         { href: "/quizzes", label: "Quiz Library" },
@@ -128,7 +128,7 @@ export function SiteHeader() {
       ]
     : [
         { href: "/", label: "Нүүр" },
-        { href: "/exams", label: "Шалгалт" },
+        { href: "/exams", label: "Тест" },
         { href: "/papers", label: "Төсөл" },
         { href: "/iq", label: "IQ тест" },
         { href: "/quizzes", label: "Асуулт" },
