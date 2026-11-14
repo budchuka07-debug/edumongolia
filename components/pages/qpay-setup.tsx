@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { qpayReadiness } from "@/lib/payments/qpay";
 
 const meaning: Record<string, string> = {
@@ -7,7 +8,8 @@ const meaning: Record<string, string> = {
   EDU_SITE_URL: "сайтын хаяг, жишээ нь https://edumongolia.mn",
 };
 
-export function QpaySetup() {
+export async function QpaySetup() {
+  await connection();
   const rows = qpayReadiness();
   const ready = rows.filter((row) => row.name !== "EDU_SITE_URL").every((row) => row.set);
   return (

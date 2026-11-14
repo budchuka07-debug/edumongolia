@@ -50,3 +50,6 @@ next-env.d.ts
 
 # netlify
 .netlify
+
+# QPay merchant values captured at build. Never commit.
+/lib/payments/qpay-built.generated.ts

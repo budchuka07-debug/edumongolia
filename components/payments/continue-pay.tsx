@@ -27,6 +27,8 @@ const copy = {
     waiting: "QPay нэхэмжлэл үүсгэж байна.",
     scan: "QPay QR уншуулна уу. Төлбөр баталгаажмагц үлдсэн хичээл нээгдэнэ.",
     pending: "Төлбөр хараахан ороогүй.",
+    missing: "QPay нэвтрэх утга сервер дээр алга. Нэхэмжлэл үүсээгүй.",
+    rejectedLogin: "QPay нэвтрэх нэр эсвэл нууц үг таарсангүй.",
     failed: "QPay нэхэмжлэл үүсгэж чадсангүй. Дахин дарна уу.",
     check: "Төлбөр шалгах",
   },
@@ -36,6 +38,8 @@ const copy = {
     waiting: "Creating the QPay invoice.",
     scan: "Scan the QPay QR. The rest of the lesson opens after QPay confirms the payment.",
     pending: "The payment is not in yet.",
+    missing: "The QPay login is not on the server. No invoice was created.",
+    rejectedLogin: "QPay rejected the merchant login.",
     failed: "The QPay invoice could not be created. Try again.",
     check: "Check payment",
   },
@@ -102,7 +106,9 @@ export function ContinuePay({
       return;
     }
     if (!response.ok || !body.orderId) {
-      setMessage(t.failed);
+      if (body.error === "qpay-not-configured") setMessage(t.missing);
+      else if (body.error === "token") setMessage(body.detail ? `${t.rejectedLogin} ${body.detail}` : t.rejectedLogin);
+      else setMessage(body.detail ? `${t.failed} ${body.detail}` : t.failed);
       return;
     }
     setOrderId(body.orderId);

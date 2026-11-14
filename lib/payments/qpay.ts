@@ -1,5 +1,6 @@
 import { chargedPrice } from "@/lib/catalog/charge";
 import type { PaidPage } from "./pricing";
+import { builtQpay } from "./qpay-built.generated";
 
 const TOKEN_URL = "https://merchant.qpay.mn/v2/auth/token";
 const INVOICE_URL = "https://merchant.qpay.mn/v2/invoice";
@@ -18,7 +19,7 @@ const DEFAULT_SITE_URL = "https://edumongolia.com";
 
 /** Names only. Values stay on the server and are never returned. */
 export function qpayReadiness() {
-  return QPAY_ENV_NAMES.map((name) => ({ name, set: Boolean(process.env[name]?.trim()) }));
+  return QPAY_ENV_NAMES.map((name) => ({ name, set: Boolean(hostValue(name)) }));
 }
 
 export function siteUrlFrom(headers: Headers) {
@@ -29,20 +30,38 @@ export function siteUrlFrom(headers: Headers) {
   return `${proto}://${host}`.replace(/\/$/, "");
 }
 
+function hostValue(name: "EDU_QPAY_USERNAME" | "EDU_QPAY_PASSWORD" | "EDU_QPAY_INVOICE_CODE" | "EDU_SITE_URL") {
+  const runtime = process.env[name];
+  if (typeof runtime === "string" && runtime.trim()) return runtime.trim();
+  const built = builtQpay?.[name === "EDU_QPAY_USERNAME" ? "username" : name === "EDU_QPAY_PASSWORD" ? "password" : name === "EDU_QPAY_INVOICE_CODE" ? "invoiceCode" : "siteUrl"];
+  return built?.trim() || "";
+}
+
 /** EduMongolia uses its own QPay variables. They are not the eSIM merchant variables. */
 export function qpayConfig(fallbackSiteUrl?: string | null): QpayConfig | null {
-  const username = process.env.EDU_QPAY_USERNAME?.trim();
-  const password = process.env.EDU_QPAY_PASSWORD?.trim();
-  const invoiceCode = process.env.EDU_QPAY_INVOICE_CODE?.trim();
-  const siteUrl = (process.env.EDU_SITE_URL?.trim() || fallbackSiteUrl?.trim() || DEFAULT_SITE_URL).replace(/\/$/, "");
+  const username = hostValue("EDU_QPAY_USERNAME");
+  const password = hostValue("EDU_QPAY_PASSWORD");
+  const invoiceCode = hostValue("EDU_QPAY_INVOICE_CODE");
+  const siteUrl = (hostValue("EDU_SITE_URL") || fallbackSiteUrl?.trim() || DEFAULT_SITE_URL).replace(/\/$/, "");
   if (!username || !password || !invoiceCode) return null;
   return { username, password, invoiceCode, siteUrl };
 }
 
 export class QpayError extends Error {
-  constructor(step: "token" | "invoice" | "check") {
+  detail: string;
+
+  constructor(step: "token" | "invoice" | "check", detail = "") {
     super(step);
+    this.detail = detail.slice(0, 180);
   }
+}
+
+function qpayDetail(body: unknown) {
+  if (!body || typeof body !== "object") return "";
+  const record = body as { message?: unknown; error?: unknown };
+  const message = typeof record.message === "string" ? record.message : "";
+  const error = typeof record.error === "string" ? record.error : "";
+  return (message || error).slice(0, 180);
 }
 
 async function accessToken(config: QpayConfig) {
@@ -52,7 +71,7 @@ async function accessToken(config: QpayConfig) {
     headers: { Authorization: `Basic ${basic}` },
   });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok || !body.access_token) throw new QpayError("token");
+  if (!response.ok || !body.access_token) throw new QpayError("token", qpayDetail(body));
   return String(body.access_token);
 }
 
@@ -80,7 +99,7 @@ export async function createQpayInvoice(input: {
     }),
   });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok || !body.invoice_id) throw new QpayError("invoice");
+  if (!response.ok || !body.invoice_id) throw new QpayError("invoice", qpayDetail(body));
   return {
     invoiceId: String(body.invoice_id),
     qrText: typeof body.qr_text === "string" ? body.qr_text : "",
@@ -105,7 +124,7 @@ export async function checkQpayInvoice(config: QpayConfig, invoiceId: string) {
     }),
   });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new QpayError("check");
+  if (!response.ok) throw new QpayError("check", qpayDetail(body));
   const rows = Array.isArray(body.rows) ? body.rows : [];
   const paid = rows.find((row: { payment_status?: string }) => row?.payment_status === "PAID");
   const paymentId = paid?.payment_id ? String(paid.payment_id) : paid ? `invoice:${invoiceId}` : null;

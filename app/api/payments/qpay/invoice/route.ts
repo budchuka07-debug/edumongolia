@@ -85,6 +85,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     await markInvoiceFailed(orderId);
     const step = error instanceof QpayError ? error.message : "invoice";
-    return withReader(NextResponse.json({ ok: false, error: step }, { status: 502 }), reader.id, reader.fresh);
+    const detail = error instanceof QpayError ? error.detail : "";
+    console.error("qpay invoice failed", step, detail);
+    return withReader(NextResponse.json({ ok: false, error: step, detail }, { status: 502 }), reader.id, reader.fresh);
   }
 }
