@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { UniversityCoverage } from "@/components/marketplace/university-coverage";
 import { ScholarshipAdmin } from "@/components/scholarships/scholarship-admin";
 import { AdminDesk } from "@/components/pages/admin-desk";
+import { QpaySetup } from "@/components/pages/qpay-setup";
 
 export const metadata: Metadata = {
   title: "Админ самбар",
@@ -13,6 +14,9 @@ export default function Page() {
   return (
     <>
       <AdminDesk />
+      <div className="mx-auto max-w-6xl px-4">
+        <QpaySetup />
+      </div>
       <div className="mx-auto max-w-6xl px-4 pb-12">
         <UniversityCoverage />
         <section className="mt-8">

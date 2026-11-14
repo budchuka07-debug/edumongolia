@@ -1,5 +1,6 @@
 import { lessonFile, lessonPreview } from "@/lib/content/lessons";
 import { projectBriefs } from "@/lib/content/project-briefs";
+import { getGradeLesson } from "@/lib/content/grade-bank";
 import { getSchoolTopic } from "@/lib/content/school-exams";
 import type { SchoolQuestion, SchoolTopic } from "@/lib/content/school-play";
 import { papers, type Paper } from "@/lib/content/papers";
@@ -47,7 +48,7 @@ export function presentExam(topic: SchoolTopic, readerId: string | null): Readin
 }
 
 export function examReading(slug: string, readerId: string | null) {
-  const topic = getSchoolTopic(slug);
+  const topic = getSchoolTopic(slug) ?? getGradeLesson(slug)?.topic;
   if (!topic || topic.custom) return null;
   return presentExam(topic, readerId);
 }

@@ -70,6 +70,7 @@ const copy = {
 } as const;
 
 export type ExamPage = {
+  backHref?: string;
   slug: string;
   band: SchoolTopic["band"];
   subject: string;
@@ -97,7 +98,7 @@ function readAvoid(slug: string) {
   }
 }
 
-export function SchoolRunner({ slug, bank }: { slug: string; bank: ExamPage | null }) {
+export function SchoolRunner({ slug, bank, backHref = "/school" }: { slug: string; bank: ExamPage | null; backHref?: string }) {
   const { locale } = useI18n();
   const t = copy[locale];
   const [custom] = usePersistedState<unknown[]>(SCHOOL_CUSTOM_KEY, []);
@@ -137,7 +138,7 @@ export function SchoolRunner({ slug, bank }: { slug: string; bank: ExamPage | nu
     return (
       <div className="mx-auto max-w-3xl px-4 py-16">
         <p className="text-sm text-muted-foreground">{t.missing}</p>
-        <Link href="/school" className="mt-4 inline-block text-sm font-medium text-primary">{t.back}</Link>
+        <Link href={backHref} className="mt-4 inline-block text-sm font-medium text-primary">{t.back}</Link>
       </div>
     );
   }
@@ -173,7 +174,7 @@ export function SchoolRunner({ slug, bank }: { slug: string; bank: ExamPage | nu
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
-      <Link href="/school" className="text-sm font-medium text-primary">{t.back}</Link>
+      <Link href={backHref} className="text-sm font-medium text-primary">{t.back}</Link>
       <p className="mt-4 text-sm text-muted-foreground">
         {schoolText(bandLabel[band], locale)} · {subjectName(subject, locale)} · {schoolText(grades, locale)}
         {customTopic ? ` · ${t.custom}` : ""}

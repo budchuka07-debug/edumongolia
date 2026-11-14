@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { gradeLessons } from "@/lib/content/grade-bank";
 import { schoolTopics } from "@/lib/content/school-exams";
 import { lessonCatalog } from "@/lib/content/lessons";
 import { papers } from "@/lib/content/papers";
@@ -15,6 +16,8 @@ const existing = [
   "/discounts",
   "/courses",
   "/kids",
+  "/bank",
+  ...gradeLessons.map((lesson) => `/bank/${lesson.topic.slug}`),
   "/school",
   ...schoolTopics.map((topic) => `/school/${topic.slug}`),
   "/resources",

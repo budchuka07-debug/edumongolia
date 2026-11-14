@@ -69,6 +69,7 @@ export type HubCopy = {
     orderPaper: string;
     kidsTests: string;
     schoolExams: string;
+    gradeBank: string;
   };
   pages: Record<
     | "tutors"
@@ -139,6 +140,7 @@ const railHrefs = [
   ["/#individual", "individual"],
   ["/#semi", "semi"],
   ["/kids", "kidsTests"],
+  ["/bank", "gradeBank"],
   ["/school", "schoolExams"],
   ["/centers", "centers"],
   ["/tutors", "tutors"],
@@ -218,6 +220,7 @@ const mnSections: HubCopy["sections"] = {
   papers: "Төсөл, диплом, даалгавар",
   orderPaper: "Захиалгаар бичүүлэх",
   kidsTests: "Хүүхдийн тест",
+  gradeBank: "Шалгалтын сан",
   schoolExams: "Дунд, ахлах, Cambridge",
 };
 
@@ -258,6 +261,7 @@ const enSections: HubCopy["sections"] = {
   papers: "Projects, diplomas, assignments",
   orderPaper: "Order a paper",
   kidsTests: "Children's tests",
+  gradeBank: "Exam bank",
   schoolExams: "School and Cambridge exams",
 };
 

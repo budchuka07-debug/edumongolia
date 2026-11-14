@@ -30,7 +30,9 @@ function bucket(href: string): GroupId {
     href === "/kids" ||
     href.startsWith("/kids/") ||
     href === "/school" ||
-    href.startsWith("/school/")
+    href.startsWith("/school/") ||
+    href === "/bank" ||
+    href.startsWith("/bank/")
   ) {
     return "education";
   }

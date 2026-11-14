@@ -11,6 +11,13 @@ export type QpayConfig = {
   siteUrl: string;
 };
 
+export const QPAY_ENV_NAMES = ["EDU_QPAY_USERNAME", "EDU_QPAY_PASSWORD", "EDU_QPAY_INVOICE_CODE", "EDU_SITE_URL"] as const;
+
+/** Names only. Values stay on the server and are never returned. */
+export function qpayReadiness() {
+  return QPAY_ENV_NAMES.map((name) => ({ name, set: Boolean(process.env[name]?.trim()) }));
+}
+
 /** EduMongolia uses its own QPay variables. They are not the eSIM merchant variables. */
 export function qpayConfig(): QpayConfig | null {
   const username = process.env.EDU_QPAY_USERNAME;

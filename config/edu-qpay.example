@@ -1,5 +1,14 @@
-# EduMongolia QPay. These names are separate from eSIMMongolia.
-# Put the values in the host's environment. Do not commit them.
+# EduMongolia-ийн өөрийн QPay. eSIMMongolia-ийн нэр, нууц үг биш.
+# Утгыг энэ файлд бүү бөглө. Git болон чат руу бүү хий.
+#
+# Локал: энэ мөрүүдийг төслийн үндэс дээрх .env.local руу хуулж, утгыг тэнд бөглөнө.
+# Амьд сайт: хостын Environment Variables дээр яг энэ нэрээр нэмнэ.
+#
+# EDU_QPAY_USERNAME     merchant.qpay.mn дээрх нэвтрэх нэр
+# EDU_QPAY_PASSWORD     тэр бүртгэлийн нууц үг
+# EDU_QPAY_INVOICE_CODE QPay-аас өгсөн invoice code
+# EDU_SITE_URL          сайтын хаяг, төгсгөлд / байхгүй. Callback энэ хаяг дээр ирнэ.
+
 EDU_QPAY_USERNAME=
 EDU_QPAY_PASSWORD=
 EDU_QPAY_INVOICE_CODE=
