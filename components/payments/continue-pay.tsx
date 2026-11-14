@@ -27,7 +27,7 @@ const copy = {
     waiting: "QPay нэхэмжлэл үүсгэж байна.",
     scan: "QR уншуулж төлнө. Төлбөр баталгаажмагц үлдсэн мэдээлэл татагдана.",
     pending: "Төлбөр хараахан ороогүй.",
-    missing: "QPay хараахан холбогдоогүй. Серверийн орчинд EDU_QPAY_USERNAME, EDU_QPAY_PASSWORD, EDU_QPAY_INVOICE_CODE, EDU_SITE_URL тавина. Локал бол төслийн .env.local. Амьд сайт бол хостын Environment Variables. Утгыг чат, git рүү бүү хий.",
+    closed: "Үлдсэн хэсэг төлбөр холбогдсоны дараа нээгдэнэ.",
     failed: "QPay нэхэмжлэл үүсгэж чадсангүй.",
     check: "Төлбөр шалгах",
   },
@@ -37,7 +37,7 @@ const copy = {
     waiting: "Creating the QPay invoice.",
     scan: "Pay with the QR. The rest of the information loads after QPay confirms the payment.",
     pending: "The payment is not in yet.",
-    missing: "QPay is not connected yet. Set EDU_QPAY_USERNAME, EDU_QPAY_PASSWORD, EDU_QPAY_INVOICE_CODE, and EDU_SITE_URL on the server. Locally that is .env.local. On the live site it is the host's environment variables. Do not put the values in chat or git.",
+    closed: "The rest opens after payment is connected.",
     failed: "The QPay invoice could not be created.",
     check: "Check payment",
   },
@@ -62,10 +62,26 @@ export function ContinuePay({
   const t = copy[locale];
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState<boolean | null>(null);
   const [message, setMessage] = useState("");
   const [orderId, setOrderId] = useState("");
   const [qrImage, setQrImage] = useState("");
   const [links, setLinks] = useState<Array<{ name: string; link: string }>>([]);
+
+  useEffect(() => {
+    let stopped = false;
+    fetch("/api/payments/qpay/status")
+      .then((response) => response.json())
+      .then((body) => {
+        if (!stopped) setReady(Boolean(body.ready));
+      })
+      .catch(() => {
+        if (!stopped) setReady(false);
+      });
+    return () => {
+      stopped = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!orderId) return undefined;
@@ -104,7 +120,8 @@ export function ContinuePay({
       return;
     }
     if (body.error === "qpay-not-configured") {
-      setMessage(t.missing);
+      setReady(false);
+      setMessage("");
       return;
     }
     if (!response.ok || !body.orderId) {
@@ -140,7 +157,10 @@ export function ContinuePay({
     <div className="mt-5 rounded-2xl bg-secondary p-4">
       <p className="text-sm">{t.open}</p>
       <p className="mt-1 font-heading text-2xl font-semibold">{money(priceMnt)}</p>
-      <Button className="mt-3" disabled={busy} onClick={() => { void start(); }}>{t.continue}</Button>
+      {ready === true ? (
+        <Button className="mt-3" disabled={busy} onClick={() => { void start(); }}>{t.continue}</Button>
+      ) : null}
+      {ready === false ? <p className="mt-3 text-sm leading-6 text-muted-foreground">{t.closed}</p> : null}
       {qrImage ? (
         <img
           alt="QPay"
