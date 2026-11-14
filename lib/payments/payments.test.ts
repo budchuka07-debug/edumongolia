@@ -24,8 +24,9 @@ for (const topic of schoolTopics) {
   const whole = joinParts(parts);
   const preview = previewText(parts);
   const rest = remainderText(parts);
-  assert.ok(preview.length > 0 && preview.length <= Math.floor(whole.length * 0.4), topic.slug);
+  assert.ok(preview.length > 0, topic.slug);
   assert.ok(whole.startsWith(preview), topic.slug);
+  assert.ok(preview.length <= Math.floor(whole.length * 0.4) || preview.startsWith(parts[0].trim()), topic.slug);
   assert.equal(rest, whole.slice(preview.length).trimStart());
   assert.ok(!preview.includes(topic.questions[0].prompt.mn));
 }
@@ -34,7 +35,9 @@ for (const id of Object.keys(projectBriefs)) {
   const parts = projectBriefs[id].map((part) => part.mn);
   const whole = joinParts(parts);
   const preview = previewText(parts);
-  assert.ok(preview.length > 0 && preview.length <= Math.floor(whole.length * 0.4), id);
+  assert.ok(preview.length > 0, id);
+  assert.ok(whole.startsWith(preview), id);
+  assert.ok(preview.length <= Math.floor(whole.length * 0.4) || preview.startsWith(parts[0].trim()), id);
   assert.ok(priceForPage("project") === 10000);
 }
 

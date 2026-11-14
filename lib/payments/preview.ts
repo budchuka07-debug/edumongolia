@@ -6,15 +6,23 @@ export function joinParts(parts: string[]) {
   return parts.map((part) => part.trim()).filter(Boolean).join("\n\n");
 }
 
-/** The readable prefix is at most `ratio` of the characters. The cut prefers a word boundary inside that budget. */
+/** Whole paragraphs that fit in the ratio. The first paragraph stays intact so the open part is readable. */
 export function previewText(parts: string[], ratio = PREVIEW_RATIO) {
-  const whole = joinParts(parts);
-  const budget = Math.floor(whole.length * ratio);
-  if (budget <= 0) return "";
-  const slice = whole.slice(0, budget);
-  const space = slice.lastIndexOf(" ");
-  const clipped = space > budget * 0.6 ? slice.slice(0, space) : slice;
-  return clipped.trimEnd();
+  const cleaned = parts.map((part) => part.trim()).filter(Boolean);
+  if (cleaned.length === 0) return "";
+  const budget = Math.floor(joinParts(cleaned).length * ratio);
+  let used = "";
+  for (const part of cleaned) {
+    const next = used ? `${used}\n\n${part}` : part;
+    if (!used || next.length <= budget) used = next;
+    else break;
+  }
+  return used;
+}
+
+export function openQuestionCount(total: number, ratio = PREVIEW_RATIO) {
+  if (total <= 0) return 0;
+  return Math.max(1, Math.round(total * ratio));
 }
 
 export function remainderText(parts: string[], ratio = PREVIEW_RATIO) {

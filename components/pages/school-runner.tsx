@@ -26,7 +26,7 @@ const copy = {
     missing: "Энэ сэдэв энэ хөтөч дээр алга.",
     start: "Шалгалт эхлүүлэх",
     lesson: "Хичээл",
-    note: "Эхний 40% нээлттэй. Үргэлжлүүлэхэд 5,000₮. Төлбөр баталгаажмагц үлдсэн хичээл, асуулт татагдана. Хариулсны дараа эхлээд алдаа, дараа нь оноо гарна.",
+    note: "Эхний хэсэг нээлттэй. Түүнийг дуусгасны дараа үлдсэн хичээл, асуулт 5,000₮. Хариулсны дараа эхлээд алдаа, дараа нь оноо гарна.",
     own: "Энэ таны оруулсан хичээл. Төлбөргүй. Хариулсны дараа эхлээд алдаа, дараа нь оноо гарна.",
     previous: "Өмнөх",
     next: "Дараагийн асуулт",
@@ -49,7 +49,7 @@ const copy = {
     missing: "This topic is not in this browser.",
     start: "Start the exam",
     lesson: "Lesson",
-    note: "The first 40% is open. Continuing costs 5,000 MNT. After the payment is confirmed, the rest of the lesson and the questions are loaded. Mistakes come first, then the score.",
+    note: "The first part is open. After it, the rest of the lesson and the questions cost 5,000 MNT. Mistakes come first, then the score.",
     own: "This is a lesson you added. It has no fee. Mistakes come first, then the score.",
     previous: "Previous",
     next: "Next question",
@@ -121,7 +121,7 @@ export function SchoolRunner({ slug, bank, backHref = "/school" }: { slug: strin
 
   const questions = customTopic?.questions ?? unlocked?.questions ?? bank?.questions ?? null;
   const perAttempt = customTopic?.perAttempt ?? unlocked?.perAttempt ?? bank?.perAttempt ?? 0;
-  const paid = Boolean(customTopic) || Boolean(questions);
+  const paid = Boolean(customTopic) || Boolean(bank?.paid) || Boolean(unlocked?.questions);
   const playTopic: SchoolTopic | null = customTopic ?? (bank && questions ? {
     slug: bank.slug,
     band: bank.band,
@@ -189,15 +189,7 @@ export function SchoolRunner({ slug, bank, backHref = "/school" }: { slug: strin
             <p>{preview}</p>
             {paid && rest ? <p>{rest}</p> : null}
           </div>
-          {paid ? <Button className="mt-5" onClick={begin}>{t.start}</Button> : null}
-          {!paid && bank ? (
-            <ContinuePay
-              kind="exam"
-              id={bank.slug}
-              priceMnt={bank.priceMnt}
-              onUnlocked={setUnlocked}
-            />
-          ) : null}
+          {questions ? <Button className="mt-5" onClick={begin}>{t.start}</Button> : null}
         </section>
       )}
 
@@ -252,6 +244,18 @@ export function SchoolRunner({ slug, bank, backHref = "/school" }: { slug: strin
             <Button onClick={startNew}>{t.retry}</Button>
             <Button variant="outline" onClick={() => setPhase("mistakes")}>{t.review}</Button>
           </div>
+          {!paid && bank ? (
+            <ContinuePay
+              kind="exam"
+              id={bank.slug}
+              priceMnt={bank.priceMnt}
+              onUnlocked={(reading) => {
+                setUnlocked(reading);
+                setPack(null);
+                setPhase("lesson");
+              }}
+            />
+          ) : null}
         </section>
       )}
 

@@ -4,7 +4,7 @@ import { getGradeLesson } from "@/lib/content/grade-bank";
 import { getSchoolTopic } from "@/lib/content/school-exams";
 import type { SchoolQuestion, SchoolTopic } from "@/lib/content/school-play";
 import { papers, type Paper } from "@/lib/content/papers";
-import { splitBilingual, type Bilingual } from "./preview";
+import { openQuestionCount, splitBilingual, type Bilingual } from "./preview";
 import { chargedPrice } from "@/lib/catalog/charge";
 import { getCatalogItem, type CatalogKind } from "@/lib/catalog/items";
 import { productKey, type PaidPage } from "./pricing";
@@ -34,6 +34,7 @@ function entitled(readerId: string | null, kind: PaidPage, id: string) {
 export function presentExam(topic: SchoolTopic, readerId: string | null): Reading {
   const parts = splitBilingual(topic.lesson);
   const paid = entitled(readerId, "exam", topic.slug);
+  const openQuestions = topic.questions.slice(0, openQuestionCount(topic.questions.length));
   return {
     kind: "exam",
     id: topic.slug,
@@ -41,8 +42,8 @@ export function presentExam(topic: SchoolTopic, readerId: string | null): Readin
     title: topic.title,
     preview: parts.preview,
     rest: paid ? parts.rest : null,
-    questions: paid ? topic.questions : null,
-    perAttempt: topic.perAttempt,
+    questions: paid ? topic.questions : openQuestions,
+    perAttempt: paid ? topic.perAttempt : openQuestions.length,
     paid,
     embedUrl: null,
     html: null,
