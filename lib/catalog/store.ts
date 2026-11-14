@@ -8,7 +8,7 @@ function catalogPath() {
 
 export function loadPriceRules(): PriceRule[] {
   try {
-    const parsed = JSON.parse(fs.readFileSync(catalogPath(), "utf8")) as { rules?: unknown };
+    const parsed = JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ catalogPath(), "utf8")) as { rules?: unknown };
     return sanitizeRules(parsed.rules) ?? defaultPriceRules;
   } catch {
     return defaultPriceRules;

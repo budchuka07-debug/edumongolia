@@ -40,7 +40,7 @@ function emptyLedger(): Ledger {
 
 function readLedger(): Ledger {
   try {
-    const raw = fs.readFileSync(ledgerPath(), "utf8");
+    const raw = fs.readFileSync(/*turbopackIgnore: true*/ ledgerPath(), "utf8");
     const parsed = JSON.parse(raw) as Ledger;
     return {
       invoices: Array.isArray(parsed.invoices) ? parsed.invoices : [],

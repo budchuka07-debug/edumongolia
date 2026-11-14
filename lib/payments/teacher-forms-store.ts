@@ -22,7 +22,7 @@ function filePath() {
 
 function readFile(): StoredTeacherForm[] {
   try {
-    const parsed = JSON.parse(fs.readFileSync(filePath(), "utf8")) as FileShape;
+    const parsed = JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ filePath(), "utf8")) as FileShape;
     return Array.isArray(parsed.forms) ? parsed.forms : [];
   } catch {
     return [];
