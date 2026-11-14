@@ -1,0 +1,6 @@
+# EduMongolia QPay. These names are separate from eSIMMongolia.
+# Put the values in the host's environment. Do not commit them.
+EDU_QPAY_USERNAME=
+EDU_QPAY_PASSWORD=
+EDU_QPAY_INVOICE_CODE=
+EDU_SITE_URL=https://edumongolia.mn

@@ -368,7 +368,7 @@ export const hubCopy: Record<Locale, HubCopy> = {
       },
       papers: {
         title: "Төсөл, диплом, курсын ажил, бие даалт",
-        lead: "Бэлэн сэдвийн жишээ. Файл зардаггүй. Диплом, курсын ажил, бие даалт, төслийг захиалгаар бичүүлнэ.",
+        lead: "Төслийн хуудас 10,000₮. Эхний 40% нээлттэй. Үргэлжлүүлэхэд үлдсэн бүтэц татагдана. Файл зардаггүй.",
       },
       order: {
         title: "Захиалгаар бичүүлэх",
@@ -534,7 +534,7 @@ export const hubCopy: Record<Locale, HubCopy> = {
       },
       papers: {
         title: "Projects, diplomas, course papers, assignments",
-        lead: "Sample topics. Files are not for sale. Order a diploma, course paper, assignment, or project.",
+        lead: "A project page costs 10,000 MNT. The first 40% is open. Continuing loads the rest of the brief. Files are not for sale.",
       },
       order: {
         title: "Order a paper",

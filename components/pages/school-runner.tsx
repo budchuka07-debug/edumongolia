@@ -6,14 +6,16 @@ import {
   bandLabel,
   choiceLabel,
   drawSchoolAttempt,
-  getSchoolTopic,
   readCustomTopics,
   SCHOOL_CUSTOM_KEY,
   schoolText,
   subjectName,
   type SchoolQuestion,
-} from "@/lib/content/school-exams";
+  type SchoolTopic,
+} from "@/lib/content/school-play";
+import type { Bilingual } from "@/lib/payments/preview";
 import { usePersistedState } from "@/lib/use-persisted-state";
+import { ContinuePay, type UnlockedReading } from "@/components/payments/continue-pay";
 import { useI18n } from "@/components/language-provider";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
@@ -24,7 +26,8 @@ const copy = {
     missing: "Энэ сэдэв энэ хөтөч дээр алга.",
     start: "Шалгалт эхлүүлэх",
     lesson: "Хичээл",
-    note: "Хариугаа дуусгасны дараа эхлээд алдаа, түүний учир гарна. Оноо түүний дараа гарна. Дахин өгөхөд сангаас өөр багц гарна. Энэ нь албан ёсны улсын, Cambridge, IB-ийн хуудас биш.",
+    note: "Эхний 40% нээлттэй. Үргэлжлүүлэхэд 5,000₮. Төлбөр баталгаажмагц үлдсэн хичээл, асуулт татагдана. Хариулсны дараа эхлээд алдаа, дараа нь оноо гарна.",
+    own: "Энэ таны оруулсан хичээл. Төлбөргүй. Хариулсны дараа эхлээд алдаа, дараа нь оноо гарна.",
     previous: "Өмнөх",
     next: "Дараагийн асуулт",
     finish: "Хариултаа дуусгах",
@@ -46,7 +49,8 @@ const copy = {
     missing: "This topic is not in this browser.",
     start: "Start the exam",
     lesson: "Lesson",
-    note: "After you finish, the mistakes and the reason for each one appear first. The score comes after that. A retry draws a different set. This is not an official national, Cambridge, or IB paper.",
+    note: "The first 40% is open. Continuing costs 5,000 MNT. After the payment is confirmed, the rest of the lesson and the questions are loaded. Mistakes come first, then the score.",
+    own: "This is a lesson you added. It has no fee. Mistakes come first, then the score.",
     previous: "Previous",
     next: "Next question",
     finish: "Finish the answers",
@@ -65,6 +69,20 @@ const copy = {
   },
 } as const;
 
+export type ExamPage = {
+  slug: string;
+  band: SchoolTopic["band"];
+  subject: string;
+  grades: SchoolTopic["grades"];
+  title: SchoolTopic["title"];
+  priceMnt: number;
+  preview: Bilingual;
+  rest: Bilingual | null;
+  questions: SchoolQuestion[] | null;
+  perAttempt: number;
+  paid: boolean;
+};
+
 function avoidKey(slug: string) {
   return `edumongolia-school-avoid-${slug}`;
 }
@@ -79,16 +97,17 @@ function readAvoid(slug: string) {
   }
 }
 
-export function SchoolRunner({ slug }: { slug: string }) {
+export function SchoolRunner({ slug, bank }: { slug: string; bank: ExamPage | null }) {
   const { locale } = useI18n();
   const t = copy[locale];
   const [custom] = usePersistedState<unknown[]>(SCHOOL_CUSTOM_KEY, []);
-  const topic = getSchoolTopic(slug) ?? readCustomTopics(custom).find((item) => item.slug === slug);
+  const customTopic = bank ? undefined : readCustomTopics(custom).find((item) => item.slug === slug);
   const [activeSlug, setActiveSlug] = useState(slug);
   const [phase, setPhase] = useState<"lesson" | "quiz" | "mistakes" | "score">("lesson");
   const [pack, setPack] = useState<SchoolQuestion[] | null>(null);
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<Record<string, number>>({});
+  const [unlocked, setUnlocked] = useState<UnlockedReading | null>(null);
 
   if (activeSlug !== slug) {
     setActiveSlug(slug);
@@ -96,9 +115,25 @@ export function SchoolRunner({ slug }: { slug: string }) {
     setIndex(0);
     setPicked({});
     setPhase("lesson");
+    setUnlocked(null);
   }
 
-  if (!topic) {
+  const questions = customTopic?.questions ?? unlocked?.questions ?? bank?.questions ?? null;
+  const perAttempt = customTopic?.perAttempt ?? unlocked?.perAttempt ?? bank?.perAttempt ?? 0;
+  const paid = Boolean(customTopic) || Boolean(questions);
+  const playTopic: SchoolTopic | null = customTopic ?? (bank && questions ? {
+    slug: bank.slug,
+    band: bank.band,
+    subject: bank.subject,
+    grades: bank.grades,
+    title: bank.title,
+    summary: bank.title,
+    lesson: [],
+    perAttempt,
+    questions,
+  } : null);
+
+  if (!customTopic && !bank) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16">
         <p className="text-sm text-muted-foreground">{t.missing}</p>
@@ -107,19 +142,26 @@ export function SchoolRunner({ slug }: { slug: string }) {
     );
   }
 
+  const title = customTopic ? schoolText(customTopic.title, locale) : schoolText(bank!.title, locale);
+  const band = customTopic ? customTopic.band : bank!.band;
+  const subject = customTopic ? customTopic.subject : bank!.subject;
+  const grades = customTopic ? customTopic.grades : bank!.grades;
+  const preview = customTopic ? customTopic.lesson.map((paragraph) => schoolText(paragraph, locale)).join("\n\n") : bank!.preview[locale];
+  const rest = customTopic ? "" : (unlocked?.rest ?? bank!.rest)?.[locale] ?? "";
+
   function begin() {
-    if (!topic) return;
-    setPack(drawSchoolAttempt(topic, readAvoid(topic.slug)));
+    if (!playTopic) return;
+    setPack(drawSchoolAttempt(playTopic, readAvoid(playTopic.slug)));
     setIndex(0);
     setPicked({});
     setPhase("quiz");
   }
 
   function startNew() {
-    if (!topic || !pack) return;
+    if (!playTopic || !pack) return;
     const avoid = pack.map((item) => item.id);
-    sessionStorage.setItem(avoidKey(topic.slug), JSON.stringify(avoid));
-    setPack(drawSchoolAttempt(topic, avoid));
+    sessionStorage.setItem(avoidKey(playTopic.slug), JSON.stringify(avoid));
+    setPack(drawSchoolAttempt(playTopic, avoid));
     setIndex(0);
     setPicked({});
     setPhase("quiz");
@@ -133,21 +175,28 @@ export function SchoolRunner({ slug }: { slug: string }) {
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
       <Link href="/school" className="text-sm font-medium text-primary">{t.back}</Link>
       <p className="mt-4 text-sm text-muted-foreground">
-        {schoolText(bandLabel[topic.band], locale)} · {subjectName(topic.subject, locale)} · {schoolText(topic.grades, locale)}
-        {topic.custom ? ` · ${t.custom}` : ""}
+        {schoolText(bandLabel[band], locale)} · {subjectName(subject, locale)} · {schoolText(grades, locale)}
+        {customTopic ? ` · ${t.custom}` : ""}
       </p>
-      <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{schoolText(topic.title, locale)}</h1>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">{t.note}</p>
+      <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">{customTopic ? t.own : t.note}</p>
 
       {phase === "lesson" && (
         <section className="mt-8 rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
           <h2 className="font-heading text-xl font-semibold">{t.lesson}</h2>
-          <div className="mt-3 space-y-3 text-sm leading-6">
-            {topic.lesson.map((paragraph) => (
-              <p key={paragraph.mn}>{schoolText(paragraph, locale)}</p>
-            ))}
+          <div className="mt-3 space-y-3 text-sm leading-6 whitespace-pre-wrap">
+            <p>{preview}</p>
+            {paid && rest ? <p>{rest}</p> : null}
           </div>
-          <Button className="mt-5" onClick={begin}>{t.start}</Button>
+          {paid ? <Button className="mt-5" onClick={begin}>{t.start}</Button> : null}
+          {!paid && bank ? (
+            <ContinuePay
+              kind="exam"
+              id={bank.slug}
+              priceMnt={bank.priceMnt}
+              onUnlocked={setUnlocked}
+            />
+          ) : null}
         </section>
       )}
 

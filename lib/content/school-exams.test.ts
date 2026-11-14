@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { buildCustomTopic, drawSchoolAttempt, schoolTopics } from "./school-exams.ts";
+import { schoolTopics } from "./school-exams.ts";
+import { buildCustomTopic, drawSchoolAttempt } from "./school-play.ts";
 
 const seen = new Set<string>();
 for (const topic of schoolTopics) {

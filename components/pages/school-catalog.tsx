@@ -9,12 +9,12 @@ import {
   SCHOOL_CUSTOM_KEY,
   schoolBands,
   schoolText,
-  schoolTopics,
   subjectName,
   type CustomDraft,
   type CustomError,
   type SchoolBand,
-} from "@/lib/content/school-exams";
+  type SchoolText,
+} from "@/lib/content/school-play";
 import { usePersistedState } from "@/lib/use-persisted-state";
 import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
@@ -23,10 +23,11 @@ const copy = {
   mn: {
     eyebrow: "EduMongolia шалгалт",
     title: "Сэдвийн дагуу шалгалтын сан",
-    lead: "Дунд, ахлах анги, Cambridge, олон улсын төгсөлтийн шалгалтыг хичээл, сэдвээр нь дасна. Хариулж дууссаны дараа эхлээд юу буруу, яагаад тэр алдаа гарсан бэ гэдэг гарна. Оноо түүний дараа гарна. Дахин өгөхөд асуулт солигдоно.",
+    lead: "Дунд, ахлах анги, Cambridge, олон улсын төгсөлтийн шалгалт бүгд төлбөртэй. Хичээлийн эхний 40% нээлттэй. Үргэлжлүүлэхэд 5,000₮. Төлбөр баталгаажмагц үлдсэн мэдээлэл татагдана.",
     open: "Хичээл, шалгалт",
     bank: "санд",
     each: "нэг хувилбарт",
+    price: "үргэлжлүүлэх",
     yours: "Таны оруулсан",
     remove: "Хасах",
     addTitle: "Хичээл, шалгалт нэмэх",
@@ -61,10 +62,11 @@ const copy = {
   en: {
     eyebrow: "EduMongolia exams",
     title: "A topic exam bank",
-    lead: "Practice middle school, high school, Cambridge, and international graduation exams by lesson and topic. After the answers, the wrong items and the reason for each mistake appear first. The score comes after that. A retry changes the questions.",
+    lead: "Every exam is paid. The first 40% of the lesson is open. Continuing costs 5,000 MNT. The rest of the information loads after the payment is confirmed.",
     open: "Lesson and exam",
     bank: "in the bank",
     each: "in one variant",
+    price: "to continue",
     yours: "Added by you",
     remove: "Remove",
     addTitle: "Add a lesson and an exam",
@@ -112,7 +114,23 @@ function emptyQuestion(): CustomDraft["questions"][number] {
   };
 }
 
-export function SchoolCatalog() {
+export type SchoolCard = {
+  slug: string;
+  band: SchoolBand;
+  subject: string;
+  grades: SchoolText;
+  title: SchoolText;
+  summary: SchoolText;
+  questionCount: number;
+  perAttempt: number;
+  priceMnt: number;
+};
+
+function money(value: number) {
+  return `${new Intl.NumberFormat("mn-MN").format(value)}₮`;
+}
+
+export function SchoolCatalog({ cards }: { cards: SchoolCard[] }) {
   const { locale } = useI18n();
   const t = copy[locale];
   const [stored, setStored] = usePersistedState<unknown[]>(SCHOOL_CUSTOM_KEY, []);
@@ -155,7 +173,7 @@ export function SchoolCatalog() {
       </header>
 
       {schoolBands.map((band) => {
-        const builtIn = schoolTopics.filter((item) => item.band === band);
+        const builtIn = cards.filter((item) => item.band === band);
         const added = custom.filter((item) => item.band === band);
         const subjects = [...new Set([...builtIn.map((item) => item.subject), ...added.map((item) => item.subject)])];
         return (
@@ -169,7 +187,8 @@ export function SchoolCatalog() {
                     <article key={item.slug} className="rounded-2xl bg-card p-5 ring-1 ring-foreground/10">
                       <h4 className="font-heading text-xl font-semibold">{schoolText(item.title, locale)}</h4>
                       <p className="mt-2 text-sm leading-6 text-muted-foreground">{schoolText(item.summary, locale)}</p>
-                      <p className="mt-3 text-sm">{schoolText(item.grades, locale)} · {item.questions.length} {t.bank} · {item.perAttempt} {t.each}</p>
+                      <p className="mt-3 text-sm">{schoolText(item.grades, locale)} · {item.questionCount} {t.bank} · {item.perAttempt} {t.each}</p>
+                      <p className="mt-1 text-sm font-semibold">{money(item.priceMnt)} · {t.price}</p>
                       <Link href={`/school/${item.slug}`} className="mt-4 inline-block text-sm font-semibold text-primary">{t.open}</Link>
                     </article>
                   ))}

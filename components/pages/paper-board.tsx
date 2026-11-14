@@ -16,6 +16,7 @@ import { useI18n } from "@/components/language-provider";
 import { useHub } from "@/components/directory/use-hub";
 import { EmptyState } from "@/components/empty-state";
 import { publicPapers } from "@/lib/content/public";
+import { priceForPage } from "@/lib/payments/pricing";
 import { isPublicStatus, paperStatus } from "@/lib/content/publication";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -45,12 +46,22 @@ export function PaperCard({ paper }: { paper: Paper }) {
       <p className="mt-3 text-sm">
         {paper.pages} {hub.paper.pages.toLowerCase()} · {hub.paper.from} {money(paper.from)}
       </p>
-      <Link
-        href={`/papers/order?kind=${paper.kind}&sample=${paper.id}`}
-        className="mt-4 text-sm font-semibold text-primary"
-      >
-        {hub.sections.orderPaper}
-      </Link>
+      {paper.kind === "project" ? (
+        <p className="mt-2 text-sm font-semibold">{money(priceForPage("project"))} · {locale === "en" ? "to continue reading" : "уншихыг үргэлжлүүлэх"}</p>
+      ) : null}
+      <div className="mt-4 flex gap-4">
+        {paper.kind === "project" ? (
+          <Link href={`/papers/${paper.id}`} className="text-sm font-semibold text-primary">
+            {locale === "en" ? "Read the first 40%" : "Эхний 40%-ийг унших"}
+          </Link>
+        ) : null}
+        <Link
+          href={`/papers/order?kind=${paper.kind}&sample=${paper.id}`}
+          className="text-sm font-semibold text-primary"
+        >
+          {hub.sections.orderPaper}
+        </Link>
+      </div>
     </article>
   );
 }
@@ -61,8 +72,10 @@ export function PaperList() {
   const params = useSearchParams();
   const kind = params.get("kind");
   const active = kinds.includes(kind as PaperKind) ? (kind as PaperKind) : "all";
-  const published = publicPapers();
-  const list = active === "all" ? published : published.filter((paper) => paper.kind === active);
+  const projects = papers.filter((paper) => paper.kind === "project");
+  const published = publicPapers().filter((paper) => paper.kind !== "project");
+  const pool = [...projects, ...published];
+  const list = active === "all" ? pool : pool.filter((paper) => paper.kind === active);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
