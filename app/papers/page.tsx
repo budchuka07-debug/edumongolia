@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PaperList } from "@/components/pages/paper-board";
+import { chargedPrice } from "@/lib/catalog/charge";
 
 export const metadata: Metadata = {
   title: "Төсөл, диплом, даалгавар",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <Suspense fallback={<div className="px-4 py-10" />}>
-      <PaperList />
+      <PaperList projectPrice={chargedPrice("project")} />
     </Suspense>
   );
 }

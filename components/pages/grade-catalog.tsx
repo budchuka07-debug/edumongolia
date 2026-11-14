@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { subjectName, schoolText } from "@/lib/content/school-play";
 import { gradeCatalog } from "@/lib/content/grade-bank";
-import { EXAM_PRICE_MNT } from "@/lib/payments/pricing";
 import { useI18n } from "@/components/language-provider";
 
 const copy = {
@@ -25,11 +24,11 @@ const copy = {
   },
 } as const;
 
-export function GradeCatalog() {
+export function GradeCatalog({ examPrice }: { examPrice: number }) {
   const { locale } = useI18n();
   const t = copy[locale];
   const grades = gradeCatalog();
-  const price = new Intl.NumberFormat("mn-MN").format(EXAM_PRICE_MNT);
+  const price = new Intl.NumberFormat("mn-MN").format(examPrice);
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <p className="text-sm font-medium text-primary">{t.eyebrow}</p>

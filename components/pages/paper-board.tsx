@@ -16,7 +16,7 @@ import { useI18n } from "@/components/language-provider";
 import { useHub } from "@/components/directory/use-hub";
 import { EmptyState } from "@/components/empty-state";
 import { publicPapers } from "@/lib/content/public";
-import { priceForPage } from "@/lib/payments/pricing";
+import { PROJECT_PRICE_MNT } from "@/lib/payments/pricing";
 import { isPublicStatus, paperStatus } from "@/lib/content/publication";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -30,7 +30,7 @@ function money(value: number) {
   return `${new Intl.NumberFormat("mn-MN").format(value)}₮`;
 }
 
-export function PaperCard({ paper }: { paper: Paper }) {
+export function PaperCard({ paper, projectPrice = PROJECT_PRICE_MNT }: { paper: Paper; projectPrice?: number }) {
   const { locale } = useI18n();
   const hub = useHub();
   return (
@@ -47,7 +47,7 @@ export function PaperCard({ paper }: { paper: Paper }) {
         {paper.pages} {hub.paper.pages.toLowerCase()} · {hub.paper.from} {money(paper.from)}
       </p>
       {paper.kind === "project" ? (
-        <p className="mt-2 text-sm font-semibold">{money(priceForPage("project"))} · {locale === "en" ? "to continue reading" : "уншихыг үргэлжлүүлэх"}</p>
+        <p className="mt-2 text-sm font-semibold">{money(projectPrice)} · {locale === "en" ? "to continue reading" : "уншихыг үргэлжлүүлэх"}</p>
       ) : null}
       <div className="mt-4 flex gap-4">
         {paper.kind === "project" ? (
@@ -66,7 +66,7 @@ export function PaperCard({ paper }: { paper: Paper }) {
   );
 }
 
-export function PaperList() {
+export function PaperList({ projectPrice = PROJECT_PRICE_MNT }: { projectPrice?: number }) {
   const { locale } = useI18n();
   const hub = useHub();
   const params = useSearchParams();
@@ -114,7 +114,7 @@ export function PaperList() {
       ) : (
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {list.map((paper) => (
-            <PaperCard key={paper.id} paper={paper} />
+            <PaperCard key={paper.id} paper={paper} projectPrice={projectPrice} />
           ))}
         </div>
       )}

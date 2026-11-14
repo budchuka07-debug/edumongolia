@@ -1,4 +1,5 @@
-import { priceForPage, type PaidPage } from "./pricing";
+import { chargedPrice } from "@/lib/catalog/charge";
+import type { PaidPage } from "./pricing";
 
 const TOKEN_URL = "https://merchant.qpay.mn/v2/auth/token";
 const INVOICE_URL = "https://merchant.qpay.mn/v2/invoice";
@@ -52,7 +53,7 @@ export async function createQpayInvoice(input: {
   description: string;
 }) {
   const token = await accessToken(input.config);
-  const amount = priceForPage(input.kind);
+  const amount = chargedPrice(input.kind);
   const response = await fetch(INVOICE_URL, {
     method: "POST",
     headers: {

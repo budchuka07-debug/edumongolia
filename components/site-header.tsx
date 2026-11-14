@@ -113,6 +113,32 @@ export function SiteHeader() {
           { href: "/apply", label: "Зөвлөгөө авах" },
         ];
 
+  const primary = locale === "en"
+    ? [
+        { href: "/", label: "Home" },
+        { href: "/exams", label: "Examinations" },
+        { href: "/papers", label: "Projects" },
+        { href: "/iq", label: "IQ Tests" },
+        { href: "/quizzes", label: "Quiz Library" },
+        { href: "/stories", label: "Reading Stories" },
+        { href: "/resources", label: "Learning Resources" },
+        { href: "/account", label: "My Account" },
+        { href: "/about", label: "About Us" },
+        { href: "/contact", label: "Contact" },
+      ]
+    : [
+        { href: "/", label: "Нүүр" },
+        { href: "/exams", label: "Шалгалт" },
+        { href: "/papers", label: "Төсөл" },
+        { href: "/iq", label: "IQ тест" },
+        { href: "/quizzes", label: "Асуулт" },
+        { href: "/stories", label: "Уншлага" },
+        { href: "/resources", label: "Нөөц" },
+        { href: "/account", label: "Бүртгэл" },
+        { href: "/about", label: "Бидний тухай" },
+        { href: "/contact", label: "Холбоо" },
+      ];
+
   const grouped = groupOrder.map((id) => ({
     id,
     title: groupTitle[id],
@@ -208,6 +234,23 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+      <nav aria-label={locale === "en" ? "Catalog" : "Каталог"} className="border-t border-border/80">
+        <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2">
+          {primary.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
+              className={cn(
+                "shrink-0 rounded-full px-3 py-1.5 text-sm",
+                isCurrent(pathname, item.href) ? "bg-primary text-primary-foreground" : "text-foreground/80 hover:bg-muted",
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
       {menu ? (
         <div id={panelId} className="absolute inset-x-0 top-full z-50 hidden border-b border-border bg-card shadow-lg lg:block">
           <div className="mx-auto grid max-h-[70vh] max-w-6xl gap-1 overflow-y-auto px-4 py-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -228,7 +271,7 @@ export function SiteHeader() {
         </div>
       ) : null}
       {open ? (
-        <nav className="fixed inset-x-0 top-16 bottom-0 z-50 overflow-y-auto border-t border-border bg-card lg:hidden" aria-label={t.header.menu}>
+        <nav className="absolute inset-x-0 top-full z-50 max-h-[calc(100vh-8rem)] overflow-y-auto border-t border-border bg-card lg:hidden" aria-label={t.header.menu}>
           <div className="mx-auto max-w-6xl px-2 py-2">
             {grouped.map((group) => {
               const expanded = mobileGroups.includes(group.id);

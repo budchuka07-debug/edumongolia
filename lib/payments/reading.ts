@@ -5,7 +5,9 @@ import { getSchoolTopic } from "@/lib/content/school-exams";
 import type { SchoolQuestion, SchoolTopic } from "@/lib/content/school-play";
 import { papers, type Paper } from "@/lib/content/papers";
 import { splitBilingual, type Bilingual } from "./preview";
-import { priceForPage, productKey, type PaidPage } from "./pricing";
+import { chargedPrice } from "@/lib/catalog/charge";
+import { getCatalogItem, type CatalogKind } from "@/lib/catalog/items";
+import { productKey, type PaidPage } from "./pricing";
 import { findEntitlement } from "./store";
 import { findTeacherForm, openTeacherForm } from "./teacher-forms-store";
 import fs from "node:fs";
@@ -35,7 +37,7 @@ export function presentExam(topic: SchoolTopic, readerId: string | null): Readin
   return {
     kind: "exam",
     id: topic.slug,
-    priceMnt: priceForPage("exam"),
+    priceMnt: chargedPrice("exam"),
     title: topic.title,
     preview: parts.preview,
     rest: paid ? parts.rest : null,
@@ -64,7 +66,7 @@ export function presentProject(paper: Paper, readerId: string | null): Reading {
   return {
     kind: "project",
     id: paper.id,
-    priceMnt: priceForPage("project"),
+    priceMnt: chargedPrice("project"),
     title: paper.title,
     preview: parts.preview,
     rest: paid ? parts.rest : null,
@@ -109,7 +111,7 @@ export function lessonReading(id: string, readerId: string | null): Reading | nu
   return {
     kind: "lesson",
     id,
-    priceMnt: priceForPage("lesson"),
+    priceMnt: chargedPrice("lesson"),
     title: lesson.title,
     preview: lesson.preview,
     rest: paid ? lesson.rest : null,
@@ -121,10 +123,31 @@ export function lessonReading(id: string, readerId: string | null): Reading | nu
   };
 }
 
+export function catalogReading(kind: CatalogKind, slug: string, readerId: string | null): Reading | null {
+  const item = getCatalogItem(kind, slug);
+  if (!item) return null;
+  const parts = splitBilingual(item.paragraphs);
+  const paid = entitled(readerId, kind, slug);
+  return {
+    kind,
+    id: slug,
+    priceMnt: chargedPrice(kind),
+    title: item.title,
+    preview: parts.preview,
+    rest: paid ? parts.rest : null,
+    questions: null,
+    perAttempt: 0,
+    paid,
+    embedUrl: null,
+    html: null,
+  };
+}
+
 export function readingFor(kind: PaidPage, id: string, readerId: string | null) {
   if (kind === "exam") return examReading(id, readerId);
   if (kind === "project") return projectReading(id, readerId);
   if (kind === "form") return formReading(id, readerId);
+  if (kind === "quiz" || kind === "iq" || kind === "story") return catalogReading(kind, id, readerId);
   return lessonReading(id, readerId);
 }
 

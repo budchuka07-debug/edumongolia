@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SchoolCatalog } from "@/components/pages/school-catalog";
 import { lessonCatalog } from "@/lib/content/lessons";
 import { schoolCatalog } from "@/lib/content/school-exams";
-import { priceForPage } from "@/lib/payments/pricing";
+import { chargedPrice } from "@/lib/catalog/charge";
 
 export const metadata: Metadata = {
   title: "Дунд, ахлах, Cambridge, олон улсын шалгалт",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const cards = [
-    ...schoolCatalog().map((card) => ({ ...card, priceMnt: priceForPage("exam") })),
+    ...schoolCatalog().map((card) => ({ ...card, priceMnt: chargedPrice("exam") })),
     ...lessonCatalog().map((lesson) => ({
       slug: lesson.slug,
       band: "cambridge" as const,
@@ -24,7 +24,7 @@ export default function Page() {
       },
       questionCount: lesson.slug === "cambridge-balance-equation" ? 3 : 10,
       perAttempt: lesson.slug === "cambridge-balance-equation" ? 3 : 10,
-      priceMnt: priceForPage("lesson"),
+      priceMnt: chargedPrice("lesson"),
       href: `/activities/${lesson.slug}`,
     })),
   ];

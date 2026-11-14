@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { UniversityCoverage } from "@/components/marketplace/university-coverage";
 import { ScholarshipAdmin } from "@/components/scholarships/scholarship-admin";
 import { AdminDesk } from "@/components/pages/admin-desk";
+import { PriceAdmin } from "@/components/pages/price-admin";
 import { QpaySetup } from "@/components/pages/qpay-setup";
+import { loadPriceRules } from "@/lib/catalog/store";
 
 export const metadata: Metadata = {
   title: "Админ самбар",
@@ -15,6 +17,7 @@ export default function Page() {
     <>
       <AdminDesk />
       <div className="mx-auto max-w-6xl px-4">
+        <PriceAdmin initial={loadPriceRules()} />
         <QpaySetup />
       </div>
       <div className="mx-auto max-w-6xl px-4 pb-12">

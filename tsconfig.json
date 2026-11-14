@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "lib/marketplace/eligibility.test.ts", "lib/content/practice-exams.test.ts", "lib/content/school-exams.test.ts", "lib/content/grade-bank.test.ts", "lib/payments/payments.test.ts", "scripts"]
+  "exclude": ["node_modules", "lib/marketplace/eligibility.test.ts", "lib/content/practice-exams.test.ts", "lib/content/school-exams.test.ts", "lib/content/grade-bank.test.ts", "lib/catalog/catalog.test.ts", "lib/payments/payments.test.ts", "scripts"]
 }

@@ -3,7 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { paidPayload, readingFor } from "@/lib/payments/reading";
 import { isReaderId, READER_COOKIE } from "@/lib/payments/reader";
 import { createQpayInvoice, qpayConfig, QpayError } from "@/lib/payments/qpay";
-import { priceForPage, type PaidPage } from "@/lib/payments/pricing";
+import { chargedPrice } from "@/lib/catalog/charge";
+import { isPaidPage, type PaidPage } from "@/lib/payments/pricing";
 import { attachQpayInvoice, createInvoice, markInvoiceFailed } from "@/lib/payments/store";
 
 function readerFrom(request: NextRequest) {
@@ -27,7 +28,7 @@ function withReader(response: NextResponse, readerId: string, fresh: boolean) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
-  const kind: PaidPage | null = body.kind === "exam" || body.kind === "project" || body.kind === "form" || body.kind === "lesson" ? body.kind : null;
+  const kind: PaidPage | null = isPaidPage(body.kind) ? body.kind : null;
   const id = typeof body.id === "string" ? body.id.trim() : "";
   if (!kind || !id) return NextResponse.json({ ok: false, error: "unknown-page" }, { status: 400 });
 
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
     productKey: `${kind}:${id}`,
     kind,
     itemId: id,
-    amountMnt: priceForPage(kind),
+    amountMnt: chargedPrice(kind),
     qpayInvoiceId: null,
     paymentId: null,
     status: "pending",

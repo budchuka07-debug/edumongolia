@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { embedUrl, type TeacherFormKind } from "@/lib/content/teacher-forms";
-import { EXAM_PRICE_MNT } from "./pricing";
+import { chargedPrice } from "@/lib/catalog/charge";
 
 export type StoredTeacherForm = {
   id: string;
@@ -64,7 +64,7 @@ export function addTeacherForm(input: Omit<StoredTeacherForm, "id" | "createdAt"
 }
 
 export function openTeacherForm(form: StoredTeacherForm, entitled: boolean) {
-  const priceMnt = form.requiresPayment ? EXAM_PRICE_MNT : 0;
+  const priceMnt = form.requiresPayment ? chargedPrice("form") : 0;
   const embed = !form.requiresPayment || entitled ? embedUrl(form.formUrl) : null;
   return { priceMnt, embedUrl: embed };
 }

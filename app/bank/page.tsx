@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GradeCatalog } from "@/components/pages/grade-catalog";
+import { chargedPrice } from "@/lib/catalog/charge";
 
 export const metadata: Metadata = {
   title: "8–12-р ангийн шалгалтын сан",
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <GradeCatalog />;
+  return <GradeCatalog examPrice={chargedPrice("exam")} />;
 }
