@@ -5,6 +5,8 @@ import { builtQpay } from "./qpay-built.generated";
 const TOKEN_URL = "https://merchant.qpay.mn/v2/auth/token";
 const INVOICE_URL = "https://merchant.qpay.mn/v2/invoice";
 const CHECK_URL = "https://merchant.qpay.mn/v2/payment/check";
+const ESIM_QPAY_INVOICE = "https://esimmongolia.com/.netlify/functions/qpay-create-invoice";
+const ESIM_QPAY_CHECK = "https://esimmongolia.com/.netlify/functions/qpay-check";
 
 export type QpayConfig = {
   username: string;
@@ -116,6 +118,46 @@ export async function createQpayInvoice(input: {
     urls: Array.isArray(body.urls) ? body.urls : [],
     amount,
   };
+}
+
+export async function createEsimQpayInvoice(input: {
+  orderId: string;
+  kind: PaidPage;
+  description: string;
+}) {
+  const amount = chargedPrice(input.kind);
+  const response = await fetch(ESIM_QPAY_INVOICE, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      amount,
+      orderId: input.orderId,
+      description: input.description,
+    }),
+  });
+  const body = await response.json().catch(() => ({}));
+  const nested = body?.invoice_response || body?.token_response;
+  if (!response.ok || !body?.ok || !body?.invoice_id) {
+    throw new QpayError(body?.step === "token" ? "token" : "invoice", qpayDetail(body) || qpayDetail(nested));
+  }
+  return {
+    invoiceId: String(body.invoice_id),
+    qrText: typeof body.qr_text === "string" ? body.qr_text : "",
+    qrImage: typeof body.qr_image === "string" ? body.qr_image : "",
+    urls: Array.isArray(body.urls) ? body.urls : [],
+    amount: Number(body.amount) || amount,
+  };
+}
+
+export async function checkEsimQpayInvoice(invoiceId: string) {
+  const response = await fetch(ESIM_QPAY_CHECK, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ invoice_id: invoiceId }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || body?.error) throw new QpayError("check", qpayDetail(body));
+  return { paid: Boolean(body?.paid), paymentId: body?.paid ? `invoice:${invoiceId}` : null };
 }
 
 export async function checkQpayInvoice(config: QpayConfig, invoiceId: string) {

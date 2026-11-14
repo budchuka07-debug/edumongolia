@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { paidPayload, readingFor } from "@/lib/payments/reading";
 import { isReaderId, READER_COOKIE } from "@/lib/payments/reader";
-import { checkQpayInvoice, qpayConfig, QpayError } from "@/lib/payments/qpay";
+import { checkEsimQpayInvoice, checkQpayInvoice, qpayConfig, QpayError } from "@/lib/payments/qpay";
 import { findInvoice, grantOnce } from "@/lib/payments/store";
 
 export async function POST(request: NextRequest) {
@@ -16,10 +16,11 @@ export async function POST(request: NextRequest) {
   }
 
   const config = qpayConfig();
-  if (!config) return NextResponse.json({ ok: false, error: "qpay-not-configured" }, { status: 503 });
 
   try {
-    const result = await checkQpayInvoice(config, invoice.qpayInvoiceId);
+    const result = config
+      ? await checkQpayInvoice(config, invoice.qpayInvoiceId)
+      : await checkEsimQpayInvoice(invoice.qpayInvoiceId);
     if (!result.paid || !result.paymentId) return NextResponse.json({ ok: true, paid: false });
     const grant = await grantOnce({ orderId, paymentId: result.paymentId });
     if (!grant.ok) return NextResponse.json({ ok: false, error: "missing" }, { status: 404 });

@@ -18,7 +18,7 @@ export async function QpaySetup() {
       <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
         {ready
           ? "QPay холбогдсон. Нэхэмжлэх үүсгэх, төлбөр шалгах, callback энэ тохиргоогоор ажиллана."
-          : "QPay гаргахын тулд нэр, нууц үг, invoice code гурвыг серверийн орчинд тавина. Утгыг энэ хуудас харуулахгүй."}
+          : "Өөрийн утга хоосон үед QPay нь eSIM Mongolia серверээр гарна. Нэр ESIM_MGL, invoice code ESIM_MGL_INVOICE. Нууц үг энэ хуудсанд харагдахгүй."}
       </p>
       <ul className="mt-5 space-y-3">
         {rows.map((row) => (
@@ -31,7 +31,7 @@ export async function QpaySetup() {
       </ul>
       <div className="mt-5 space-y-2 text-sm leading-6 text-muted-foreground">
         <p>Локал: төслийн үндэс дээр `.env.local` үүсгээд `config/edu-qpay.example` доторх дөрвөн мөрийг хуулж, утгыг тэнд бөглөнө.</p>
-        <p>Амьд сайт: хостын Environment Variables дээр яг энэ дөрвөн нэрээр нэмнэ. eSIMMongolia-ийн QPay бүртгэлийг энд бүү хий.</p>
+        <p>Амьд сайт өөрийн утгагүй үед eSIM Mongolia дээрх QPAY_USERNAME, QPAY_PASSWORD, QPAY_INVOICE_CODE-оор нэхэмжлэл үүсгэнэ.</p>
       </div>
     </section>
   );

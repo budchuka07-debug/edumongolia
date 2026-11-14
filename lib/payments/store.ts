@@ -42,12 +42,14 @@ function readLedger(): Ledger {
   try {
     const raw = fs.readFileSync(/*turbopackIgnore: true*/ ledgerPath(), "utf8");
     const parsed = JSON.parse(raw) as Ledger;
-    return {
+    const ledger = {
       invoices: Array.isArray(parsed.invoices) ? parsed.invoices : [],
       entitlements: Array.isArray(parsed.entitlements) ? parsed.entitlements : [],
     };
+    memoryLedger = ledger;
+    return ledger;
   } catch {
-    return emptyLedger();
+    return memoryLedger ?? emptyLedger();
   }
 }
 
@@ -60,12 +62,18 @@ function writeLedger(ledger: Ledger) {
 }
 
 let chain: Promise<unknown> = Promise.resolve();
+let memoryLedger: Ledger | null = null;
 
 function update<T>(change: (ledger: Ledger) => T): Promise<T> {
   const run = chain.then(() => {
     const ledger = readLedger();
     const result = change(ledger);
-    writeLedger(ledger);
+    memoryLedger = ledger;
+    try {
+      writeLedger(ledger);
+    } catch {
+      // The host disk can be read-only. This process still has the ledger.
+    }
     return result;
   });
   chain = run.then(() => undefined, () => undefined);
